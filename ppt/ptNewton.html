@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="vi">
 
 <head>
     <meta charset="UTF-8">
@@ -333,13 +333,14 @@
         <buttonk onclick="location.href='/ppt/bpct.html'">PP Bình phương cực tiểu</buttonk>
         <buttonk onclick="location.href='/ppt/tpSimpson.html'">Tính Tích phân</buttonk>
         <buttonk onclick="location.href='/ppt/ptvp.html'">Phương trình vi phân</buttonk> -->
+
     </div>
 
-    <h1>Newton's Method Calculator</h1>
+    <h1>Phương pháp Newton - Tiếp Tuyến</h1>
     <button class="reset-btn" onclick="resetCalculator()">Ref</button>
     <div class="input-section">
         <div class="input-group">
-            <label for="function">Function f(x):</label>
+            <label for="function">Hàm f(x) = 0:</label>
             <input type="text" id="function" placeholder="x^3 - 2x - 5" value="x^2 + 1/x -40">
             <small style="color: #7f8c8d; font-size: 0.9em;">Use JavaScript math syntax: log, sin, cos, exp, sqrt, ^ for
                 power</small>
@@ -367,36 +368,38 @@
         </div>
     </div>
 
-    <button onclick="calculate()">Calculate</button>
+    <button onclick="calculate()">Tính toán</button>
 
 
     <div id="result" class="result-section" style="display: none;">
-        <h2 class="result-title">Calculation Results</h2>
+        <div style="background-color: #24ff7f; color: white; padding: 8px 15px; border-radius: 4px; margin-top: 10px;">
+            Tính toán thành công ✅</div>
+        <h2 class="result-title">Kết quả tính toán</h2>
 
         <div id="function-display" class="math-formula"></div>
 
         <div class="step">
-            <h3>Derivatives</h3>
+            <h3>Các đạo hàm </h3>
             <div id="derivatives" class="math-formula"></div>
         </div>
 
         <div class="step">
-            <h3>Initial Point Selection</h3>
+            <h3>Chọn điểm ban đầu</h3>
             <div id="initial-point" class="math-formula"></div>
         </div>
 
         <div class="step">
-            <h3>Iteration Process</h3>
+            <h3>Xây dựng dãy <span> \( \{x_{n}\} \)</span></h3>
             <div id="iteration-process"></div>
         </div>
 
         <div class="step">
-            <h3>Error Estimation</h3>
+            <h3>Đánh giá sai số</h3>
             <div id="error-estimation" class="math-formula"></div>
         </div>
 
         <div class="final-result">
-            <h3>Final Result</h3>
+            <h3>Kết quả cuối cùng</h3>
             <div id="final-result" class="math-formula"></div>
         </div>
     </div>
@@ -434,7 +437,7 @@
                     / (12 * h);
             }
             catch (e) {
-                console.error("Error calculating derivative:", e);
+                console.error("Không tìm thấy đạo hàm : ", e);
                 return NaN;
             }
         }
@@ -448,7 +451,7 @@
                     + math.evaluate(f, { x: x - h }))
                     / (h * h);
             } catch (e) {
-                console.error("Error calculating second derivative:", e);
+                console.error("Không tìm thấy đạo hàm : ", e);
                 return NaN;
             }
         }
@@ -496,7 +499,7 @@
                     .replace(/([^+\-*/()]+)\/([^+\-*/()]+)/g, '\\frac{$1}{$2}'); // Tổng quát hơn
 
                 document.getElementById('function-display').innerHTML = `
-                    <p>Function to find root:</p>
+                    <p>Hàm cần tìm nghiệm: </p>
                     <p>\\[ f(x) = ${fDisplay} \\]</p>
                 `;
 
@@ -540,9 +543,9 @@
 
                 // Display derivatives
                 document.getElementById('derivatives').innerHTML = `
-                    <p>First derivative:</p>
+                    <p>Đạo hàm cấp 1 : </p>
                     <p>\\[ f'(x) = ${fPrimeDisplay} > 0 \\text{ } \\forall x \\in [${a};${b}] \\]</p>
-                    <p>Second derivative:</p>
+                    <p>Đạo hàm cấp 2 :</p>
                     <p>\\[ f''(x) = ${fDoublePrimeDisplay} > 0 \\text{ } \\forall x \\in [${a};${b}] \\]</p>
                 `;
 
@@ -559,7 +562,7 @@
                 }
 
                 document.getElementById('initial-point').innerHTML = `
-                    <p>Checking condition for initial point:</p>
+                    <p>Kiểm tra điều kiện cho điểm ban đầu:</p>
                     <p>\\[ f(${a}) \\cdot f''(${a}) = ${formatNumber(fA)} \\times ${formatNumber(fDoublePrimeA)} = ${formatNumber(productA)} ${productA > 0 ? '> 0' : '< 0'} \\]</p>
                     <p>\\[ \\Rightarrow x_0 = ${x0} \\]</p>
                 `;
@@ -592,7 +595,7 @@
                     .replace(/\bx\b/g, 'x_{n}'); // Đổi x thành x_n
 
                 // First, show the Newton's formula for each iteration
-                iterationHTML += `<div class="math-formula"><p>Newton's iteration formula:</p>`;
+                iterationHTML += `<div class="math-formula"><p>Công thức lặp Newton:</p>`;
                 iterationHTML += `
                         <p>\\[ x_{n+1} = x_{n} - \\frac{f(x_{n})} {f'(x_{n})} = x_{n} - \\frac{${f_xn}}{${f_prime_xn}} \\]</p>
                     `;
@@ -626,12 +629,12 @@
                     x_temp = last.nextX;
 
                     errorEstimation = `
-                        <p>Where:</p>
+                        <p>Ở :</p>
                         <p>\\[ m = \\min_{[${a},${b}]} |f'(x)| = ${formatNumber(fPrimeMin)} \\]</p>
                         <p>\\[ M = \\max_{[${a},${b}]} |f''(x)| = ${formatNumber(fDoublePrimeMax)} \\]</p>
-                        <p>Error estimation formula:</p>
+                        <p>Đánh giá sai số:</p>
                         <p>\\[ |x_{${iterations}} - x^*| \\leq \\frac{M}{2m} (x_{${iterations}} - x_{${iterations - 1}})^2 \\]</p>
-                        <p>For the last iteration:</p>
+                        <p>Đối với lần lặp cuối cùng::</p>
                         <p>\\[ |x_{${iterations}} - x^*| \\leq \\frac{${formatNumber(fDoublePrimeMax)}}{2 \\times ${formatNumber(fPrimeMin)}} (${formatNumber(last.nextX)} - ${formatNumber(prev.nextX)})^2 \\]</p>
                         <p>\\[ \\approx ${formatNumber(error)} \\]</p>
                     `;
@@ -642,7 +645,7 @@
                 // Display final result
                 document.getElementById('final-result').innerHTML = `
                     <div class="success-box">
-                        <h3>Approximate Root Found</h3>
+                        <h3>Đã tìm thấy nghiệm gần đúng</h3>
                         <p style="font-size: 1.3em; text-align: center;">\\[ x \\approx ${formatNumber(x_temp)} \\]</p>
                         <p>\\[ f(${formatNumber(x_temp)}) \\approx ${formatNumber(math.evaluate(fInput, { x: x_temp }))} \\]</p>
                     </div>
