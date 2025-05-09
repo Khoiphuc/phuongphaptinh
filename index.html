@@ -13,6 +13,15 @@
             /* Thêm để reset margin mặc định */
         }
 
+        /* CSS cho nút mở menu */
+        .open-menu-button-container {
+            /* Thêm container để dễ căn giữa nút */
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+            /* Khoảng cách từ hình ảnh đến nút */
+        }
+
         .open-menu-button {
             background-color: #007BFF;
             color: white;
@@ -21,8 +30,8 @@
             border-radius: 6px;
             cursor: pointer;
             font-size: 16px;
-            margin: 20px;
-            display: block;
+            /* margin: 20px;  Xóa hoặc điều chỉnh margin này nếu dùng container */
+            /* display: block;  Không cần thiết nếu dùng flex container */
         }
 
         .modal {
@@ -78,8 +87,6 @@
 
         .modal.active .modal-content {
             /* Khi modal active, đưa modal-content lên vị trí mong muốn */
-            /* top: 50%; transform: translate(-50%, -50%);  Cách này sẽ đưa lên giữa màn hình */
-            /* Để nó hiện ở dưới và chạy lên, rồi dừng ở khoảng cách nhất định từ dưới */
             bottom: 20px;
             /* Hoặc một giá trị % như 5% */
             transform: translate(-50%, 0);
@@ -169,6 +176,13 @@
         h1 {
             text-align: center;
         }
+
+        /* CSS cho container của hình ảnh */
+        .image-container {
+            display: flex;
+            justify-content: center;
+            /* margin-bottom: 20px; /* Khoảng cách giữa ảnh và nút đã được xử lý bởi margin-top của open-menu-button-container */
+        }
     </style>
 </head>
 
@@ -176,9 +190,12 @@
 
     <h1>Toán học Ứng dụng</h1>
 
-    <button class="open-menu-button" id="openMenuBtn">Mở Menu Tính Năng</button>
-    <div style="display: flex; justify-content: center;">
+    <div class="image-container">
         <img src="./img/icon-web.png" alt="logo" height="250">
+    </div>
+
+    <div class="open-menu-button-container">
+        <button class="open-menu-button" id="openMenuBtn">Mở Menu Tính Năng</button>
     </div>
 
     <div id="myModal" class="modal">
