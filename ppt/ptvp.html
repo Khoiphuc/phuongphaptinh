@@ -354,21 +354,21 @@
         <buttonk onclick="location.href='/ppt/ptvp.html'">Phương trình vi phân</buttonk> -->
     </div>
 
-    <h1>Improved Euler Method Calculator</h1>
+    <h1>PP Euler cải tiến </h1>
 
     <div class="input-section">
         <div class="input-group">
-            <label for="y_diff">Differential equation \( y' = f(x, y) \):</label>
+            <label for="y_diff">Phương trình vi phân \( y' = f(x, y) \):</label>
             <input type="text" id="y_diff" placeholder="e.g., x + y" value="5y + 2e^x">
         </div>
 
         <div class="input-row">
             <div class="input-group">
-                <label for="x0">Initial \( x_0 \):</label>
+                <label for="x0">Điểm ban đầu \( x_0 \):</label>
                 <input type="number" id="x0" step="any" value="0.01">
             </div>
             <div class="input-group">
-                <label for="y0">Initial \( y_0 \):</label>
+                <label for="y0">Giá trị ban đầu \( y_0 \):</label>
                 <input type="number" id="y0" step="any" value="1">
             </div>
         </div>
@@ -383,19 +383,19 @@
                 <input type="number" id="x2" step="any" value="0.03">
             </div>
             <div class="input-group">
-                <label for="h">Step size \( h \):</label>
+                <label for="h">Kích thước bước \( h \):</label>
                 <input type="number" id="h" step="any" value="0.01">
             </div>
         </div>
 
         <div class="input-row">
             <div class="input-group">
-                <label for="iterations">Number of iterations:</label>
+                <label for="iterations">Số lần lặp:</label>
                 <input type="number" id="iterations" min="1" value="3">
             </div>
 
             <div class="input-group">
-                <label for="decimalPlaces">Decimal places:</label>
+                <label for="decimalPlaces">Dấu chấm động:</label>
                 <input type="number" id="decimalPlaces" min="1" max="34" value="6">
             </div>
         </div>
@@ -405,7 +405,7 @@
 
     <div id="result" class="result-section" style="display: none;">
         <div style="display: flex; justify-content: space-between; align-items: center;">
-            <h2 class="result-title">Improved Euler Method Results</h2>
+            <h2 class="result-title">Kết quả của phương pháp Euler cải tiến</h2>
             <button id="toggleView" class="toggle-btn" onclick="toggleViewMode()">Thu gọn</button>
         </div>
         <!-- ... phần còn lại giữ nguyên ... -->
@@ -413,7 +413,7 @@
         <div style="background-color: #24ff7f; color: white; padding: 8px 15px; border-radius: 4px; margin-top: 10px;">
             Calculation successful ✅
         </div>
-        <h2 class="result-title">Improved Euler Method Results</h2>
+        <h2 class="result-title">Kết quả của phương pháp Euler cải tiến</h2>
 
         <div id="equation-display" class="math-formula"></div>
 
@@ -658,52 +658,52 @@
 
             document.getElementById('result').innerHTML = `
                 <div style="display: flex; justify-content: space-between; align-items: center;">
-                    <h2 class="result-title">Improved Euler Method Results</h2>
+                    <h2 class="result-title">Kết quả của phương pháp Euler cải tiến</h2>
                     <button id="toggleView" class="toggle-btn" onclick="toggleViewMode()">Thu gọn</button>
                 </div>
                 <div style="background-color: #24ff7f; color: white; padding: 8px 15px; border-radius: 4px; margin-top: 10px;">
-                    Calculation successful ✅
+                    Tính toán thành công ✅
                 </div>
                 
                 <div id="equation-display" class="math-formula"></div>
                 <div class="step">
-                    <h3>Initial Values</h3>
+                    <h3>Các điểm tính toán:</h3>
                     <div id="initial-values" class="math-formula"></div>
                 </div>
                 <div class="step">
-                    <h3>Calculate y₁</h3>
+                    <h3>Tính \\(y_1\\)</h3>
                     <div id="y1-calculation" class="math-formula"></div>
                     <div id="y1-iterations"></div>
                 </div>
                 <div class="step">
-                    <h3>Calculate y₂</h3>
+                    <h3>Tính \\(y_2\\)</h3>
                     <div id="y2-calculation" class="math-formula"></div>
                     <div id="y2-iterations"></div>
                 </div>
                 <div class="final-result">
-                    <h3>Final Results</h3>
+                    <h3>Kết quả cuối cùng</h3>
                     <div id="final-results-table"></div>
                 </div>
             `;
 
             // Điền dữ liệu vào các phần tử (giống như trong calculateEuler1)
             document.getElementById('equation-display').innerHTML = `
-                <p>Solving differential equation:</p>
+                <p>Phương trình vi phân:</p>
                 <p>\\[ y' = ${formatExpression(y_diff)} \\]</p>
             `;
 
             // ... tiếp tục điền các phần khác như trong calculateEuler1 ...
             // Display initial values
             document.getElementById('initial-values').innerHTML = `
-                    <p>Initial conditions:</p>
-                    <p>\\[ y(${x0}) = ${y0} \\]</p>
-                    <p>Step size: \\[ h = ${h} \\]</p>
+                    <p>Các điểm tính toán:</p>
+                    <p>\\[ y(${x0}) = ${y0};x_1 = ${x1};x_2 = ${x2} \\]</p>
+                    <p>Kích thước bước: \\[ h = ${h} \\]</p>
                 `;
             document.getElementById('y1-calculation').innerHTML = `
-                    <p>First approximation:</p>
+                    <p>Xấp xỉ ban đầu:</p>
                     <p>\\[ y_1^{(0)} = y_0 + h f(x_0, y_0) = y_0 + h(${formatExpression(format_k(y_diff, { x: 0, y: 0 }))}) \\]</p>
                     <p>\\[ =${y0} + ${h} \\times ${formatNumber(calcFunction(y_diff, x0, y0), decimalPlaces)} = ${formatNumber(s0_y1, decimalPlaces)} \\]</p>
-                    <p>Iterative improvements:</p>
+                    <p>Lặp cải tiến:</p>
                     <p>\\[ y_1^{(k+1)} = y_0 + \\frac{h}{2} \\left[ f(x_0, y_0) + f(x_1, y_1^{(k)}) \\right] \\]</p>
                     <p> \\[ y_1^{(k+1)} = y_0 + \\frac{h}{2} \\left[ (${formatExpression(format_k(y_diff, { x: 0, y: 0 }))}) + (${formatExpression(format_k(y_diff, { x: 1, y: 1 }))})  \\right]\\] </p>
                 `;
@@ -713,7 +713,7 @@
                         <table>
                             <thead>
                                 <tr>
-                                    <th>\\(\\text{Iteration}\\)</th>
+                                    <th>\\(\\text{Các bước lặp }\\)</th>
                                     <th>\\(y_1^{(k+1)}\\)</th>
                                 </tr>
                             </thead>
@@ -736,10 +736,10 @@
             y1TableHTML += `</tbody></table>`;
             document.getElementById('y1-iterations').innerHTML = y1TableHTML;
             document.getElementById('y2-calculation').innerHTML = `
-                    <p>First approximation:</p>
+                    <p>Xấp xỉ ban đầu:</p>
                     <p> \\[ y_2^{(0)} = y_1 + h f(x_1, y_1) = y_0 + h(${formatExpression(format_k(y_diff, { x: 1, y: 1 }))}) \\]</p>
                     <p> \\[ = ${formatNumber(y1_final, decimalPlaces)} + ${h} \\times ${formatNumber(calcFunction(y_diff, x1, y1_final), decimalPlaces)} = ${formatNumber(s0_y2, decimalPlaces)} \\]</p>
-                    <p>Iterative improvements:</p>
+                    <p>Lặp cải tiến:</p>
                     <p>\\[ y_2^{(k+1)} = y_1 + \\frac{h}{2} \\left[ f(x_1, y_1) + f(x_2, y_2^{(k)}) \\right] \\]</p>
                     <p> \\[ y_1^{(k+1)} = y_0 + \\frac{h}{2} \\left[ (${formatExpression(format_k(y_diff, { x: 1, y: 1 }))}) + (${formatExpression(format_k(y_diff, { x: 2, y: 2 }))})  \\right]\\] </p>
                 `;
@@ -789,11 +789,11 @@
 
             document.getElementById('result').innerHTML = `
                 <div style="display: flex; justify-content: space-between; align-items: center;">
-                    <h2 class="result-title">Improved Euler Method Results</h2>
+                    <h2 class="result-title">Kết quả của phương pháp Euler cải tiến</h2>
                     <button id="toggleView" class="toggle-btn" onclick="toggleViewMode()">Chi tiết</button>
                 </div>
                 <div style="background-color: #24ff7f; color: white; padding: 8px 15px; border-radius: 4px; margin-top: 10px;">
-                    Calculation successful ✅
+                    Tính toán thành công ✅
                 </div>
                 
                 <div id="main-result-content"></div>
