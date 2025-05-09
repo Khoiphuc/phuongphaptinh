@@ -367,18 +367,18 @@
     <div class="input-section">
         <div class="input-row">
             <div class="input-group">
-                <label for="f_a">Coefficient a function (φ₁(x)):</label>
+                <label for="f_a">Hệ số a của hàm số (φ₁(x))::</label>
                 <input type="text" id="f_a" placeholder="x" value="log(x)">
 
             </div>
 
             <div class="input-group">
-                <label for="f_b">Coefficient b function (φ₂(x)):</label>
+                <label for="f_b">Hệ số b của hàm số (φ₂(x)):</label>
                 <input type="text" id="f_b" placeholder="1" value="x^3">
             </div>
 
             <div class="input-group">
-                <label for="f_free">Free term function (φ₀(x)):</label>
+                <label for="f_free">Hàm số tự do (φ₀(x)):</label>
                 <input type="text" id="f_free" placeholder="0" value="1">
             </div>
 
@@ -389,7 +389,7 @@
 
         <div class="input-row">
             <div class="input-group">
-                <label for="n">Number of data points (n):</label>
+                <label for="n">Số lượng điểm dữ liệu (n):</label>
                 <input type="number" id="n" min="2" value="3">
             </div>
             <div class="input-group">
@@ -409,42 +409,42 @@
     <div id="result" class="result-section" style="display: none;">
         <div style="background-color: #24ff7f; color: white; padding: 8px 15px; border-radius: 4px; margin-top: 10px;">
             Tính toán thành công ✅</div>
-        <h2 class="result-title">Least Squares Calculation Results</h2>
+        <h2 class="result-title">Kết quả tính toán Bình phương cực tiểu</h2>
 
         <div id="function-display" class="math-formula"></div>
 
         <div class="step">
-            <h3>Data Points</h3>
+            <h3>Các điểm dữ liệu</h3>
             <div id="data-points-display"></div>
         </div>
 
         <div class="step">
-            <h3>Sum of Squares Function</h3>
+            <h3>Hàm Tổng Bình Phương</h3>
             <div id="sum-squares" class="math-formula"></div>
         </div>
 
         <div class="step">
-            <h3>Partial Derivatives</h3>
+            <h3>Đạo hàm riêng</h3>
             <div id="partial-derivatives" class="math-formula"></div>
         </div>
 
         <div class="step">
-            <h3>Sum formulas</h3>
+            <h3>Công thức tính tổng</h3>
             <div id="sum-formulas" class="math-formula"></div>
         </div>
 
         <div class="step">
-            <h3>Normal Equations</h3>
+            <h3>Phương trình chuẩn</h3>
             <div id="normal-equations" class="math-formula"></div>
         </div>
 
         <div class="step">
-            <h3>Equation System</h3>
+            <h3>Hệ phương trình</h3>
             <div id="equation-system" class="math-formula"></div>
         </div>
 
         <div class="final-result">
-            <h3>Final Result</h3>
+            <h3>Kết quả cuối cùng</h3>
             <div id="final-result" class="math-formula"></div>
         </div>
     </div>
@@ -556,7 +556,7 @@
                 // Display the approximation function
                 const fDisplay = `a \\cdot ${f_a} + b \\cdot ${f_b} ${f_free ? ' + ' + f_free : ''}`;
                 document.getElementById('function-display').innerHTML = `
-                    <p>Approximation function:</p>
+                    <p>Hàm xấp xỉ:</p>
                     <p>\\[ y = ${formatExpression(fDisplay)} \\]</p>
                 `;
 
@@ -593,7 +593,7 @@
                 // Display sum of squares function
                 const sExpr = `(a \\cdot ${f_a} + b \\cdot ${f_b} ${f_free ? ' + ' + f_free : ''}- y_k)^2 `;
                 document.getElementById('sum-squares').innerHTML = `
-                    <p>Sum of squares function:</p>
+                    <p>Hàm tổng bình phương:</p>
                     <p>\\[ S = \\sum_{k=1}^{${n}} ${formatExpression(format_k(sExpr))} \\]</p>
                 `;
 
@@ -602,7 +602,7 @@
                 const sDiffB = `(a \\cdot ${f_a} + b \\cdot ${f_b} ${f_free ? ' + ' + f_free : ''} - y_k) \\cdot ${f_b}`;
 
                 document.getElementById('partial-derivatives').innerHTML = `
-                    <p>Partial derivatives:</p>
+                    <p>Đạo hàm riêng:</p>
                     <p>\\[ \\frac{\\partial S}{\\partial a} = 2 \\sum_{k=1}^{${n}} ${formatExpression(format_k(sDiffA))} \\]</p>
                     <p>\\[ \\frac{\\partial S}{\\partial b} = 2 \\sum_{k=1}^{${n}} ${formatExpression(format_k(sDiffB))} \\]</p>
                 `;
@@ -628,7 +628,7 @@
                 ];
 
                 document.getElementById('sum-formulas').innerHTML = `
-                    <p>Sum Formulas:</p>
+                    <p>Công thức tính tổng</p>
                     <p>\\[ 
                         \\begin{cases}
                             \\left( \\sum\\limits_{k=1}^{${n}} ${formatExpression(format_k(he_pt1[0]))}\\right)a + \\left(\\sum\\limits_{k=1}^{${n}} ${formatExpression(format_k(he_pt1[1]))}\\right)b + \\left(\\sum\\limits_{k=1}^{${n}} ${formatExpression(format_k(he_pt1[2]))}\\right) - \\left(\\sum\\limits_{k=1}^{${n}} ${formatExpression(format_k(he_pt1[3]))} \\right) = 0 \\\\[1.1ex]
@@ -686,7 +686,7 @@
                 }
 
                 document.getElementById('normal-equations').innerHTML = `
-                    <p>Normal equations:</p>
+                    <p>Phương trình chuẩn</p>
                     <p>\\[ 
                         \\begin{cases}
                             ${formatFirstCoefficient(sums1[0])}a ${formatFollowingCoefficient(sums1[1])}b ${formatFollowingCoefficient(sums1[2])} ${formatFollowingCoefficient(-sums1[3])} = 0 \\\\[1.1ex]
@@ -709,7 +709,7 @@
 
                 // Áp dụng vào hệ phương trình
                 document.getElementById('equation-system').innerHTML = `
-                    <p>Equation system:</p>
+                    <p>Hệ phương trình</p>
                     <p>\\[ 
                         \\begin{cases}
                             ${formatFirstCoefficient(a11)}a ${formatFollowingCoefficient(a12)}b = ${formatFirstCoefficient(formatNumber(-b1))} \\\\[1.1ex]
@@ -731,14 +731,14 @@
                 // Display final result
                 document.getElementById('final-result').innerHTML = `
                     <div class="success-box">
-                        <h3>Solution Found</h3>
+                        <h3>Giải Hệ phương trình</h3>
                         <p>\\[ 
                             \\begin{cases}
                                 a = ${formatNumber(aSol)}\\\\[1.1ex]
                                 b = ${formatNumber(bSol)}
                             \\end{cases}
                         \\]</p>
-                        <p>Final approximation function:</p>
+                        <p>Hàm xấp xỉ cuối cùng:</p>
                         <p style="font-size: 1.3em; text-align: center;">
                             \\[ y = ${formatFirstCoefficient(formatNumber(aSol))} ${formatExpression(f_a)} + ${formatFirstCoefficient(formatNumber(bSol))} ${formatExpression(f_b)}${f_free ? ' + ' + formatExpression(f_free) : ''} \\]
                         </p>
