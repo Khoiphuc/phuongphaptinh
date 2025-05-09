@@ -282,11 +282,11 @@
         <buttonk onclick="location.href='/ppt/ptvp.html'">Phương trình vi phân</buttonk> -->
     </div>
 
-    <h1>Simpson's Rule Calculator</h1>
+    <h1>PP Simpson \(\frac{1}{3}\) Mở rộng</h1>
 
     <div class="input-section">
         <div class="input-group">
-            <label for="function">Function f(x):</label>
+            <label for="function">Hàm số f(x):</label>
             <input type="text" id="function" placeholder="exp(2x)/(exp(x)+1)" value="log(2x+1)">
             <small style="color: #7f8c8d; font-size: 0.9em;">Use JavaScript math syntax: log, sin, cos, exp, sqrt, ^ for
                 power</small>
@@ -294,18 +294,18 @@
 
         <div class="input-row">
             <div class="input-group" style="flex: 1;">
-                <label for="lower">Lower bound (a):</label>
+                <label for="lower">Cận dưới(a):</label>
                 <input type="number" id="lower" step="any" value="1">
             </div>
 
             <div class="input-group" style="flex: 1;">
-                <label for="upper">Upper bound (b):</label>
+                <label for="upper">Cận trên (b):</label>
                 <input type="number" id="upper" step="any" value="2">
             </div>
         </div>
         <div class="input-row">
             <div class="input-group" style="flex: 1;">
-                <label for="n">Intervals (n):</label>
+                <label for="n">Số lần lặp (n):</label>
                 <input type="number" id="n" min="2" step="2" value="10">
             </div>
             <div class="input-group" style="flex: 1;">
@@ -316,30 +316,30 @@
         </div>
     </div>
 
-    <button onclick="calculate()">Calculate Integral</button>
+    <button onclick="calculate()">Tính toán </button>
 
     <div id="result" class="result-section" style="display: none;">
-        <h2 class="result-title">Calculation Results</h2>
+        <h2 class="result-title">Kết quả tính toán</h2>
 
         <div id="function-display" class="math-formula"></div>
 
         <div class="step">
-            <h3>Step 1: Calculate Interval Width</h3>
+            <h3>Tính bước nhảy</h3>
             <div id="h-calculation" class="math-formula"></div>
         </div>
 
         <div class="step">
-            <h3>Step 2: Evaluate Function at Points</h3>
+            <h3>Tính toán hàm tại các điểm </h3>
             <div id="table-container"></div>
         </div>
 
         <div class="step">
-            <h3>Step 3: Calculate Sums</h3>
+            <h3>Tính các tổng</h3>
             <div id="sums-calculation" class="math-formula"></div>
         </div>
 
         <div class="final-result">
-            <h3>Final Result</h3>
+            <h3>Kết quả cuối cùng</h3>
             <div id="final-calculation" class="math-formula"></div>
         </div>
     </div>
@@ -390,7 +390,7 @@
                     .replace(/([^\/]+)\/([^\/]+)/g, '\\frac{$1}{$2}'); // Chuyển a/b thành \frac{a}{b}
 
                 document.getElementById('function-display').innerHTML = `
-                    <p>Function to integrate:</p>
+                    <p>Hàm cần tính</p>
                     <p>\\[ I = \\int_{${a}}^{${b}} ${fDisplay} \\, dx \\]</p>
                 `;
 
