@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gauss-Seidel Solver</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js" async></script>
+    <link rel="icon" href="img/anh.jpg" type="image/x-icon">
     <style>
         :root {
             --success-color: #2ecc71;
@@ -463,13 +464,13 @@
                     if (cvc_B >= 1) {
                         resultsDiv.innerHTML += `
                             <div class="error">
-                                Phương pháp Gauss-Seidel có thể không hội tụ vì ||B||∞ >= 1 
+                                Phương pháp Gauss-Seidel có thể không hội tụ vì \\( ||B||_∞ \\) >= 1 
                             </div>
                         `;
                     } else {
                         resultsDiv.innerHTML += `
                             <div class="success">
-                                Phương pháp Gauss-Seidel hội tụ vì ||B||∞ < 1
+                                Phương pháp Gauss-Seidel hội tụ vì  \\( ||B||_∞ \\) < 1 
                             </div>
                         `;
                     }
