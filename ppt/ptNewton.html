@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Newton's Method Calculator</title>
+    <title>Giải phương trình</title>
     <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/11.7.0/math.js"></script>
@@ -29,6 +29,7 @@
             line-height: 1.6;
             color: var(--text-color);
             background-color: #f5f7fa;
+
         }
 
         h1,
@@ -58,7 +59,7 @@
         }
 
         .input-section {
-            background-color: white;
+            background-color: rgb(240, 245, 255);
             padding: 25px;
             border-radius: 10px;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
@@ -93,7 +94,7 @@
         }
 
         button {
-            background-color: var(--primary-color);
+            background: linear-gradient(to right, #0D47A1, #0288D1, #4FC3F7);
             color: white;
             border: none;
             padding: 14px 24px;
@@ -110,9 +111,8 @@
         }
 
         button:hover {
-            background-color: var(--secondary-color);
+            background: linear-gradient(to right, rgba(0, 123, 255, 0.8), rgba(0, 196, 180, 0.2));
             transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
         }
 
         .result-section {
@@ -121,6 +121,23 @@
             border-radius: 10px;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
             margin-top: 25px;
+
+            /* ---- THÊM CÁC DÒNG SAU ĐỂ TẠO HIỆU ỨNG ---- */
+            opacity: 0;
+            /* Ban đầu ẩn đi */
+            transform: translateY(-20px);
+            /* Ban đầu hơi dịch xuống dưới một chút */
+            transition: opacity 0.7s ease-out, transform 0.7s ease-out;
+            /* Thời gian và kiểu hiệu ứng, 0.3s cho nhất quán với hiệu ứng Home */
+            /* display: none; sẽ được quản lý bởi JavaScript và style inline ban đầu */
+        }
+
+        /* ---- THÊM LỚP MỚI NÀY VÀO CSS CỦA BẠN ---- */
+        .result-section.visible {
+            opacity: 1;
+            /* Hiện rõ ra */
+            transform: translateY(0);
+            /* Về vị trí ban đầu */
         }
 
         .result-title {
@@ -266,78 +283,31 @@
             }
         }
 
-        /* Thêm vào phần CSS hiện có */
-        .reset-btn {
-            background-color: #a8d8ea;
-            color: #333;
-            border: none;
-            padding: 5px 10px;
-            /* Giảm kích thước nút */
-            border-radius: 4px;
-            transition: all 0.3s;
-            width: auto;
-            font-size: 90%;
-            /* Giảm kích thước chữ */
-            font-weight: 200;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            text-align: center;
-            position: absolute;
-            /* Đưa nút về bên trái */
-            margin-left: 420px;
-            /* Điều chỉnh khoảng cách với mép trái */
-            margin-top: 340px;
+
+
+
+        /* Đặt đoạn CSS này vào bên trong thẻ <style> của bạn */
+        body {
+            /* ... các style hiện có của body ... */
+            opacity: 1;
+            /* Đảm bảo body có opacity ban đầu là 1 */
+            transition: opacity 0.3s ease-out, transform 0.3s ease-out;
+            /* Thời gian hiệu ứng */
         }
 
-        .reset-btn:hover {
-            background-color: #8cc2d8;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-        }
-
-        buttonk {
-            background-color: #007BFF;
-            color: white;
-            border: none;
-            padding: 14px 24px;
-            border-radius: 10px;
-            cursor: pointer;
-            font-size: 16px;
-            margin: 10px 0;
-            transition: all 0.3s;
-            width: 50px;
-            font-weight: 500;
-            letter-spacing: 0.5px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            text-align: center;
-        }
-
-        .button-containerk {
-            position: absolute;
-            /* Tách biệt khỏi body */
-            display: flex;
-            flex-direction: column;
-            /* Đặt các nút theo chiều dọc */
-            left: 20px;
-            /* Căn trái */
-
-
+        body.page-fade-out {
+            opacity: 0;
+            transform: translateY(30px);
+            /* Đổi thành hiệu ứng trượt xuống. Bạn có thể điều chỉnh giá trị 30px tùy ý */
         }
     </style>
 </head>
 
 <body>
-    <div class="button-containerk">
-        <buttonk onclick="location.href='../index.html'">Home</buttonk>
-        <!-- <buttonk onclick="location.href='/ppt/ptNewton.html'">Giải Phương trình</buttonk>
-        <buttonk onclick="location.href='/ppt/ppSeidel-Gauss.html'">Giải Hệ 3 pt</buttonk>
-        <buttonk onclick="location.href='/ppt/bpct.html'">PP Bình phương cực tiểu</buttonk>
-        <buttonk onclick="location.href='/ppt/tpSimpson.html'">Tính Tích phân</buttonk>
-        <buttonk onclick="location.href='/ppt/ptvp.html'">Phương trình vi phân</buttonk> -->
-
-    </div>
+    <button onclick="goToHomeWithTransition()"
+        style="width: 400px; height: 50px; text-align: center; background: linear-gradient(135deg, #00B4DB, #0083B0, #00FF7F);">Home</button>
 
     <h1>Phương pháp Newton - Tiếp Tuyến</h1>
-    <button class="reset-btn" onclick="resetCalculator()">Ref</button>
     <div class="input-section">
         <div class="input-group">
             <label for="function">Hàm f(x) = 0:</label>
@@ -406,6 +376,21 @@
 
     <script>
 
+        // Đặt hàm này vào bên trong thẻ <script> của bạn
+
+        // ... (các hàm JavaScript hiện có của bạn như roundTo, formatNumber, ...)
+
+        function goToHomeWithTransition() {
+            document.body.classList.add('page-fade-out'); // Thêm lớp để kích hoạt hiệu ứng CSS
+
+            // Đợi hiệu ứng CSS hoàn thành (0.5 giây = 500ms, khớp với 'transition' trong CSS)
+            setTimeout(function () {
+                window.location.href = '../index.html'; // Chuyển hướng đến trang Home
+            }, 300); // 500 milliseconds
+        }
+
+        // ... (Phần còn lại của script của bạn) ...
+
         function roundTo(value, decimals) {
             const factor = Math.pow(10, decimals);
             return Math.round(value * factor) / factor;
@@ -456,17 +441,6 @@
             }
         }
 
-        function resetCalculator() {
-            // Cách 1: Đơn giản nhất - Tải lại trang
-            // window.location.reload();
-
-            // Cách 2: Mềm mại hơn - Reset toàn bộ state
-            window.location.href = window.location.href;
-            document.getElementById('function').value = '';
-            document.getElementById('lower').value = '';
-            document.getElementById('upper').value = '';
-            document.getElementById('iterations').value = '';
-        }
 
         function calculate() {
             // Get input values
@@ -477,7 +451,25 @@
 
 
             // Show result section
-            document.getElementById('result').style.display = 'block';
+
+            // Show result section with animation
+            const resultSection = document.getElementById('result');
+
+            // 1. Thay đổi display để phần tử chiếm không gian và có thể thực hiện transition
+            //    Style inline ban đầu là display: none;, giờ chúng ta đổi thành 'block'
+            resultSection.style.display = 'block';
+
+            // 2. Sử dụng một setTimeout nhỏ để đảm bảo trình duyệt đã áp dụng 'display: block'
+            //    và opacity: 0 từ CSS trước khi thêm lớp 'visible'. Điều này giúp transition chạy đúng.
+            // Chúng ta sẽ thêm lệnh cuộn vào đây
+            setTimeout(function () {
+                resultSection.classList.add('visible'); // Thêm lớp .visible để kích hoạt hiệu ứng CSS
+
+                // ---- THÊM DÒNG NÀY ĐỂ TỰ ĐỘNG CUỘN ----
+                resultSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                // ----------------------------------------
+
+            }, 10); // Khoảng trễ nhỏ (10 mili giây) là đủ để trình duyệt xử lý
 
 
 
@@ -660,6 +652,7 @@
                     </div>
                 `;
             }
+
 
             // Render MathJax after updating content
             if (typeof MathJax !== 'undefined') {
