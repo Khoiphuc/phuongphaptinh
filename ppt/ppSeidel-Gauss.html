@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gauss-Seidel Solver</title>
+    <title>Giải hệ 3 phương trình</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js" async></script>
     <link rel="icon" href="img/anh.jpg" type="image/x-icon">
     <style>
@@ -84,7 +84,7 @@
         }
 
         button {
-            background-color: #3498db;
+            background: linear-gradient(to right, #0D47A1, #0288D1, #4FC3F7);
             color: white;
             border: none;
             padding: 10px 15px;
@@ -97,11 +97,28 @@
         }
 
         button:hover {
-            background-color: #2980b9;
+            background: linear-gradient(to right, rgba(0, 123, 255, 0.8), rgba(0, 196, 180, 0.2));
+            transform: translateY(-2px);
         }
 
+        /* Tìm đến phần CSS của .results trong thẻ <style> của bạn */
         .results {
             margin-top: 30px;
+            /* ---- THÊM CÁC DÒNG SAU ĐỂ TẠO HIỆU ỨNG ---- */
+            opacity: 0;
+            /* Ban đầu ẩn đi */
+            transform: translateY(20px);
+            /* Ban đầu hơi dịch xuống dưới một chút (bạn có thể dùng 30px nếu muốn) */
+            transition: opacity 0.7s ease-out, transform 0.7s ease-out;
+            /* Thời gian và kiểu hiệu ứng */
+        }
+
+        /* ---- THÊM LỚP MỚI NÀY VÀO CSS CỦA BẠN ---- */
+        .results.visible {
+            opacity: 1;
+            /* Hiện rõ ra */
+            transform: translateY(0);
+            /* Về vị trí ban đầu */
         }
 
         .matrix {
@@ -244,53 +261,33 @@
         }
 
         .result-divfinal {
-            background: rgb(80, 255, 80);
+            background: rgb(96, 254, 96);
             border-radius: 8px;
             padding: 20px;
             margin-top: 40px;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
         }
 
-        buttonk {
-            background-color: #007BFF;
-            color: white;
-            border: none;
-            padding: 14px 24px;
-            border-radius: 10px;
-            cursor: pointer;
-            font-size: 16px;
-            margin: 10px 0;
-            transition: all 0.3s;
-            width: 50px;
-            font-weight: 500;
-            letter-spacing: 0.5px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            text-align: center;
+        /* Đặt đoạn CSS này vào bên trong thẻ <style> của bạn */
+        body {
+            /* ... các style hiện có của body ... */
+            opacity: 1;
+            /* Đảm bảo body có opacity ban đầu là 1 */
+            transition: opacity 0.3s ease-out, transform 0.3s ease-out;
+            /* Thời gian hiệu ứng */
         }
 
-        .button-containerk {
-            position: absolute;
-            /* Tách biệt khỏi body */
-            display: flex;
-            flex-direction: column;
-            /* Đặt các nút theo chiều dọc */
-            align-items: flex-start;
-            /* Căn trái */
-            left: 20px;
-            /* Căn trái */
+        body.page-fade-out {
+            opacity: 0;
+            transform: translateY(30px);
+            /* Tùy chọn: thêm hiệu ứng trượt nhẹ */
         }
     </style>
 </head>
 
 <body>
-    <div class="button-containerk">
-        <buttonk onclick="location.href='../index.html'">Home</buttonk>
-        <!-- <buttonk onclick="location.href='/ppt/ptNewton.html'">Giải Phương trình</buttonk>
-        <buttonk onclick="location.href='/ppt/ppSeidel-Gauss.html'">Giải Hệ 3 pt</buttonk>
-        <buttonk onclick="location.href='/ppt/bpct.html'">PP Bình phương cực tiểu</buttonk>
-        <buttonk onclick="location.href='/ppt/tpSimpson.html'">Tính Tích phân</buttonk>
-        <buttonk onclick="location.href='/ppt/ptvp.html'">Phương trình vi phân</buttonk> -->
-    </div>
+    <button onclick="goToHomeWithTransition()"
+        style="width: 400px; height: 50px; text-align: center; background: linear-gradient(135deg, #00B4DB, #0083B0, #00FF7F);">Home</button>
     <h1>Giải Hệ Phương Trình Bằng Phương Pháp Gauss-Seidel</h1>
 
     <div class="input-section">
@@ -358,6 +355,21 @@
         <div id="results" class="results"></div>
 
         <script>
+            // Đặt hàm này vào bên trong thẻ <script> của bạn
+
+            // ... (các hàm JavaScript hiện có của bạn như roundTo, formatNumber, ...)
+
+            function goToHomeWithTransition() {
+                document.body.classList.add('page-fade-out'); // Thêm lớp để kích hoạt hiệu ứng CSS
+
+                // Đợi hiệu ứng CSS hoàn thành (0.5 giây = 500ms, khớp với 'transition' trong CSS)
+                setTimeout(function () {
+                    window.location.href = '../index.html'; // Chuyển hướng đến trang Home
+                }, 300); // 500 milliseconds
+            }
+
+
+            // ... (Phần còn lại của script của bạn) ...
             function froundf(value) {
                 const dcd = parseInt(document.getElementById('floatpoint').value) || 6;
                 const num = parseFloat(value);
@@ -590,6 +602,21 @@
                         </div>
                     `;
 
+
+                    setTimeout(function () {
+                        resultsDiv.classList.add('visible');
+                    }, 10);
+
+
+                    // ---- THAY ĐỔI Ở ĐÂY ----
+                    setTimeout(function () {
+                        resultsDiv.classList.add('visible'); // Thêm lớp để bắt đầu hiệu ứng
+
+                        // Tự động cuộn xuống phần kết quả
+                        resultsDiv.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }, 10);
+                    // ---- KẾT THÚC THAY ĐỔI ----
+
                     // Render MathJax
                     if (typeof MathJax !== 'undefined') {
                         MathJax.typesetPromise().catch(err => console.error("MathJax error:", err));
@@ -598,8 +625,11 @@
 
                 catch (error) {
                     console.error("Error in solve:", error);
-                    document.getElementById('results').innerHTML = '<div style="background-color: #e74c3c; color: white; padding: 8px 15px; border-radius: 4px; margin-top: 30px;">Lỗi khi tính toán: phát hiện lỗi ' + error.message + '</div>';
-
+                    const resultsDivForCatchError = document.getElementById('results');
+                    resultsDivForCatchError.innerHTML = '<div style="background-color: #e74c3c; color: white; padding: 8px 15px; border-radius: 4px; margin-top: 30px;">Lỗi khi tính toán: phát hiện lỗi ' + error.message + '</div>';
+                    // Nếu muốn thông báo lỗi cũng có hiệu ứng:
+                    resultsDivForCatchError.classList.remove('visible');
+                    setTimeout(() => resultsDivForCatchError.classList.add('visible'), 10);
                 }
             }
         </script>
