@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Least Squares Method Calculator</title>
+    <title>Bình phương Cực Tiểu</title>
     <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/11.7.0/math.js"></script>
@@ -27,6 +27,13 @@
             line-height: 1.6;
             color: var(--text-color);
             background-color: #f5f7fa;
+            opacity: 1;
+            transition: opacity 0.3s ease-out, transform 0.3s ease-out;
+        }
+
+        body.page-fade-out {
+            opacity: 0;
+            transform: translateY(30px);
         }
 
         h1,
@@ -65,9 +72,7 @@
 
         .input-group {
             flex: 1;
-            /* Chiếm đều không gian */
             margin-bottom: 22px;
-
         }
 
         label {
@@ -94,7 +99,7 @@
         }
 
         button {
-            background-color: var(--primary-color);
+            background: linear-gradient(to right, #0D47A1, #0288D1, #4FC3F7);
             color: white;
             border: none;
             padding: 14px 24px;
@@ -111,9 +116,8 @@
         }
 
         button:hover {
-            background-color: var(--secondary-color);
+            background: linear-gradient(to right, rgba(0, 123, 255, 0.8), rgba(0, 196, 180, 0.2));
             transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
         }
 
         .result-section {
@@ -122,7 +126,20 @@
             border-radius: 10px;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
             margin-top: 25px;
+            /* Updated for transition */
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.7s ease-out, transform 0.7s ease-out;
+            visibility: hidden;
+            /* Initially hidden, to be managed by JS */
         }
+
+        .result-section.show {
+            opacity: 1;
+            transform: translateY(0);
+            visibility: visible;
+        }
+
 
         .result-title {
             color: #2c3e50;
@@ -247,31 +264,8 @@
         .data-table td {
             padding: 8px 12px;
             text-align: center;
-
         }
 
-        .reset-btn {
-            background-color: #a8d8ea;
-            color: #333;
-            border: none;
-            padding: 5px 10px;
-            border-radius: 4px;
-            transition: all 0.3s;
-            width: auto;
-            font-size: 90%;
-            font-weight: 200;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            text-align: center;
-            position: absolute;
-            margin-left: 600px;
-            margin-top: 495px;
-        }
-
-        .reset-btn:hover {
-            background-color: #8cc2d8;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-        }
 
         @media (max-width: 768px) {
 
@@ -290,9 +284,7 @@
 
         .scrollable-table {
             max-height: 300px;
-            /* Chiều cao tối đa trước khi xuất hiện thanh cuộn */
             overflow-y: auto;
-            /* Thanh cuộn dọc khi cần */
             display: block;
             border: 1px solid #ddd;
             border-radius: 4px;
@@ -319,50 +311,14 @@
                 font-size: 14px;
             }
         }
-
-        buttonk {
-            background-color: #007BFF;
-            color: white;
-            border: none;
-            padding: 14px 24px;
-            border-radius: 10px;
-            cursor: pointer;
-            font-size: 16px;
-            margin: 10px 0;
-            transition: all 0.3s;
-            width: 50px;
-            font-weight: 500;
-            letter-spacing: 0.5px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            text-align: center;
-        }
-
-        .button-containerk {
-            position: absolute;
-            /* Tách biệt khỏi body */
-            display: flex;
-            flex-direction: column;
-            /* Đặt các nút theo chiều dọc */
-            align-items: flex-start;
-            /* Căn trái */
-            left: 20px;
-            /* Căn trái */
-        }
     </style>
 </head>
 
 <body>
-    <div class="button-containerk">
-        <buttonk onclick="location.href='../index.html'">Home</buttonk>
-        <!-- <buttonk onclick="location.href='/ppt/ptNewton.html'">Giải Phương trình</buttonk>
-        <buttonk onclick="location.href='/ppt/ppSeidel-Gauss.html'">Giải Hệ 3 pt</buttonk>
-        <buttonk onclick="location.href='/ppt/bpct.html'">PP Bình phương cực tiểu</buttonk>
-        <buttonk onclick="location.href='/ppt/tpSimpson.html'">Tính Tích phân</buttonk>
-        <buttonk onclick="location.href='/ppt/ptvp.html'">Phương trình vi phân</buttonk> -->
-    </div>
+    <button onclick="goToHomeWithTransition()"
+        style="width: 400px; height: 50px; text-align: center; background: linear-gradient(135deg, #00B4DB, #0083B0, #00FF7F);">Home</button>
+    <h1>PP - Bình phương Cực tiểu</h1>
 
-    <h1>Least Squares Method Calculator</h1>
-    <button class="reset-btn" onclick="resetCalculator()">Reset</button>
 
     <div class="input-section">
         <div class="input-row">
@@ -400,13 +356,12 @@
         </div>
 
         <div id="data-points-container" class="data-points">
-            <!-- Data points will be added here dynamically -->
         </div>
     </div>
 
     <button onclick="calculateLeastSquares()">Calculate</button>
 
-    <div id="result" class="result-section" style="display: none;">
+    <div id="result" class="result-section">
         <div style="background-color: #24ff7f; color: white; padding: 8px 15px; border-radius: 4px; margin-top: 10px;">
             Tính toán thành công ✅</div>
         <h2 class="result-title">Kết quả tính toán Bình phương cực tiểu</h2>
@@ -475,15 +430,22 @@
                 pointDiv.className = 'data-point';
                 pointDiv.innerHTML = `
                     <label for="x_${i}"> \\(x_${i}:\\) </label>
-                    <input type="number" id="x_${i}" step="any" placeholder="x value" value="${temp_x[i]}">
+                    <input type="number" id="x_${i}" step="any" placeholder="x value" value="${temp_x[i] || ''}">
                     <label for="y_${i}"> \\(y_${i}:\\)</label>
-                    <input type="number" id="y_${i}" step="any" placeholder="y value" value="${temp_y[i]}">
+                    <input type="number" id="y_${i}" step="any" placeholder="y value" value="${temp_y[i] || ''}">
                 `;
                 container.appendChild(pointDiv);
             }
         });
 
-        // Làm tròn số
+
+        function goToHomeWithTransition() {
+            document.body.classList.add('page-fade-out');
+            setTimeout(function () {
+                window.location.href = '../index.html';
+            }, 300);
+        }
+
         function roundTo(value, decimals) {
             const factor = Math.pow(10, decimals);
             return Math.round(value * factor) / factor;
@@ -495,7 +457,6 @@
             const rounded = roundTo(num, decimals);
             let str = rounded.toString();
 
-            // Remove trailing zeros and possible decimal point
             if (str.indexOf('.') !== -1) {
                 str = str.replace(/\.?0+$/, '');
             }
@@ -503,12 +464,8 @@
             return str === '' ? '0' : str;
         }
 
-        // Trigger initial setup
         document.getElementById('n').dispatchEvent(new Event('change'));
 
-        function resetCalculator() {
-            window.location.reload();
-        }
 
         function format_k(expr) {
             return expr
@@ -528,238 +485,226 @@
         }
 
         function calculateLeastSquares() {
-            try {
-                // Get input values
-                const f_a = document.getElementById('f_a').value || '0';
-                const f_b = document.getElementById('f_b').value || '0';
-                const f_free = document.getElementById('f_free').value || '0';
-                const n = parseInt(document.getElementById('n').value);
+            const resultSection = document.getElementById('result');
+            // Reset opacity and transform before new calculation for re-triggering animation
+            resultSection.classList.remove('show');
+            // Ensure a small delay to allow the browser to apply the 'hide' state before 'show' for re-animation
+            // If you calculate multiple times, you want the animation to replay.
+            // Using requestAnimationFrame or a small timeout can help.
+            requestAnimationFrame(() => {
+                requestAnimationFrame(() => { // Double RAF for more robust reflow
+                    try {
+                        // Get input values
+                        const f_a = document.getElementById('f_a').value || '0';
+                        const f_b = document.getElementById('f_b').value || '0';
+                        const f_free = document.getElementById('f_free').value || '0';
+                        const n = parseInt(document.getElementById('n').value);
 
 
-                // Collect data points
-                dataPoints = [];
-                for (let i = 0; i < n; i++) {
-                    const x = parseFloat(document.getElementById(`x_${i}`).value);
-                    const y = parseFloat(document.getElementById(`y_${i}`).value);
+                        // Collect data points
+                        dataPoints = [];
+                        for (let i = 0; i < n; i++) {
+                            const x = parseFloat(document.getElementById(`x_${i}`).value);
+                            const y = parseFloat(document.getElementById(`y_${i}`).value);
 
-                    if (isNaN(x) || isNaN(y)) {
-                        throw new Error(`Please enter valid numbers for data point ${i}`);
+                            if (isNaN(x) || isNaN(y)) {
+                                throw new Error(`Please enter valid numbers for data point ${i}`);
+                            }
+
+                            dataPoints.push({ x, y });
+                        }
+
+                        // Display the approximation function
+                        const fDisplay = `a \\cdot ${f_a} + b \\cdot ${f_b} ${f_free ? ' + ' + f_free : ''}`;
+                        document.getElementById('function-display').innerHTML = `
+                            <p>Hàm xấp xỉ:</p>
+                            <p>\\[ y = ${formatExpression(fDisplay)} \\]</p>
+                        `;
+
+                        let dataPointsHTML = `
+                            <div class="scrollable-table">
+                                <table class="data-table">
+                                    <thead>
+                                        <tr>
+                                            <th> \\(k\\) </th>
+                                            <th> \\(x_k\\) </th>
+                                            <th> \\(y_k\\) </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>`;
+
+                        dataPoints.forEach((point, i) => {
+                            dataPointsHTML += `
+                                        <tr>
+                                            <td> \\(${i + 1}\\) </td>
+                                            <td> \\(${point.x}\\)</td>
+                                            <td> \\(${point.y}\\)</td>
+                                        </tr>`;
+                        });
+
+                        dataPointsHTML += `
+                                        </tbody>
+                                    </table>
+                                </div>`;
+
+                        document.getElementById('data-points-display').innerHTML = dataPointsHTML;
+
+                        const sExpr = `(a \\cdot ${f_a} + b \\cdot ${f_b} ${f_free ? ' + ' + f_free : ''}- y_k)^2 `;
+                        document.getElementById('sum-squares').innerHTML = `
+                            <p>Hàm tổng bình phương:</p>
+                            <p>\\[ S = \\sum_{k=1}^{${n}} ${formatExpression(format_k(sExpr))} \\]</p>
+                        `;
+
+                        const sDiffA = `(a \\cdot ${f_a} + b \\cdot ${f_b} ${f_free ? ' + ' + f_free : ''} - y_k) \\cdot ${f_a}`;
+                        const sDiffB = `(a \\cdot ${f_a} + b \\cdot ${f_b} ${f_free ? ' + ' + f_free : ''} - y_k) \\cdot ${f_b}`;
+
+                        document.getElementById('partial-derivatives').innerHTML = `
+                            <p>Đạo hàm riêng:</p>
+                            <p>\\[ \\frac{\\partial S}{\\partial a} = 2 \\sum_{k=1}^{${n}} ${formatExpression(format_k(sDiffA))} \\]</p>
+                            <p>\\[ \\frac{\\partial S}{\\partial b} = 2 \\sum_{k=1}^{${n}} ${formatExpression(format_k(sDiffB))} \\]</p>
+                        `;
+
+                        const he_pt1 = [
+                            `(${f_a})*(${f_a})`,
+                            `(${f_a})*(${f_b})`,
+                            `(${f_a})*(${f_free})`,
+                            `(${f_a})*y`
+                        ];
+
+                        const he_pt2 = [
+                            `(${f_b})*(${f_a})`,
+                            `(${f_b})*(${f_b})`,
+                            `(${f_b})*(${f_free})`,
+                            `(${f_b})*y`
+                        ];
+
+                        document.getElementById('sum-formulas').innerHTML = `
+                            <p>Công thức tính tổng</p>
+                            <p>\\[
+                                \\begin{cases}
+                                    \\left( \\sum\\limits_{k=1}^{${n}} ${formatExpression(format_k(he_pt1[0]))}\\right)a + \\left(\\sum\\limits_{k=1}^{${n}} ${formatExpression(format_k(he_pt1[1]))}\\right)b + \\left(\\sum\\limits_{k=1}^{${n}} ${formatExpression(format_k(he_pt1[2]))}\\right) - \\left(\\sum\\limits_{k=1}^{${n}} ${formatExpression(format_k(he_pt1[3]))} \\right) = 0 \\\\[1.1ex]
+                                    \\left( \\sum\\limits_{k=1}^{${n}} ${formatExpression(format_k(he_pt2[0]))}\\right)a + \\left(\\sum\\limits_{k=1}^{${n}} ${formatExpression(format_k(he_pt2[1]))}\\right)b + \\left(\\sum\\limits_{k=1}^{${n}} ${formatExpression(format_k(he_pt2[2]))}\\right) - \\left(\\sum\\limits_{k=1}^{${n}} ${formatExpression(format_k(he_pt2[3]))} \\right) = 0
+                                \\end{cases}
+                            \\]</p>
+                        `;
+
+                        const sums1 = [0, 0, 0, 0];
+                        const sums2 = [0, 0, 0, 0];
+
+                        function safeExpr(expr, varName) {
+                            return `(${expr.replace(/x/g, varName)})`;
+                        }
+
+                        dataPoints.forEach(point => {
+                            for (let i = 0; i < 4; i++) {
+                                const x_expr = `(${point.x})`;
+                                const expr1 = he_pt1[i].replace(/y/g, point.y.toString());
+                                const expr2 = he_pt2[i].replace(/y/g, point.y.toString());
+                                const finalExpr1 = expr1.replace(/x/g, x_expr);
+                                const finalExpr2 = expr2.replace(/x/g, x_expr);
+
+                                sums1[i] += math.evaluate(finalExpr1);
+                                sums2[i] += math.evaluate(finalExpr2);
+                            }
+                        });
+
+                        for (let i = 0; i < 4; i++) {
+                            sums1[i] = parseFloat(formatNumber(sums1[i]));
+                            sums2[i] = parseFloat(formatNumber(sums2[i]));
+                        }
+
+                        function formatFirstCoefficient(value) {
+                            const num = parseFloat(value);
+                            return (num >= 0) ? `${num}` : `- ${Math.abs(num)}`;
+                        }
+
+                        function formatFollowingCoefficient(value) {
+                            const num = parseFloat(value);
+                            return (num >= 0) ? `+ ${num}` : `- ${Math.abs(num)}`;
+                        }
+
+                        document.getElementById('normal-equations').innerHTML = `
+                            <p>Phương trình chuẩn</p>
+                            <p>\\[
+                                \\begin{cases}
+                                    ${formatFirstCoefficient(sums1[0])}a ${formatFollowingCoefficient(sums1[1])}b ${formatFollowingCoefficient(sums1[2])} ${formatFollowingCoefficient(-sums1[3])} = 0 \\\\[1.1ex]
+                                    ${formatFirstCoefficient(sums2[0])}a ${formatFollowingCoefficient(sums2[1])}b ${formatFollowingCoefficient(sums2[2])} ${formatFollowingCoefficient(-sums2[3])} = 0
+                                \\end{cases}
+                            \\]</p>
+                        `;
+
+                        const a11 = sums1[0];
+                        const a12 = sums1[1];
+                        const b1 = -sums1[3] + sums1[2];
+
+                        const a21 = sums2[0];
+                        const a22 = sums2[1];
+                        const b2 = -sums2[3] + sums2[2];
+
+                        document.getElementById('equation-system').innerHTML = `
+                            <p>Hệ phương trình</p>
+                            <p>\\[
+                                \\begin{cases}
+                                    ${formatFirstCoefficient(a11)}a ${formatFollowingCoefficient(a12)}b = ${formatFirstCoefficient(formatNumber(-b1))} \\\\[1.1ex]
+                                    ${formatFirstCoefficient(a21)}a ${formatFollowingCoefficient(a22)}b = ${formatFirstCoefficient(formatNumber(-b2))}
+                                \\end{cases}
+                            \\]</p>
+                        `;
+
+                        const det = a11 * a22 - a12 * a21;
+                        if (Math.abs(det) < 1e-10) {
+                            throw new Error('The system of equations has no unique solution (determinant is zero)');
+                        }
+
+                        const bSol = (a21 * -b1 - a11 * -b2) / (a21 * a12 - a11 * a22);
+                        const aSol = (-b1 / a11) - (a12 / a11) * bSol;
+
+                        document.getElementById('final-result').innerHTML = `
+                            <div class="success-box">
+                                <h3>Giải Hệ phương trình</h3>
+                                <p>\\[
+                                    \\begin{cases}
+                                        a = ${formatNumber(aSol)}\\\\[1.1ex]
+                                        b = ${formatNumber(bSol)}
+                                    \\end{cases}
+                                \\]</p>
+                                <p>Hàm xấp xỉ cuối cùng:</p>
+                                <p style="font-size: 1.3em; text-align: center;">
+                                    \\[ y = ${formatFirstCoefficient(formatNumber(aSol))} ${formatExpression(f_a)} + ${formatFirstCoefficient(formatNumber(bSol))} ${formatExpression(f_b)}${f_free ? ' + ' + formatExpression(f_free) : ''} \\]
+                                </p>
+                            </div>
+                        `;
+
+                        // Show result section with animation
+                        resultSection.classList.add('show');
+
+                        // Scroll to the result section after a short delay to allow animation to start
+                        setTimeout(() => {
+                            resultSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                        }, 100); // Delay can be adjusted
+
+                    } catch (e) {
+                        resultSection.innerHTML = `
+                            <div class="error">
+                                <h3>Error</h3>
+                                <p>Xuất hiện lỗi : ${e.message}</p>
+                                <p>Vui lòng kiểm tra lại dữ liệu đã nhập và thử lại </p>
+                            </div>
+                        `;
+                        // Show error with animation
+                        resultSection.classList.add('show');
+                        // Scroll to the error message
+                        setTimeout(() => {
+                            resultSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                        }, 100);
                     }
 
-                    dataPoints.push({ x, y });
-                }
-
-                // Show result section
-                document.getElementById('result').style.display = 'block';
-
-
-                // Display the approximation function
-                const fDisplay = `a \\cdot ${f_a} + b \\cdot ${f_b} ${f_free ? ' + ' + f_free : ''}`;
-                document.getElementById('function-display').innerHTML = `
-                    <p>Hàm xấp xỉ:</p>
-                    <p>\\[ y = ${formatExpression(fDisplay)} \\]</p>
-                `;
-
-                // Display data points in a table
-                // Display data points in a scrollable table
-                let dataPointsHTML = `
-                    <div class="scrollable-table">
-                        <table class="data-table">
-                            <thead>
-                                <tr>
-                                    <th> \\(k\\) </th>
-                                    <th> \\(x_k\\) </th>
-                                    <th> \\(y_k\\) </th>
-                                </tr>
-                            </thead>
-                            <tbody>`;
-
-                dataPoints.forEach((point, i) => {
-                    dataPointsHTML += `
-                        <tr>
-                            <td> \\(${i + 1}\\) </td>
-                            <td> \\(${point.x}\\)</td>
-                            <td> \\(${point.y}\\)</td>
-                        </tr>`;
-                });
-
-                dataPointsHTML += `
-                                </tbody>
-                            </table>
-                        </div>`;
-
-                document.getElementById('data-points-display').innerHTML = dataPointsHTML;
-
-                // Display sum of squares function
-                const sExpr = `(a \\cdot ${f_a} + b \\cdot ${f_b} ${f_free ? ' + ' + f_free : ''}- y_k)^2 `;
-                document.getElementById('sum-squares').innerHTML = `
-                    <p>Hàm tổng bình phương:</p>
-                    <p>\\[ S = \\sum_{k=1}^{${n}} ${formatExpression(format_k(sExpr))} \\]</p>
-                `;
-
-                // Display partial derivatives
-                const sDiffA = `(a \\cdot ${f_a} + b \\cdot ${f_b} ${f_free ? ' + ' + f_free : ''} - y_k) \\cdot ${f_a}`;
-                const sDiffB = `(a \\cdot ${f_a} + b \\cdot ${f_b} ${f_free ? ' + ' + f_free : ''} - y_k) \\cdot ${f_b}`;
-
-                document.getElementById('partial-derivatives').innerHTML = `
-                    <p>Đạo hàm riêng:</p>
-                    <p>\\[ \\frac{\\partial S}{\\partial a} = 2 \\sum_{k=1}^{${n}} ${formatExpression(format_k(sDiffA))} \\]</p>
-                    <p>\\[ \\frac{\\partial S}{\\partial b} = 2 \\sum_{k=1}^{${n}} ${formatExpression(format_k(sDiffB))} \\]</p>
-                `;
-
-
-
-                // Calculate normal equations
-                // φ₁², φ₁φ₂, φ₁φ₀, φ₁y
-                // φ₂φ₁, φ₂², φ₂φ₀, φ₂y
-                // Cách viết an toàn nhất (thêm ngoặc cho tất cả các phép toán)
-                const he_pt1 = [
-                    `(${f_a})*(${f_a})`,   // Thay vì f_a+'^2'
-                    `(${f_a})*(${f_b})`,
-                    `(${f_a})*(${f_free})`,
-                    `(${f_a})*y`
-                ];
-
-                const he_pt2 = [
-                    `(${f_b})*(${f_a})`,
-                    `(${f_b})*(${f_b})`,   // Thay vì f_b+'^2'
-                    `(${f_b})*(${f_free})`,
-                    `(${f_b})*y`
-                ];
-
-                document.getElementById('sum-formulas').innerHTML = `
-                    <p>Công thức tính tổng</p>
-                    <p>\\[ 
-                        \\begin{cases}
-                            \\left( \\sum\\limits_{k=1}^{${n}} ${formatExpression(format_k(he_pt1[0]))}\\right)a + \\left(\\sum\\limits_{k=1}^{${n}} ${formatExpression(format_k(he_pt1[1]))}\\right)b + \\left(\\sum\\limits_{k=1}^{${n}} ${formatExpression(format_k(he_pt1[2]))}\\right) - \\left(\\sum\\limits_{k=1}^{${n}} ${formatExpression(format_k(he_pt1[3]))} \\right) = 0 \\\\[1.1ex]
-                            \\left( \\sum\\limits_{k=1}^{${n}} ${formatExpression(format_k(he_pt2[0]))}\\right)a + \\left(\\sum\\limits_{k=1}^{${n}} ${formatExpression(format_k(he_pt2[1]))}\\right)b + \\left(\\sum\\limits_{k=1}^{${n}} ${formatExpression(format_k(he_pt2[2]))}\\right) - \\left(\\sum\\limits_{k=1}^{${n}} ${formatExpression(format_k(he_pt2[3]))} \\right) = 0
-                        \\end{cases}
-                    \\]</p>
-                `;
-
-
-                // Calculate sums for each term
-                const sums1 = [0, 0, 0, 0];
-                const sums2 = [0, 0, 0, 0];
-
-                // Tạo biểu thức an toàn
-                function safeExpr(expr, varName) {
-                    return `(${expr.replace(/x/g, varName)})`;
-                }
-
-                // Tính các tổng
-                dataPoints.forEach(point => {
-                    for (let i = 0; i < 4; i++) {
-                        const x_expr = `(${point.x})`; // Đóng gói giá trị x
-
-                        // Xử lý an toàn cho y
-                        const expr1 = he_pt1[i].replace(/y/g, point.y.toString());
-                        const expr2 = he_pt2[i].replace(/y/g, point.y.toString());
-
-                        // Thay thế x an toàn
-                        const finalExpr1 = expr1.replace(/x/g, x_expr);
-                        const finalExpr2 = expr2.replace(/x/g, x_expr);
-
-                        sums1[i] += math.evaluate(finalExpr1);
-                        sums2[i] += math.evaluate(finalExpr2);
+                    // Render MathJax after updating content
+                    if (typeof MathJax !== 'undefined') {
+                        MathJax.typesetPromise().catch((err) => console.log('MathJax typesetting error: ', err));
                     }
                 });
-
-                // Round sums to 6 decimal places
-                for (let i = 0; i < 4; i++) {
-                    sums1[i] = parseFloat(formatNumber(sums1[i]));
-                    sums2[i] = parseFloat(formatNumber(sums2[i]));
-                }
-
-
-                // Display normal equations
-                // Hàm định dạng hệ số đầu tiên (không thêm dấu +)
-                function formatFirstCoefficient(value) {
-                    const num = parseFloat(value);
-                    return (num >= 0) ? `${num}` : `- ${Math.abs(num)}`;
-                }
-
-                // Hàm định dạng hệ số tiếp theo (thêm dấu + hoặc -)
-                function formatFollowingCoefficient(value) {
-                    const num = parseFloat(value);
-                    return (num >= 0) ? `+ ${num}` : `- ${Math.abs(num)}`;
-                }
-
-                document.getElementById('normal-equations').innerHTML = `
-                    <p>Phương trình chuẩn</p>
-                    <p>\\[ 
-                        \\begin{cases}
-                            ${formatFirstCoefficient(sums1[0])}a ${formatFollowingCoefficient(sums1[1])}b ${formatFollowingCoefficient(sums1[2])} ${formatFollowingCoefficient(-sums1[3])} = 0 \\\\[1.1ex]
-                            ${formatFirstCoefficient(sums2[0])}a ${formatFollowingCoefficient(sums2[1])}b ${formatFollowingCoefficient(sums2[2])} ${formatFollowingCoefficient(-sums2[3])} = 0 
-                        \\end{cases}
-                    \\]</p>
-                `;
-
-                // Solve the system of equations
-                const a11 = sums1[0];
-                const a12 = sums1[1];
-                const b1 = -sums1[3] + sums1[2];
-
-                const a21 = sums2[0];
-                const a22 = sums2[1];
-                const b2 = -sums2[3] + sums2[2];
-
-                // Display equation system
-
-
-                // Áp dụng vào hệ phương trình
-                document.getElementById('equation-system').innerHTML = `
-                    <p>Hệ phương trình</p>
-                    <p>\\[ 
-                        \\begin{cases}
-                            ${formatFirstCoefficient(a11)}a ${formatFollowingCoefficient(a12)}b = ${formatFirstCoefficient(formatNumber(-b1))} \\\\[1.1ex]
-                            ${formatFirstCoefficient(a21)}a ${formatFollowingCoefficient(a22)}b = ${formatFirstCoefficient(formatNumber(-b2))}
-                        \\end{cases}
-                    \\]</p>
-                `;
-
-                // Solve using Cramer's rule
-                const det = a11 * a22 - a12 * a21;
-                if (Math.abs(det) < 1e-10) {
-                    throw new Error('The system of equations has no unique solution (determinant is zero)');
-                }
-
-                const bSol = (a21 * -b1 - a11 * -b2) / (a21 * a12 - a11 * a22);
-                const aSol = (-b1 / a11) - (a12 / a11) * bSol;
-
-
-                // Display final result
-                document.getElementById('final-result').innerHTML = `
-                    <div class="success-box">
-                        <h3>Giải Hệ phương trình</h3>
-                        <p>\\[ 
-                            \\begin{cases}
-                                a = ${formatNumber(aSol)}\\\\[1.1ex]
-                                b = ${formatNumber(bSol)}
-                            \\end{cases}
-                        \\]</p>
-                        <p>Hàm xấp xỉ cuối cùng:</p>
-                        <p style="font-size: 1.3em; text-align: center;">
-                            \\[ y = ${formatFirstCoefficient(formatNumber(aSol))} ${formatExpression(f_a)} + ${formatFirstCoefficient(formatNumber(bSol))} ${formatExpression(f_b)}${f_free ? ' + ' + formatExpression(f_free) : ''} \\]
-                        </p>
-                    </div>
-                `;
-
-            } catch (e) {
-                document.getElementById('result').innerHTML = `
-                    <div class="error">
-                        <h3>Error</h3>
-                        <p>Xuất hiện lỗi : ${e.message}</p>
-                        <p>Vui lòng kiểm tra lại dữ liệu đã nhập và thử lại </p>
-                    </div>
-                `;
-                document.getElementById('result').style.display = 'block';
-            }
-
-            // Render MathJax after updating content
-            if (typeof MathJax !== 'undefined') {
-                MathJax.typeset();
-            }
+            });
         }
     </script>
 </body>
