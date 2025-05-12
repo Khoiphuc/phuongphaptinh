@@ -27,15 +27,6 @@
             line-height: 1.6;
             color: var(--text-color);
             background-color: #f5f7fa;
-            /* Added for page transition */
-            opacity: 1;
-            transition: opacity 0.3s ease-out, transform 0.3s ease-out;
-        }
-
-        /* Added for page transition */
-        body.page-fade-out {
-            opacity: 0;
-            transform: translateY(30px);
         }
 
         h1,
@@ -74,8 +65,6 @@
 
         .input-group {
             margin-bottom: 15px;
-            flex: 1;
-            /* Added to make groups share space */
         }
 
         label {
@@ -123,51 +112,14 @@
             transform: translateY(-2px);
         }
 
-        /* ... các style khác giữ nguyên ... */
-
         .result-section {
             background-color: white;
-            /* padding: 25px; <-- Chuyển sang .show */
-            padding: 0 25px;
-            /* Giữ padding ngang nếu muốn */
+            padding: 25px;
             border-radius: 10px;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-            /* margin-top: 25px; <-- Chuyển sang .show */
-            margin-top: 0;
-            /* ---- Added/Modified for animation & no initial space ---- */
-            opacity: 0;
-            transform: translateY(30px);
-            visibility: hidden;
-            max-height: 0;
-            /* Thu gọn chiều cao ban đầu */
-            overflow: hidden;
-            /* Ẩn nội dung khi thu gọn */
-            transition: opacity 0.5s ease-out,
-                transform 0.5s ease-out,
-                max-height 0.5s ease-out,
-                /* Thêm transition cho max-height */
-                padding-top 0.5s ease-out,
-                /* Thêm transition cho padding */
-                padding-bottom 0.5s ease-out,
-                margin-top 0.5s ease-out;
-            /* Thêm transition cho margin */
-            /* ------------------------------------------------------- */
-        }
-
-        .result-section.show {
-            opacity: 1;
-            transform: translateY(0);
-            visibility: visible;
-            max-height: 200vh;
-            /* Đặt giá trị đủ lớn để chứa mọi nội dung có thể */
-            padding: 25px;
-            /* Khôi phục padding */
             margin-top: 25px;
-            /* Khôi phục margin-top */
-        }
 
-        /* ... các style còn lại giữ nguyên ... */
-        /* --------------------------- */
+        }
 
         .result-title {
             color: #2c3e50;
@@ -181,6 +133,7 @@
             border-collapse: collapse;
             margin: 20px 0;
             font-family: 'Consolas', 'Monaco', monospace;
+
         }
 
         th,
@@ -244,36 +197,32 @@
         }
 
         .success-box h3 {
-            /* This was likely unused in original */
             color: var(--success-color);
             margin-top: 0;
         }
 
         .success-box2 {
             background-color: rgb(243, 253, 244);
+
             padding: 15px;
             border-radius: 8px;
             margin-top: 30px;
             height: 100px;
-            /* Original fixed height */
             border-left: 4px solid var(--success-color);
         }
+
+
 
         .input-row {
             display: flex;
             gap: 20px;
         }
 
+
         @media (max-width: 768px) {
             .input-row {
                 flex-direction: column;
-                gap: 0;
-                /* Original was 15px, reverting */
-            }
-
-            .input-group {
-                margin-bottom: 15px;
-                /* Added back for spacing when stacked */
+                gap: 15px;
             }
         }
 
@@ -289,8 +238,6 @@
         .scrollable-table table {
             width: 100%;
             border-collapse: collapse;
-            margin: 0;
-            /* Added */
         }
 
         .scrollable-table th {
@@ -322,8 +269,6 @@
             margin: 0;
             width: auto;
             transition: all 0.3s;
-            flex-shrink: 0;
-            /* Added */
         }
 
         .toggle-btn:hover {
@@ -340,13 +285,8 @@
 
         .horizontal-table {
             width: auto;
-            /* Original */
-            min-width: 100%;
-            /* Added */
             border-collapse: collapse;
             white-space: nowrap;
-            margin: 0;
-            /* Added */
         }
 
         .horizontal-table th,
@@ -362,24 +302,31 @@
             color: white;
             position: sticky;
             top: 0;
-            z-index: 1;
-            /* Added */
         }
-
-        .horizontal-table td {
-            /* Added */
-            background-color: white;
-        }
-
 
         .fixed-column {
             position: sticky;
             left: 0;
             background-color: #f8f9fa;
-            /* Original */
             z-index: 2;
-            border-right: 2px solid #ccc;
-            /* Added */
+        }
+
+        /* hết */
+
+
+        /* Đặt đoạn CSS này vào bên trong thẻ <style> của bạn */
+        body {
+            /* ... các style hiện có của body ... */
+            opacity: 1;
+            /* Đảm bảo body có opacity ban đầu là 1 */
+            transition: opacity 0.3s ease-out, transform 0.3s ease-out;
+            /* Thời gian hiệu ứng */
+        }
+
+        body.page-fade-out {
+            opacity: 0;
+            transform: translateY(30px);
+            /* Đổi thành hiệu ứng trượt xuống. Bạn có thể điều chỉnh giá trị 30px tùy ý */
         }
     </style>
 </head>
@@ -387,14 +334,13 @@
 <body>
     <button onclick="goToHomeWithTransition()"
         style="width: 400px; height: 50px; text-align: center; background: linear-gradient(135deg, #00B4DB, #0083B0, #00FF7F);">Home</button>
+
     <h1>PP Euler cải tiến </h1>
 
     <div class="input-section">
         <div class="input-group">
             <label for="y_diff">Phương trình vi phân \( y' = f(x, y) \):</label>
-            <input type="text" id="y_diff" placeholder="e.g., x + y" value="5*y + 2*e^x"> <small
-                style="color: #7f8c8d; font-size: 0.9em;">Use JavaScript math syntax: e.g., x*y, x^2, log(x), sin(x),
-                e^x</small>
+            <input type="text" id="y_diff" placeholder="e.g., x + y" value="5y + 2e^x">
         </div>
 
         <div class="input-row">
@@ -428,20 +374,24 @@
                 <label for="iterations">Số lần lặp:</label>
                 <input type="number" id="iterations" min="1" value="3">
             </div>
+
             <div class="input-group">
                 <label for="decimalPlaces">Dấu chấm động:</label>
-                <input type="number" id="decimalPlaces" min="0" max="34" value="6">
+                <input type="number" id="decimalPlaces" min="1" max="34" value="6">
             </div>
         </div>
     </div>
 
     <button onclick="calculateEuler()">Calculate</button>
 
-    <div id="result" class="result-section">
+    <div id="result" class="result-section" style="display: none;">
         <div style="display: flex; justify-content: space-between; align-items: center;">
             <h2 class="result-title">Kết quả của phương pháp Euler cải tiến</h2>
             <button id="toggleView" class="toggle-btn" onclick="toggleViewMode()">Thu gọn</button>
         </div>
+        <!-- ... phần còn lại giữ nguyên ... -->
+        <h2 class="result-title">Kết quả của phương pháp Euler cải tiến</h2>
+
         <div style="background-color: #24ff7f; color: white; padding: 8px 15px; border-radius: 4px; margin-top: 10px;">
             Calculation successful ✅
         </div>
@@ -472,22 +422,25 @@
     </div>
 
     <script>
+
         function goToHomeWithTransition() {
-            document.body.classList.add('page-fade-out');
+            document.body.classList.add('page-fade-out'); // Thêm lớp để kích hoạt hiệu ứng CSS
+
+            // Đợi hiệu ứng CSS hoàn thành (0.5 giây = 500ms, khớp với 'transition' trong CSS)
             setTimeout(function () {
-                window.location.href = '../index.html';
-            }, 300);
+                window.location.href = '../index.html'; // Chuyển hướng đến trang Home
+            }, 300); // 500 milliseconds
         }
 
-        // Original rounding function
+
+        // Làm tròn số
         function roundTo(value, decimals) {
             const factor = Math.pow(10, decimals);
             return Math.round(value * factor) / factor;
         }
-        // Original formatNumber function
         function formatNumber(num) {
             const dcd = parseInt(document.getElementById('decimalPlaces').value);
-            decimals = dcd // Note: global variable 'decimals', original code had this
+            decimals = dcd
             if (num === null || num === undefined) return "NaN";
             const rounded = roundTo(num, decimals);
             let str = rounded.toString();
@@ -497,44 +450,38 @@
                 str = str.replace(/\.?0+$/, '');
             }
 
-            // Original logic had this check at the end
-            if (str.endsWith('.')) str = str.slice(0, -1);
-
             return str === '' ? '0' : str;
         }
 
-
-        // Original formatExpression function
+        // Format mathematical expression for display
         function formatExpression(expr) {
             // Xử lý hàm exp() và e^ thành e^{...}
             expr = expr.replace(/exp\(([^)]+)\)/g, 'e^{$1}')
-                .replace(/e\^\(([^)]+)\)/g, 'e^{$1}'); // Original handled only e^(...)
+                .replace(/e\^\(([^)]+)\)/g, 'e^{$1}');
 
             // Các thay thế khác
             return expr
                 .replace(/log/g, '\\ln')
-                .replace(/\^/g, '^') // Original replaced ^ with ^
+                .replace(/\^/g, '^')
                 .replace(/sqrt\(([^)]+)\)/g, '\\sqrt{$1}')
                 .replace(/\*/g, '\\cdot ')
-                .replace(/\\cdot/g, ''); // Original removed cdot again
-            // Original did not handle fractions explicitly
+                .replace(/\\cdot/g, '');
         }
 
-        // Original calcFunction
+        // Calculate function value with substitution
         function calcFunction(f, xVal, yVal) {
             try {
-                // Thay thế exp(x) thành e^x trước khi tính toán - This logic seems redundant if math.js handles 'e'
-                // let processedExpr = f.replace(/exp\(([^)]+)\)/g, 'e^($1)');
-                // Replace x and y with their values using regex to avoid replacing parts of words
-                const expr = f.replace(/\bx\b/g, `(${xVal})`).replace(/\by\b/g, `(${yVal})`);
-                // Use math.evaluate, provide 'e' constant
-                return math.evaluate(expr, { e: Math.E });
+                // Thay thế exp(x) thành e^x trước khi tính toán
+                let processedExpr = f.replace(/exp\(([^)]+)\)/g, 'e^($1)');
+                // Replace x and y with their values
+                const expr = f.replace(/x/g, `(${xVal})`).replace(/y/g, `(${yVal})`);
+                return math.evaluate(expr);
             } catch (e) {
-                throw new Error(`Error evaluating function f(${xVal}, ${yVal}): ${e.message}`);
+                throw new Error(`Error evaluating function: ${e.message}`);
             }
         }
 
-        // Original replaceVars - Note: this was quite complex and might have issues
+
         function replaceVars(str, varNames, variables) {
             varNames.forEach(varName => {
                 // Xử lý biến đứng riêng hoặc sau toán tử
@@ -547,183 +494,169 @@
             });
             return str;
         }
-
-        // Original format_k - Note: this relied on replaceVars
         function format_k(expr, variables = { x: '0', y: '0' }) {
             // Tạo danh sách biến cần thay thế (theo thứ tự dài trước ngắn)
             const varNames = Object.keys(variables).sort((a, b) => b.length - a.length);
 
-            // Bước 1: Xử lý các hàm đặc biệt (exp, e^) trước - Original logic
+            // Bước 1: Xử lý các hàm đặc biệt (exp, e^) trước
             expr = expr.replace(/exp\(([^)]+)\)/g, (match, inner) => {
                 return `exp(${replaceVars(inner, varNames, variables)})`;
             });
 
-            expr = expr.replace(/e\^([^+\-*/( )]+)/g, (match, inner) => { // Original regex for e^
+            expr = expr.replace(/e\^([^+\-*/( )]+)/g, (match, inner) => {
                 return `e^{${replaceVars(inner, varNames, variables)}}`;
             });
 
-            // Bước 2: Xử lý toàn bộ biểu thức - Original logic
+            // Bước 2: Xử lý toàn bộ biểu thức
             expr = replaceVars(expr, varNames, variables);
 
-            // Call formatExpression at the end
-            return formatExpression(expr);
+            return expr;
         }
 
-
-        // Original function to create horizontal table
+        // Hàm tạo bảng ngang
         function createHorizontalTable(data, prefix) {
-            // Get decimal places inside this function scope if needed, or pass it
-            const decimalPlaces = parseInt(document.getElementById('decimalPlaces').value);
-            // Format numbers using the original formatNumber
-            const formatFn = (val) => formatNumber(val); // Use original formatNumber
-
             return `
-                 <div class="horizontal-scroll-container">
-                     <table class="horizontal-table">
-                         <thead>
-                             <tr>
-                                 <th class="fixed-column"> \\(k\\)</th>
-                                 ${data.map(item => `<th> \\(${prefix}^{(${item.iteration})}\\)</th>`).join('')}
-                             </tr>
-                         </thead>
-                         <tbody>
-                             <tr>
-                                 <td class="fixed-column"> \\(${prefix}^{(k+1)}\\)</td>
-                                  ${data.map(item => `<td> \\(${formatFn(item.value)}\\)</td>`).join('')}
-                             </tr>
-                         </tbody>
-                     </table>
-                 </div>`;
+                <div class="horizontal-scroll-container">
+                    <table class="horizontal-table">
+                        <thead>
+                            <tr>
+                                <th class="fixed-column"> \\(k\\)</th>
+                                ${data.map(item => `<th> \\(${prefix}^{(${item.iteration})}\\)</th>`).join('')}
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="fixed-column"> \\(${prefix}^{(k+1)}\\)</td>
+                                ${data.map(item => `<td> \\(${formatNumber(item.value)}\\)</td>`).join('')}
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>`;
         }
 
-        let isDetailedView = true;
-        let currentResults = {};
+        let isDetailedView = true; // Mặc định là chế độ chi tiết
+        let currentResults = {}; // Lưu trữ kết quả hiện tại
 
-        // Original calculateEuler function with only animation/scroll added
+
         function calculateEuler() {
-            const resultSection = document.getElementById('result');
-            // ---- Added for animation ----
-            resultSection.classList.remove('show');
-            requestAnimationFrame(() => {
-                requestAnimationFrame(() => {
-                    // ---------------------------
-                    try {
-                        // Get input values (original way)
-                        const y_diff = document.getElementById('y_diff').value;
-                        const x0 = parseFloat(document.getElementById('x0').value);
-                        const y0 = parseFloat(document.getElementById('y0').value);
-                        const x1 = parseFloat(document.getElementById('x1').value);
-                        const x2 = parseFloat(document.getElementById('x2').value);
-                        const h = parseFloat(document.getElementById('h').value);
-                        const iterations = parseInt(document.getElementById('iterations').value);
-                        const decimalPlaces = parseInt(document.getElementById('decimalPlaces').value); // Get decimals
+            try {
+                // Get input values
+                const y_diff = document.getElementById('y_diff').value;
+                const x0 = parseFloat(document.getElementById('x0').value);
+                const y0 = parseFloat(document.getElementById('y0').value);
+                const x1 = parseFloat(document.getElementById('x1').value);
+                const x2 = parseFloat(document.getElementById('x2').value);
+                const h = parseFloat(document.getElementById('h').value);
+                const iterations = parseInt(document.getElementById('iterations').value);
 
-                        // Original validation (simple NaN check)
-                        if (isNaN(x0) || isNaN(y0) || isNaN(x1) || isNaN(x2) || isNaN(h) || isNaN(iterations) || isNaN(decimalPlaces)) {
-                            throw new Error("Please enter valid numerical values for all inputs");
-                        }
-                        if (iterations < 1) { // Original check
-                            throw new Error("Number of iterations must be at least 1");
-                        }
 
-                        // ---- Removed: document.getElementById('result').style.display = 'block'; ----
+                // Validate inputs
+                if (isNaN(x0) || isNaN(y0) || isNaN(x1) || isNaN(x2) || isNaN(h) || isNaN(iterations)) {
+                    throw new Error("Please enter valid numerical values for all inputs");
+                }
+                if (iterations < 1) {
+                    throw new Error("Number of iterations must be at least 1");
+                }
 
-                        // Calculate y1 (Original logic)
-                        const f_x0_y0 = calcFunction(y_diff, x0, y0); // Calc f(x0,y0) once
-                        const s0_y1 = y0 + h * f_x0_y0; // Use the calculated value
+                // Show result section
+                document.getElementById('result').style.display = 'block';
 
-                        let y1_values = [];
-                        let current_y1 = s0_y1;
-                        for (let i = 0; i < iterations; i++) {
-                            // Calculate f(x1, current_y1) inside the loop
-                            const f_x1_current_y1 = calcFunction(y_diff, x1, current_y1);
-                            current_y1 = y0 + h / 2 * (f_x0_y0 + f_x1_current_y1); // Use f(x0,y0) again
-                            y1_values.push({ iteration: i + 1, value: current_y1 });
-                        }
-                        const y1_final = y1_values.length > 0 ? y1_values[y1_values.length - 1].value : s0_y1;
 
-                        // Calculate y2 (Original logic)
-                        const f_x1_y1_final = calcFunction(y_diff, x1, y1_final); // Calc f(x1, y1_final) once
-                        const s0_y2 = y1_final + h * f_x1_y1_final; // Use the calculated value
 
-                        let y2_values = [];
-                        let current_y2 = s0_y2;
-                        for (let i = 0; i < iterations; i++) {
-                            // Calculate f(x2, current_y2) inside the loop
-                            const f_x2_current_y2 = calcFunction(y_diff, x2, current_y2);
-                            current_y2 = y1_final + h / 2 * (f_x1_y1_final + f_x2_current_y2); // Use f(x1, y1_final) again
-                            y2_values.push({ iteration: i + 1, value: current_y2 });
-                        }
-                        const y2_final = y2_values.length > 0 ? y2_values[y2_values.length - 1].value : s0_y2;
+                // Calculate y1 using improved Euler method
+                // First approximation
+                const s0_y1 = y0 + h * calcFunction(y_diff, x0, y0);
 
-                        // Store results (Original structure)
-                        currentResults = {
-                            data: {
-                                y_diff, x0, y0, x1, x2, h, iterations,
-                                y1_values, y2_values, y1_final, y2_final, s0_y1, s0_y2
-                            },
-                            // Pass decimalPlaces to render functions if needed by original formatNumber
-                            decimalPlaces: decimalPlaces
-                        };
+                // Iterative improvements
+                let y1_values = [];
+                let current_y1 = s0_y1;
+                for (let i = 0; i < iterations; i++) {
+                    current_y1 = y0 + h / 2 * (
+                        calcFunction(y_diff, x0, y0) +
+                        calcFunction(y_diff, x1, current_y1)
+                    );
+                    y1_values.push({
+                        iteration: i + 1,
+                        value: current_y1
+                    });
+                }
 
-                        // Render detailed view (Original call)
-                        isDetailedView = true;
-                        renderDetailedView(currentResults.data); // Pass data only
+                // Display y1 calculation
+                const y1_final = y1_values.length > 0 ? y1_values[y1_values.length - 1].value : s0_y1;
 
-                        // ---- Added for animation ----
-                        resultSection.classList.add('show');
-                        setTimeout(() => {
-                            resultSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                        }, 100);
-                        // ---------------------------
 
-                    } catch (e) {
-                        // Display error (Original structure)
-                        resultSection.innerHTML = `
-                             <div class="error">
-                                 <h3>Error</h3>
-                                 <p>${e.message}</p>
-                                 <p>Please check your inputs and try again.</p>
-                             </div>
-                         `;
-                        // ---- Added for animation ----
-                        resultSection.classList.add('show');
-                        setTimeout(() => {
-                            resultSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                        }, 100);
-                        // ---------------------------
-                    }
 
-                    // Render MathJax (Changed to promise-based)
-                    if (typeof MathJax !== 'undefined' && MathJax.typesetPromise) {
-                        MathJax.typesetPromise([resultSection]).catch((err) => console.error('MathJax typesetting error:', err));
-                    } else if (typeof MathJax !== 'undefined') {
-                        MathJax.typeset(); // Fallback
-                    }
-                    // ---- Added for animation ----
-                });
-            });
-            // ---------------------------
+
+                // Calculate y2 using improved Euler method
+                // First approximation
+                const s0_y2 = y1_final + h * calcFunction(y_diff, x1, y1_final);
+
+                // Iterative improvements
+                let y2_values = [];
+                let current_y2 = s0_y2;
+                for (let i = 0; i < iterations; i++) {
+                    current_y2 = y1_final + h / 2 * (
+                        calcFunction(y_diff, x1, y1_final) +
+                        calcFunction(y_diff, x2, current_y2)
+                    );
+                    y2_values.push({
+                        iteration: i + 1,
+                        value: current_y2
+                    });
+                }
+
+                // Display y2 calculation
+                const y2_final = y2_values.length > 0 ? y2_values[y2_values.length - 1].value : s0_y2;
+
+
+
+
+
+
+
+                // Lưu kết quả vào biến currentResults
+                currentResults = {
+                    data: {
+                        y_diff, x0, y0, x1, x2, h, iterations,
+                        y1_values, y2_values, y1_final, y2_final, s0_y1, s0_y2
+                    },
+                    decimalPlaces: parseInt(document.getElementById('decimalPlaces').value)
+                };
+
+                // Hiển thị chế độ chi tiết mặc định
+                isDetailedView = true;
+                renderDetailedView(currentResults.data);
+
+
+            } catch (e) {
+                document.getElementById('result').innerHTML = `
+                    <div class="error">
+                        <h3>Error</h3>
+                        <p>${e.message}</p>
+                        <p>Please check your inputs and try again.</p>
+                    </div>
+                `;
+                document.getElementById('result').style.display = 'block';
+            }
+
+            // Render MathJax after updating content
+            if (typeof MathJax !== 'undefined') {
+                MathJax.typeset();
+            }
         }
 
-        // Original renderDetailedView function
         function renderDetailedView(data) {
             const { y_diff, x0, y0, x1, x2, h, iterations, y1_values, y2_values, y1_final, y2_final, s0_y1, s0_y2 } = data;
-            // Get decimal places inside or pass it if formatNumber needs it explicitly
-            const decimalPlaces = parseInt(document.getElementById('decimalPlaces').value);
-
-            // Use original formatNumber indirectly via createHorizontalTable or directly
-            const formatFn = (val) => formatNumber(val); // Assuming formatNumber uses the global 'decimals'
 
             document.getElementById('result').innerHTML = `
-
-                <div style="display: flex; justify-content: space-between; align-items: center;">
+                
+                <div style="background-color: #24ff7f; color: white; padding: 8px 15px; border-radius: 4px; margin-top: 10px;">
+                    Tính toán thành công ✅
+                </div>
+                 <div style="display: flex; justify-content: space-between; align-items: center;">
                     <h2 class="result-title">Kết quả của phương pháp Euler cải tiến</h2>
                     <button id="toggleView" class="toggle-btn" onclick="toggleViewMode()">Thu gọn</button>
                 </div>
-                 <div style="background-color: #24ff7f; color: white; padding: 8px 15px; border-radius: 4px; margin-top: 10px;">
-                     Tính toán thành công ✅
-                 </div>
                 <div id="equation-display" class="math-formula"></div>
                 <div class="step">
                     <h3>Các điểm tính toán:</h3>
@@ -745,118 +678,179 @@
                 </div>
             `;
 
-            // Fill content using original functions
+            // Điền dữ liệu vào các phần tử (giống như trong calculateEuler1)
             document.getElementById('equation-display').innerHTML = `
                 <p>Phương trình vi phân:</p>
                 <p>\\[ y' = ${formatExpression(y_diff)} \\]</p>
             `;
+
+            // ... tiếp tục điền các phần khác như trong calculateEuler1 ...
+            // Display initial values
             document.getElementById('initial-values').innerHTML = `
-                 <p>Các điểm tính toán:</p> <p>\\[ y(${formatFn(x0)}) = ${formatFn(y0)}; x_1 = ${formatFn(x1)}; x_2 = ${formatFn(x2)} \\]</p> <p>Kích thước bước: \\[ h = ${formatFn(h)} \\]</p> `;
+                    <p>Các điểm tính toán:</p>
+                    <p>\\[ y(${x0}) = ${y0};x_1 = ${x1};x_2 = ${x2} \\]</p>
+                    <p>Kích thước bước: \\[ h = ${h} \\]</p>
+                `;
             document.getElementById('y1-calculation').innerHTML = `
-                 <p>Xấp xỉ ban đầu:</p>
-                 <p>\\[ y_1^{(0)} = y_0 + h f(x_0, y_0) = y_0 + h(${format_k(y_diff, { x: '0', y: '0' })}) \\]</p> <p>\\[ =${formatFn(y0)} + ${formatFn(h)} \\times ${formatFn(calcFunction(y_diff, x0, y0))} = ${formatFn(s0_y1)} \\]</p> <p>Lặp cải tiến:</p>
-                 <p>\\[ y_1^{(k+1)} = y_0 + \\frac{h}{2} \\left[ f(x_0, y_0) + f(x_1, y_1^{(k)}) \\right] \\]</p>
-                 <p> \\[ y_1^{(k+1)} = y_0 + \\frac{h}{2} \\left[ (${format_k(y_diff, { x: '0', y: '0' })}) + (${format_k(y_diff, { x: '1', y: '1^{(k)}' })})  \\right]\\] </p> `;
-            // Display y1 iterations table using original function
-            document.getElementById('y1-iterations').innerHTML = createHorizontalTable(y1_values, 'y_1'); // Pass prefix only
+                    <p>Xấp xỉ ban đầu:</p>
+                    <p>\\[ y_1^{(0)} = y_0 + h f(x_0, y_0) = y_0 + h(${formatExpression(format_k(y_diff, { x: 0, y: 0 }))}) \\]</p>
+                    <p>\\[ =${y0} + ${h} \\times ${formatNumber(calcFunction(y_diff, x0, y0), decimalPlaces)} = ${formatNumber(s0_y1, decimalPlaces)} \\]</p>
+                    <p>Lặp cải tiến:</p>
+                    <p>\\[ y_1^{(k+1)} = y_0 + \\frac{h}{2} \\left[ f(x_0, y_0) + f(x_1, y_1^{(k)}) \\right] \\]</p>
+                    <p> \\[ y_1^{(k+1)} = y_0 + \\frac{h}{2} \\left[ (${formatExpression(format_k(y_diff, { x: 0, y: 0 }))}) + (${formatExpression(format_k(y_diff, { x: 1, y: 1 }))})  \\right]\\] </p>
+                `;
+            // Display y1 iterations table
+            let y1TableHTML = `
+                    <div class="scrollable-table">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>\\(\\text{Các bước lặp }\\)</th>
+                                    <th>\\(y_1^{(k+1)}\\)</th>
+                                </tr>
+                            </thead>
+                            <tbody>`;
 
+            // Bỏ qua phần thêm hàng thứ 0 và chỉ thêm từ iteration 1 trở đi
+            y1_values.forEach(item => {
+                y1TableHTML += `
+                        <tr>
+                            <td>\\(y_1^{(${item.iteration})}\\)</td>
+                            <td>\\(${formatNumber(item.value)}\\)</td>
+                        </tr>`;
+            });
+
+            y1TableHTML += `
+                            </tbody>
+                        </table>
+                    </div>`;
+
+            y1TableHTML += `</tbody></table>`;
+            document.getElementById('y1-iterations').innerHTML = y1TableHTML;
             document.getElementById('y2-calculation').innerHTML = `
-                 <p>Xấp xỉ ban đầu:</p>
-                 <p> \\[ y_2^{(0)} = y_1 + h f(x_1, y_1) = y_1 + h(${format_k(y_diff, { x: '1', y: '1' })}) \\]</p> <p> \\[ = ${formatFn(y1_final)} + ${formatFn(h)} \\times ${formatFn(calcFunction(y_diff, x1, y1_final))} = ${formatFn(s0_y2)} \\]</p> <p>Lặp cải tiến:</p>
-                 <p>\\[ y_2^{(k+1)} = y_1 + \\frac{h}{2} \\left[ f(x_1, y_1) + f(x_2, y_2^{(k)}) \\right] \\]</p>
-                 <p> \\[ y_2^{(k+1)} = y_1 + \\frac{h}{2} \\left[ (${format_k(y_diff, { x: '1', y: '1' })}) + (${format_k(y_diff, { x: '2', y: '2^{(k)}' })})  \\right]\\] </p> `;
-            // Display y2 iterations table using original function
-            document.getElementById('y2-iterations').innerHTML = createHorizontalTable(y2_values, 'y_2'); // Pass prefix only
+                    <p>Xấp xỉ ban đầu:</p>
+                    <p> \\[ y_2^{(0)} = y_1 + h f(x_1, y_1) = y_0 + h(${formatExpression(format_k(y_diff, { x: 1, y: 1 }))}) \\]</p>
+                    <p> \\[ = ${formatNumber(y1_final, decimalPlaces)} + ${h} \\times ${formatNumber(calcFunction(y_diff, x1, y1_final), decimalPlaces)} = ${formatNumber(s0_y2, decimalPlaces)} \\]</p>
+                    <p>Lặp cải tiến:</p>
+                    <p>\\[ y_2^{(k+1)} = y_1 + \\frac{h}{2} \\left[ f(x_1, y_1) + f(x_2, y_2^{(k)}) \\right] \\]</p>
+                    <p> \\[ y_1^{(k+1)} = y_0 + \\frac{h}{2} \\left[ (${formatExpression(format_k(y_diff, { x: 1, y: 1 }))}) + (${formatExpression(format_k(y_diff, { x: 2, y: 2 }))})  \\right]\\] </p>
+                `;
+            let y2TableHTML = `
+                    <div class="scrollable-table">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>\\(\\text{Iteration}\\)</th>
+                                    <th>\\(y_1^{(k+1)}\\)</th>
+                                </tr>
+                            </thead>
+                            <tbody>`;
 
-            // Display final result (original structure)
+            // Bỏ qua phần thêm hàng thứ 0 và chỉ thêm từ iteration 1 trở đi
+            y2_values.forEach(item => {
+                y2TableHTML += `
+                        <tr>
+                            <td>\\(y_2^{(${item.iteration})}\\)</td>
+                            <td>\\(${formatNumber(item.value)}\\)</td>
+                        </tr>`;
+            });
+
+            y2TableHTML += `
+                            </tbody>
+                        </table>
+                    </div>`;
+
+            y2TableHTML += `</tbody></table>`;
+            document.getElementById('y2-iterations').innerHTML = y2TableHTML;
             let finalTableHTML = `
-                 <div class="success-box"> 
-                    <div class="success-box2"> <p style="color: #0afc6f; font-size: 20px;"> \\(\\quad\\) Kết quả xấp xỉ : </p> 
-                        <div style="font-size: 1.3em; text-align: center;">
-                              \\[y(${formatFn(x1)}) \\approx ${formatFn(y1_final)}; \\quad y(${formatFn(x2)}) \\approx ${formatFn(y2_final)} \\] 
+                    <div class="success-box">
+                        <div class="success-box2">
+                            <p style="color: #0afc6f; font-size: 20px;"> \\(\\quad\\) Kết quả xấp xỉ : </p>
+                            <div style="font-size: 1.3em; text-align: center;"> 
+                                \\[y(${x1}) \\approx ${formatNumber(y1_final)} \\quad;\\quad y(${x2}) \\approx ${formatNumber(y2_final)} \\]
+                            </div>
                         </div>
-                    </div>
-                 </div>`;
+                    </div>`;
             document.getElementById('final-results-table').innerHTML = finalTableHTML;
+
         }
 
-
-        // Original renderCompactView function
+        // Sửa hàm renderCompactView để sử dụng decimalPlaces từ currentResults
         function renderCompactView(data) {
             const { y_diff, x0, y0, x1, x2, h, y1_values, y2_values, y1_final, y2_final, s0_y1, s0_y2 } = data;
-            // Get decimal places if needed by formatNumber called indirectly
-            const decimalPlaces = parseInt(document.getElementById('decimalPlaces').value);
-            const formatFn = (val) => formatNumber(val); // Use original formatNumber
 
             document.getElementById('result').innerHTML = `
-
-                 <div style="display: flex; justify-content: space-between; align-items: center;">
-                     <h2 class="result-title">Kết quả của phương pháp Euler cải tiến</h2>
-                     <button id="toggleView" class="toggle-btn" onclick="toggleViewMode()">Chi tiết</button>
-                 </div>
-                 <div style="background-color: #24ff7f; color: white; padding: 8px 15px; border-radius: 4px; margin-top: 10px;">
-                     Tính toán thành công ✅
-                 </div>
-                 <div id="main-result-content"></div>
-             `;
+                
+                <div style="background-color: #24ff7f; color: white; padding: 8px 15px; border-radius: 4px; margin-top: 10px;">
+                    Tính toán thành công ✅
+                </div>
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <h2 class="result-title">Kết quả của phương pháp Euler cải tiến</h2>
+                    <button id="toggleView" class="toggle-btn" onclick="toggleViewMode()">Chi tiết</button>
+                </div>
+                <div id="main-result-content"></div>
+            `;
 
             const mainContent = document.getElementById('main-result-content');
             mainContent.innerHTML = `
-                 <div class="math-formula">
-                     <p>Phương trình vi phân:</p>
-                     <p>\\[ y' = ${formatExpression(y_diff)}; x_0 = ${formatFn(x0)}; y_0 = ${formatFn(y0)}; x_1 = ${formatFn(x1)}; x_2 = ${formatFn(x2)} \\]</p> </div>
-
-                 <div class="step math-formula">
-                     <p>Tính y₁ tại x = ${formatFn(x1)}</p> <p>\\[
-                          \\begin{cases}
-                              y_1^{(0)} =y_0 + h(${format_k(y_diff, { x: '0', y: '0' })}) = ${formatFn(s0_y1)} \\\\[2ex]
-                              y_1^{(k+1)} = y_0 + \\frac{h}{2} \\left[ (${format_k(y_diff, { x: '0', y: '0' })}) + (${format_k(y_diff, { x: '1', y: '1^{(k)}' })})  \\right]
-                          \\end{cases}
-                      \\]</p>
-                     ${createHorizontalTable(y1_values, 'y₁')} </div>
-
-                 <div class="step math-formula">
-                     <p>Tính y₂ tại x = ${formatFn(x2)}</p> <p>\\[
-                          \\begin{cases}
-                               y_2^{(0)} = y_1 + h(${format_k(y_diff, { x: '1', y: '1' })}) = ${formatFn(s0_y2)} \\\\[2ex]
-                               y_2^{(k+1)} = y_1 + \\frac{h}{2} \\left[ (${format_k(y_diff, { x: '1', y: '1' })}) + (${format_k(y_diff, { x: '2', y: '2^{(k)}' })})  \\right]
-                          \\end{cases}
-                      \\]</p>
-
-                     ${createHorizontalTable(y2_values, 'y₂')} </div>
-
-                 <div class="final-result math-formula"> <h3>Kết quả cuối cùng</h3>
-                      <p> \\[y(${formatFn(x1)}) \\approx ${formatFn(y1_final)} \\] </p> 
-                      <p> \\[y(${formatFn(x2)}) \\approx ${formatFn(y2_final)}\\]</p> </div>
-             `;
+                <div class="math-formula">
+                    <p>Phương trình vi phân:</p>
+                    <p>\\[ y' = ${formatExpression(y_diff)}; x₀ = ${x0}; y₀ = ${y0}; x₁ = ${x1}; x₂ = ${x2} \\]</p>
+                </div>
+                
+                <div class="step math-formula">
+                    <p>Tính y₁ tại x = ${x1}</p>
+                    <p>\\[ 
+                        \\begin{cases}
+                           y_1^{(0)} =y_0 + h(${formatExpression(format_k(y_diff, { x: 0, y: 0 }))}) = ${formatNumber(s0_y1, currentResults.decimalPlaces)} \\\\[2ex]
+                           y_1^{(k+1)} = y_0 + \\frac{h}{2} \\left[ (${formatExpression(format_k(y_diff, { x: 0, y: 0 }))}) + (${formatExpression(format_k(y_diff, { x: 1, y: 1 }))})  \\right] 
+                        \\end{cases}
+                    \\]</p>
+                    ${createHorizontalTable(y1_values, 'y₁')}
+                </div>
+                
+                <div class="step math-formula">
+                    <p>Tính y₂ tại x = ${x2}</p>
+                    <p>\\[ 
+                        \\begin{cases}
+                           y_2^{(0)} = y_1 + h(${formatExpression(format_k(y_diff, { x: 1, y: 1 }))}) = ${formatNumber(s0_y2, currentResults.decimalPlaces)} \\\\[2ex]
+                           y_1^{(k+1)} = y_1 + \\frac{h}{2} \\left[ (${formatExpression(format_k(y_diff, { x: 1, y: 1 }))}) + (${formatExpression(format_k(y_diff, { x: 2, y: 2 }))})  \\right] 
+                        \\end{cases}
+                    \\]</p>
+                    
+                    ${createHorizontalTable(y2_values, 'y₂')}
+                </div>
+                
+                <div class="final-result math-formula">
+                    <h3>Kết quả cuối cùng</h3>
+                    <p> \\[y(${x1}) ≈ ${formatNumber(y1_final, currentResults.decimalPlaces)} \\] </p>
+                    <p> \\[y(${x2}) ≈ ${formatNumber(y2_final, currentResults.decimalPlaces)}\\]</p>
+                </div>
+            `;
         }
-
-        // Original toggleViewMode function
         function toggleViewMode() {
             const toggleBtn = document.getElementById('toggleView');
-            const resultContainer = document.getElementById('result'); // Ensure result container exists
+            const resultContainer = document.getElementById('result');
 
             if (!resultContainer || !currentResults.data) return;
 
             isDetailedView = !isDetailedView;
 
             if (isDetailedView) {
-                // Render detailed view using the stored results
+                toggleBtn.textContent = 'Thu gọn';
                 renderDetailedView(currentResults.data);
-                // toggleBtn text updated inside renderDetailedView
             } else {
-                // Render compact view using the stored results
+                toggleBtn.textContent = 'Chi tiết';
                 renderCompactView(currentResults.data);
-                // toggleBtn text updated inside renderCompactView
             }
 
-            // Re-render MathJax for the updated content
-            if (typeof MathJax !== 'undefined' && MathJax.typesetPromise) {
-                MathJax.typesetPromise([resultContainer]).catch((err) => console.error('MathJax typesetting error:', err));
-            } else if (typeof MathJax !== 'undefined') {
-                MathJax.typeset(); // Fallback
+            // Render lại MathJax
+            if (typeof MathJax !== 'undefined') {
+                MathJax.typeset();
             }
         }
+
+        // Main calculation function
 
     </script>
 </body>
