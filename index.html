@@ -7,39 +7,57 @@
     <title>Tính Toán số</title>
     <link rel="icon" href="./img/icon-webs.png" type="image/x-icon">
     <style>
+        html,
         body {
-            font-family: sans-serif;
+            height: 100vh;
             margin: 0;
-            /* Thêm để reset margin mặc định */
         }
 
-        /* CSS cho nút mở menu */
+        body {
+            background: linear-gradient(to right, #B3E5FC, #FFCCBC, #FFF5EE);
+            font-family: sans-serif;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            opacity: 1;
+            /* Thêm để kiểm soát hiệu ứng fade */
+            transition: opacity 0.3s ease-out;
+            /* Thời gian hiệu ứng fade out */
+        }
+
+        /* Class cho hiệu ứng fade out */
+        body.page-fade-out {
+            opacity: 0;
+        }
+
         .open-menu-button-container {
-            /* Thêm container để dễ căn giữa nút */
             display: flex;
             justify-content: center;
             margin-top: 20px;
-            /* Khoảng cách từ hình ảnh đến nút */
         }
 
         .open-menu-button {
-            background-color: #007BFF;
+            background: linear-gradient(to right, #00B7EB, #1E90FF, #8A2BE2);
             color: white;
             border: none;
             padding: 10px 20px;
             border-radius: 6px;
             cursor: pointer;
             font-size: 16px;
-            /* margin: 20px;  Xóa hoặc điều chỉnh margin này nếu dùng container */
-            /* display: block;  Không cần thiết nếu dùng flex container */
+            transition: background 0.3s ease, transform 0.2s ease;
+            /* Thêm transition cho background */
+        }
+
+        .open-menu-button:hover {
+            background: linear-gradient(to right, #0095c7, #187bcd, #7423bf);
+            /* Đổi màu đậm hơn khi hover */
+            transform: translateY(-2px);
         }
 
         .modal {
-            /* display: none;  Xóa dòng này */
             visibility: hidden;
-            /* Ẩn modal ban đầu và không cho tương tác */
             opacity: 0;
-            /* Làm cho modal trong suốt ban đầu */
             position: fixed;
             z-index: 1000;
             left: 0;
@@ -48,17 +66,13 @@
             height: 100%;
             overflow: hidden;
             background-color: rgba(0, 0, 0, 0.4);
-            /* Transition cho hiệu ứng mờ dần của nền */
             transition: opacity 0.3s ease-out, visibility 0s linear 0.3s;
-            /* visibility sẽ thay đổi sau khi opacity transition hoàn tất */
         }
 
         .modal.active {
-            /* Lớp active để kích hoạt hiển thị modal */
             visibility: visible;
             opacity: 1;
             transition-delay: 0s;
-            /* Reset transition-delay khi active */
         }
 
         .modal-content {
@@ -72,25 +86,16 @@
             max-height: 70vh;
             display: flex;
             flex-direction: column;
-
             position: absolute;
-            /* Sử dụng absolute để định vị */
             left: 50%;
             bottom: 0;
-            /* Bắt đầu từ dưới cùng */
             transform: translate(-50%, 100%);
-            /* Dịch chuyển xuống dưới và căn giữa ngang */
-            /* Transition cho hiệu ứng trượt từ dưới lên */
             transition: transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
-            /* Thử nghiệm với cubic-bezier để mượt hơn */
         }
 
         .modal.active .modal-content {
-            /* Khi modal active, đưa modal-content lên vị trí mong muốn */
             bottom: 20px;
-            /* Hoặc một giá trị % như 5% */
             transform: translate(-50%, 0);
-            /* Chỉ cần căn giữa ngang, không cần dịch chuyển Y nữa */
         }
 
         .modal-header {
@@ -124,11 +129,8 @@
             flex-direction: column;
             align-items: center;
             overflow-y: auto;
-            /* Điều chỉnh max-height cho phù hợp, ví dụ trừ đi chiều cao header và padding */
             max-height: calc(70vh - 80px);
             padding-right: 10px;
-            margin-right: -10px;
-            /* Bù padding để thanh cuộn không làm lệch nội dung */
         }
 
         .button-containerk::-webkit-scrollbar {
@@ -150,7 +152,7 @@
         }
 
         .nav-button {
-            background-color: #007BFF;
+            background: linear-gradient(45deg, #007BFF, #00C4B4);
             color: white;
             border: none;
             padding: 14px 24px;
@@ -158,8 +160,8 @@
             cursor: pointer;
             font-size: 16px;
             margin: 8px 0;
-            transition: background-color 0.3s;
-            /* Chỉ transition background-color */
+            transition: background 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
+            /* Cập nhật transition */
             width: calc(100% - 10px);
             font-weight: 500;
             letter-spacing: 0.5px;
@@ -170,29 +172,74 @@
         }
 
         .nav-button:hover {
-            background-color: #0056b3;
+            background: linear-gradient(45deg, #0056b3, #00a294);
+            /* Đậm hơn khi hover */
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
         }
+
+        .nav-button:active {
+            transform: translateY(0px);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
 
         h1 {
             text-align: center;
+            /* Đã có style inline color: black; */
         }
 
-        /* CSS cho container của hình ảnh */
         .image-container {
             display: flex;
             justify-content: center;
-            /* margin-bottom: 20px; /* Khoảng cách giữa ảnh và nút đã được xử lý bởi margin-top của open-menu-button-container */
+        }
+
+        .submenu-vi-phan {
+            width: calc(100% - 10px);
+            padding-left: 20px;
+            box-sizing: border-box;
+            overflow: hidden;
+            max-height: 0;
+            opacity: 0;
+            transition: max-height 0.4s ease-in-out, opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+            transform: translateY(-10px);
+        }
+
+        .submenu-vi-phan.active {
+            max-height: 150px;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .submenu-vi-phan .nav-button {
+            background-color: #00ddff;
+            color: black;
+            font-size: 15px;
+            padding: 12px 20px;
+            margin: 6px 0;
+            width: 95%;
+            /* Giữ nguyên hoặc điều chỉnh nếu cần */
+            border-radius: 8px;
+            box-shadow: 0 2px 3px rgba(0, 0, 0, 0.15);
+            transition: background-color 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease;
+        }
+
+        .submenu-vi-phan .nav-button:hover {
+            background-color: #00a5be;
+            transform: scale(1.03) translateY(-1px);
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
+        }
+
+        .submenu-vi-phan .nav-button:active {
+            background-color: #117a8b;
+            transform: scale(1.01) translateY(0px);
         }
     </style>
 </head>
 
 <body>
 
-    <h1>Toán học Ứng dụng</h1>
-
-    <div class="image-container">
-        <img src="./img/icon-web.png" alt="logo" height="250">
-    </div>
+    <h1 style="color: black;">Toán học Ứng dụng</h1>
 
     <div class="open-menu-button-container">
         <button class="open-menu-button" id="openMenuBtn">Mở Menu Tính Năng</button>
@@ -205,11 +252,22 @@
                 <span class="close-button" id="closeBtn">&times;</span>
             </div>
             <div class="button-containerk">
-                <button class="nav-button" onclick="location.href='./ppt/ptNewton.html'">Giải Phương trình</button>
-                <button class="nav-button" onclick="location.href='./ppt/ppSeidel-Gauss.html'">Giải Hệ 3 pt</button>
-                <button class="nav-button" onclick="location.href='./ppt/bpct.html'">PP Bình phương cực tiểu</button>
-                <button class="nav-button" onclick="location.href='./ppt/tpSimpson.html'">Tính Tích phân</button>
-                <button class="nav-button" onclick="location.href='./ppt/ptvp.html'">Phương trình vi phân</button>
+                <button class="nav-button" onclick="navigateWithTransition('./ppt/ptNewton.html')">Giải Phương
+                    trình</button>
+                <button class="nav-button" onclick="navigateWithTransition('./ppt/ppSeidel-Gauss.html')">Giải Hệ 3
+                    pt</button>
+                <button class="nav-button" onclick="navigateWithTransition('./ppt/bpct.html')">PP Bình phương cực
+                    tiểu</button>
+                <button class="nav-button" onclick="navigateWithTransition('./ppt/tpSimpson.html')">Tính Tích
+                    phân</button>
+
+                <button class="nav-button" id="phuongTrinhViPhanBtn">Phương trình vi phân</button>
+                <div id="subMenuViPhan" class="submenu-vi-phan">
+                    <button class="nav-button" onclick="navigateWithTransition('./ppt/ptvp_Euler_caitien.html')">PP
+                        Euler cải tiến</button>
+                    <button class="nav-button" onclick="navigateWithTransition('./ppt/ptvp_Runge_Kutta.html')">PP
+                        Runge-Kutta</button>
+                </div>
             </div>
         </div>
     </div>
@@ -219,20 +277,59 @@
         var btnOpen = document.getElementById("openMenuBtn");
         var btnClose = document.getElementById("closeBtn");
 
+        // Thời gian của hiệu ứng fade out (tính bằng mili giây)
+        // Phải khớp với thời gian transition của body trong CSS (0.5s = 500ms)
+        const FADE_DURATION = 300;
+
+        function navigateWithTransition(url) {
+            document.body.classList.add('page-fade-out');
+            setTimeout(function () {
+                window.location.href = url;
+            }, FADE_DURATION);
+        }
+
         btnOpen.onclick = function () {
-            modal.classList.add("active"); // Thêm class active để hiển thị modal và kích hoạt animation
+            modal.classList.add("active");
+            // Khi mở lại modal, nếu muốn reset hiệu ứng fade của body (nếu có)
+            // document.body.classList.remove('page-fade-out'); 
         }
 
         btnClose.onclick = function () {
-            modal.classList.remove("active"); // Xóa class active để ẩn modal
+            modal.classList.remove("active");
         }
 
-        // Đóng modal khi click ra ngoài vùng .modal-content (tức là click vào .modal)
         modal.onclick = function (event) {
-            if (event.target === modal) { // Chỉ đóng khi click trực tiếp vào lớp .modal (vùng nền mờ)
+            if (event.target === modal) {
                 modal.classList.remove("active");
             }
         }
+
+        var phuongTrinhViPhanBtn = document.getElementById("phuongTrinhViPhanBtn");
+        var subMenuViPhan = document.getElementById("subMenuViPhan");
+
+        phuongTrinhViPhanBtn.onclick = function (event) {
+            event.preventDefault();
+            subMenuViPhan.classList.toggle("active");
+        }
+
+        // Đảm bảo body không bị fade out nếu người dùng chỉ đóng modal mà không điều hướng
+        // Hoặc khi modal mở ra
+        function resetBodyFade() {
+            if (document.body.classList.contains('page-fade-out')) {
+                // Có thể không cần thiết nếu chỉ dựa vào tải lại trang mới
+                // document.body.classList.remove('page-fade-out');
+            }
+        }
+        // Gọi khi mở modal hoặc khi có tương tác không điều hướng
+        btnOpen.addEventListener('click', resetBodyFade);
+        btnClose.addEventListener('click', resetBodyFade);
+        // modal.addEventListener('click', function(event) { // Nếu click ra ngoài cũng cần reset
+        //     if (event.target === modal) {
+        //        resetBodyFade();
+        //     }
+        // });
+
+
     </script>
 
 </body>
