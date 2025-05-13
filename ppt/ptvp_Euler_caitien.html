@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="vi">
 
 <head>
     <meta charset="UTF-8">
@@ -328,6 +328,14 @@
             transform: translateY(30px);
             /* Đổi thành hiệu ứng trượt xuống. Bạn có thể điều chỉnh giá trị 30px tùy ý */
         }
+        @media (max-width: 480px) {
+            body>button:first-of-type {
+                /* Nút Home */
+                width: 95% !important;
+                font-size: 0.9em;
+                padding: 10px;
+            }
+        }
     </style>
 </head>
 
@@ -382,7 +390,7 @@
         </div>
     </div>
 
-    <button onclick="calculateEuler()">Calculate</button>
+    <button onclick="calculateEuler()">Tính toán</button>
 
     <div id="result" class="result-section" style="display: none;">
         <div style="display: flex; justify-content: space-between; align-items: center;">
