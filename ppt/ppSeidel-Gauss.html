@@ -11,7 +11,6 @@
         :root {
             --success-color: #2ecc71;
             --error-color: #e74c3c;
-
         }
 
         body {
@@ -21,6 +20,13 @@
             margin: 0 auto;
             padding: 20px;
             color: #333;
+            opacity: 1;
+            transition: opacity 0.3s ease-out, transform 0.3s ease-out;
+        }
+
+        body.page-fade-out {
+            opacity: 0;
+            transform: translateY(30px);
         }
 
         h1 {
@@ -43,11 +49,8 @@
             border-radius: 10px;
             margin-top: 30px;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            /* Thêm hoặc điều chỉnh width nếu cần */
             transform: scale(0.95);
-            /* Thu nhỏ lại 95% */
             transform-origin: top center;
-            /* Điểm neo khi scale */
         }
 
         .input-section3 {
@@ -58,32 +61,47 @@
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
 
-
-        @media (max-width: 768px) {
-            .equation-input {
-                display: flex;
-                color: black;
-                -wrap: wrap;
-                align-items: center;
-                gap: 8px;
-                margin-bottom: 15px;
-            }
+        .equation-input {
+            display: flex;
+            /* Bật flexbox để dễ dàng sắp xếp */
+            flex-wrap: nowrap;
+            /* Mặc định không cho xuống dòng trên desktop */
+            align-items: center;
+            gap: 8px;
+            /* Giữ nguyên gap ban đầu cho desktop */
+            margin-bottom: 15px;
+            color: black;
+            /* Thêm lại nếu cần */
         }
 
-
         .equation-input label {
-            flex: 0 0 200px;
+            /* Giữ lại phòng trường hợp bạn muốn dùng */
+            flex: 0 0 auto;
+            /* Để label chiếm không gian cần thiết */
             font-weight: bold;
+            margin-right: 5px;
+            /* Khoảng cách với input đầu tiên */
         }
 
         .equation-input input {
             width: 100px;
+            /* Chiều rộng cố định cho desktop */
             padding: 10px;
             text-align: center;
+            border: 1px solid #ccc;
+            /* Thêm border để dễ nhìn */
+            border-radius: 4px;
+            box-sizing: border-box;
+            /* Quan trọng */
         }
 
         .equation-input span {
+            /* Các biến MathJax a1, b1,... */
             white-space: nowrap;
+            margin: 0 2px;
+            /* Tăng khoảng cách nhẹ */
+            line-height: 1;
+            /* Đảm bảo thẳng hàng với input */
         }
 
         button {
@@ -96,32 +114,47 @@
             font-size: 16px;
             display: block;
             margin: 20px auto;
-            transition: background-color 0.3s;
+            transition: background-color 0.3s, transform 0.2s;
+            /* Thêm transition cho transform */
+            box-sizing: border-box;
+            /* Quan trọng */
         }
+
+        /* Nút Home - Ghi đè style inline */
+        body>button:first-of-type {
+            /* Chỉ áp dụng cho nút Home */
+            width: 400px;
+            /* Giữ style gốc cho desktop */
+            height: 50px;
+            /* Các style khác đã được kế thừa từ button chung hoặc style inline */
+        }
+
 
         button:hover {
             background: linear-gradient(to right, rgba(0, 123, 255, 0.8), rgba(0, 196, 180, 0.2));
             transform: translateY(-2px);
         }
 
-        /* Tìm đến phần CSS của .results trong thẻ <style> của bạn */
         .results {
             margin-top: 30px;
-            /* ---- THÊM CÁC DÒNG SAU ĐỂ TẠO HIỆU ỨNG ---- */
             opacity: 0;
-            /* Ban đầu ẩn đi */
             transform: translateY(20px);
-            /* Ban đầu hơi dịch xuống dưới một chút (bạn có thể dùng 30px nếu muốn) */
             transition: opacity 0.7s ease-out, transform 0.7s ease-out;
-            /* Thời gian và kiểu hiệu ứng */
         }
 
-        /* ---- THÊM LỚP MỚI NÀY VÀO CSS CỦA BẠN ---- */
         .results.visible {
             opacity: 1;
-            /* Hiện rõ ra */
             transform: translateY(0);
-            /* Về vị trí ban đầu */
+        }
+
+        .matrix,
+        .iteration-table,
+        .math-display {
+            /* Áp dụng chung cho các khối này */
+            overflow-x: auto;
+            /* Cho phép cuộn ngang nếu nội dung quá rộng */
+            -webkit-overflow-scrolling: touch;
+            /* Cải thiện cuộn trên iOS */
         }
 
         .matrix {
@@ -135,6 +168,7 @@
 
         .matrix-element {
             width: 80px;
+            /* Có thể cần giảm trên mobile */
             text-align: center;
             padding: 5px;
         }
@@ -150,20 +184,37 @@
             border: 1px solid #ddd;
             padding: 8px;
             text-align: center;
+            white-space: nowrap;
+            /* Ngăn không cho nội dung trong ô xuống dòng, để bảng cuộn ngang nếu cần */
         }
 
         .iteration-table th {
             background-color: #f2f2f2;
+            position: sticky;
+            /* Giữ header bảng khi cuộn (nếu bảng có cuộn dọc) */
+            top: 0;
+            z-index: 1;
         }
 
         .error {
-            color: #e74c3c;
+            color: var(--error-color);
             font-weight: bold;
+            background-color: #fdd;
+            /* Thêm nền để dễ nhận biết */
+            padding: 10px;
+            border-radius: 4px;
+            border-left: 3px solid var(--error-color);
         }
 
         .success {
-            color: #27ae60;
+            color: var(--success-color);
+            /* Sử dụng biến màu đã định nghĩa */
             font-weight: bold;
+            background-color: #dfd;
+            /* Thêm nền để dễ nhận biết */
+            padding: 10px;
+            border-radius: 4px;
+            border-left: 3px solid var(--success-color);
         }
 
         .math-display {
@@ -171,7 +222,7 @@
             padding: 10px;
             border-radius: 4px;
             margin: 10px 0;
-            overflow-x: auto;
+            /* overflow-x: auto; đã có ở trên */
         }
 
         .section-title {
@@ -180,14 +231,36 @@
             padding: 8px 15px;
             border-radius: 4px;
             margin-top: 30px;
+            margin-bottom: 10px;
+            /* Thêm margin bottom */
         }
 
         .container {
+            /* Chứa Số lần lặp và Dấu chấm động */
             display: flex;
             color: black;
             gap: 30px;
-            /* Khoảng cách giữa các ô nhập */
         }
+
+        .container>div {
+            /* Các div con bên trong .container */
+            display: flex;
+            flex-direction: column;
+            /* Label ở trên, input ở dưới */
+            gap: 5px;
+            flex: 1;
+            /* Chia đều không gian */
+        }
+
+        .container input[type="number"] {
+            padding: 10px;
+            width: 100%;
+            /* Input chiếm hết chiều rộng của div cha */
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
 
         .final-result {
             background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
@@ -210,28 +283,29 @@
         .result-variables {
             display: flex;
             justify-content: center;
-            /* Thay space-around bằng center để các ô gần nhau hơn */
             gap: 5px;
-            /* Giảm khoảng cách giữa các ô xuống 5px (có thể điều chỉnh nhỏ hơn nếu muốn) */
             margin: 5px 0;
-            /* Giảm margin top và bottom */
             padding: 0;
-            /* Loại bỏ padding nếu có */
-
-
+            flex-wrap: wrap;
+            /* Cho phép xuống dòng trên mobile */
         }
 
         .result-variable {
             background: white;
             border-radius: 8px;
             padding: 12px;
-            margin: 14px;
+            margin: 10px;
+            /* Điều chỉnh margin để có khoảng cách đều */
             min-width: 120px;
-            font-size: 10px;
+            /* Giữ cho desktop */
+            /* font-size: 10px;  Bỏ font-size ở đây, để các class con quyết định */
             text-align: center;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05), 0 0 10px rgba(216, 216, 216, 0.5);
-            /* Thêm viền xám phát sáng */
             transition: transform 0.3s, box-shadow 0.3s;
+            flex: 1 1 120px;
+            /* Cho phép co giãn và thu nhỏ, cơ sở là 120px */
+            max-width: 200px;
+            /* Giới hạn chiều rộng tối đa mỗi box */
         }
 
         .result-variable:hover {
@@ -241,6 +315,7 @@
 
         .result-variable-name {
             font-size: 1.9em;
+            /* Sẽ điều chỉnh cho mobile */
             color: #2a4e86;
             font-weight: bold;
             margin-bottom: 5px;
@@ -248,6 +323,7 @@
 
         .result-variable-value {
             font-size: 1.4em;
+            /* Sẽ điều chỉnh cho mobile */
             color: #2c3e50;
             font-family: 'Courier New', monospace;
         }
@@ -260,7 +336,6 @@
             text-align: center;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05), 0 0 10px rgba(216, 216, 216, 0.5);
             border-left: 5px solid #3498db;
-
         }
 
         .result-divfinal {
@@ -271,19 +346,230 @@
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
         }
 
-        /* Đặt đoạn CSS này vào bên trong thẻ <style> của bạn */
-        body {
-            /* ... các style hiện có của body ... */
-            opacity: 1;
-            /* Đảm bảo body có opacity ban đầu là 1 */
-            transition: opacity 0.3s ease-out, transform 0.3s ease-out;
-            /* Thời gian hiệu ứng */
+        /* ------ Media Queries ------ */
+
+        @media (max-width: 768px) {
+
+            /* Tablet và màn hình nhỏ hơn */
+            body {
+                padding: 15px;
+            }
+
+            h1 {
+                font-size: 1.6em;
+                margin-bottom: 20px;
+            }
+
+            /* Nút Home Responsive */
+            body>button:first-of-type {
+                width: 90% !important;
+                /* Ghi đè style inline */
+                max-width: 350px;
+                /* Giới hạn chiều rộng tối đa */
+                height: auto;
+                padding: 12px 15px;
+                font-size: 0.95em;
+            }
+
+            .input-section,
+            .input-section2,
+            .input-section3 {
+                padding: 15px;
+            }
+
+            .input-section2 {
+                transform: scale(1);
+                /* Reset scale trên mobile nếu cần */
+                margin-top: 20px;
+            }
+
+            .equation-input {
+                flex-wrap: wrap;
+                /* Cho phép các phần tử xuống dòng */
+                gap: 8px;
+                /* Giữ nguyên hoặc giảm nhẹ */
+            }
+
+            /* Chia mỗi dòng thành 2 cặp (biến + input) */
+            .equation-input>span,
+            .equation-input>input {
+                flex-basis: calc(25% - 10px);
+                /* 4 mục trên 1 dòng, trừ gap */
+                min-width: 50px;
+                /* Đảm bảo không quá nhỏ */
+            }
+
+            .equation-input input {
+                width: auto;
+                /* Để flex-basis kiểm soát */
+                padding: 8px;
+                font-size: 0.9em;
+            }
+
+
+            .container {
+                /* Số lần lặp, dấu chấm động */
+                flex-direction: column;
+                /* Xếp chồng */
+                gap: 15px;
+            }
+
+            button {
+                /* Nút "Giải" */
+                width: 80%;
+                max-width: 250px;
+                font-size: 0.95em;
+            }
+
+            .result-variables {
+                gap: 10px;
+                /* Giảm gap giữa các khối kết quả */
+            }
+
+            .result-variable {
+                min-width: 100px;
+                /* Giảm min-width */
+                flex-basis: calc(50% - 20px);
+                /* 2 khối trên một dòng (trừ margin) */
+                max-width: calc(50% - 20px);
+                padding: 10px;
+                margin: 5px;
+                /* Giảm margin */
+            }
+
+            .result-variable-name {
+                font-size: 1.4em;
+            }
+
+            .result-variable-value {
+                font-size: 1.1em;
+            }
+
+            .mjx-chtml,
+            mjx-math {
+                /* Target MathJax elements */
+                font-size: 0.9em !important;
+                /* Giảm kích thước font MathJax */
+            }
+
+            .iteration-table th,
+            .iteration-table td {
+                padding: 6px;
+                font-size: 0.85em;
+            }
+
+            .matrix-element {
+                width: 60px;
+                /* Giảm chiều rộng phần tử ma trận */
+            }
+
+            .final-result-title {
+                font-size: 1.3em;
+            }
         }
 
-        body.page-fade-out {
-            opacity: 0;
-            transform: translateY(30px);
-            /* Tùy chọn: thêm hiệu ứng trượt nhẹ */
+
+        @media (max-width: 480px) {
+
+            /* Điện thoại nhỏ */
+            body {
+                padding: 10px;
+            }
+
+            h1 {
+                font-size: 1.4em;
+            }
+
+            body>button:first-of-type {
+                /* Nút Home */
+                width: 95% !important;
+                font-size: 0.9em;
+                padding: 10px;
+            }
+
+            .input-section,
+            .input-section2,
+            .input-section3 {
+                padding: 10px;
+            }
+
+            .input-section2 {
+                margin-top: 15px;
+            }
+
+            /* Layout nhập phương trình cho điện thoại nhỏ */
+            .equation-input {
+                gap: 5px;
+                /* Giảm gap */
+            }
+
+            /* Mỗi dòng 2 input, hoặc 1 input tùy ý */
+            .equation-input>span,
+            .equation-input>input {
+                flex-basis: calc(50% - 8px);
+                /* 2 mục trên 1 dòng */
+                /* Hoặc để 1 mục trên 1 dòng: flex-basis: 100%; */
+            }
+
+            .equation-input input {
+                font-size: 0.85em;
+                padding: 6px;
+            }
+
+
+            button {
+                /* Nút "Giải" */
+                width: 90%;
+                font-size: 0.9em;
+            }
+
+            .result-variables {
+                flex-direction: column;
+                /* Xếp chồng hoàn toàn trên điện thoại nhỏ */
+                align-items: center;
+            }
+
+            .result-variable {
+                flex-basis: 80%;
+                /* Một khối trên một dòng */
+                max-width: 280px;
+                /* Giới hạn chiều rộng */
+                padding: 10px;
+                margin: 8px 0;
+                /* Chỉ margin trên dưới */
+            }
+
+            .result-variable-name {
+                font-size: 1.3em;
+            }
+
+            .result-variable-value {
+                font-size: 1em;
+            }
+
+            .mjx-chtml,
+            mjx-math {
+                font-size: 0.8em !important;
+            }
+
+            .iteration-table th,
+            .iteration-table td {
+                padding: 4px;
+                font-size: 0.75em;
+            }
+
+            .matrix-element {
+                width: 50px;
+            }
+
+            .final-result-title {
+                font-size: 1.2em;
+            }
+
+            .section-title {
+                font-size: 0.9em;
+                padding: 6px 10px;
+            }
         }
     </style>
 </head>
@@ -589,7 +875,7 @@
                                 <div class="result-divfinal">
                                     \\( \\text{Sau } ${n} \\text{ lần lặp : } \\) 
                                     <div class="result-matrix">
-                                        <div class="result-variables">
+                                        <div class="result-variables"; style="font-size: 10px;">
                                             <div class="result-variable">
                                                 <div class="result-variable-name"> \\[x \\approx ${froundf(C[n - 1][0])} \\]</div>
                                             </div>
