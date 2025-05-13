@@ -314,6 +314,15 @@
                 font-size: 14px;
             }
         }
+
+        @media (max-width: 480px) {
+            body>button:first-of-type {
+                /* Nút Home */
+                width: 95% !important;
+                font-size: 0.9em;
+                padding: 10px;
+            }
+        }
     </style>
 </head>
 
@@ -519,7 +528,6 @@
                         // Display the approximation function
                         const fDisplay = `a \\cdot ${f_a} + b \\cdot ${f_b} ${f_free ? ' + ' + f_free : ''}`;
                         document.getElementById('function-display').innerHTML = `
-                            <p>Hàm xấp xỉ:</p>
                             <p>\\[ y = ${formatExpression(fDisplay)} \\]</p>
                         `;
 
@@ -553,7 +561,6 @@
 
                         const sExpr = `(a \\cdot ${f_a} + b \\cdot ${f_b} ${f_free ? ' + ' + f_free : ''}- y_k)^2 `;
                         document.getElementById('sum-squares').innerHTML = `
-                            <p>Hàm tổng bình phương:</p>
                             <p>\\[ S = \\sum_{k=1}^{${n}} ${formatExpression(format_k(sExpr))} \\]</p>
                         `;
 
@@ -561,7 +568,6 @@
                         const sDiffB = `(a \\cdot ${f_a} + b \\cdot ${f_b} ${f_free ? ' + ' + f_free : ''} - y_k) \\cdot ${f_b}`;
 
                         document.getElementById('partial-derivatives').innerHTML = `
-                            <p>Đạo hàm riêng:</p>
                             <p>\\[ \\frac{\\partial S}{\\partial a} = 2 \\sum_{k=1}^{${n}} ${formatExpression(format_k(sDiffA))} \\]</p>
                             <p>\\[ \\frac{\\partial S}{\\partial b} = 2 \\sum_{k=1}^{${n}} ${formatExpression(format_k(sDiffB))} \\]</p>
                         `;
@@ -581,7 +587,6 @@
                         ];
 
                         document.getElementById('sum-formulas').innerHTML = `
-                            <p>Công thức tính tổng</p>
                             <p>\\[
                                 \\begin{cases}
                                     \\left( \\sum\\limits_{k=1}^{${n}} ${formatExpression(format_k(he_pt1[0]))}\\right)a + \\left(\\sum\\limits_{k=1}^{${n}} ${formatExpression(format_k(he_pt1[1]))}\\right)b + \\left(\\sum\\limits_{k=1}^{${n}} ${formatExpression(format_k(he_pt1[2]))}\\right) - \\left(\\sum\\limits_{k=1}^{${n}} ${formatExpression(format_k(he_pt1[3]))} \\right) = 0 \\\\[1.1ex]
@@ -626,7 +631,6 @@
                         }
 
                         document.getElementById('normal-equations').innerHTML = `
-                            <p>Phương trình chuẩn</p>
                             <p>\\[
                                 \\begin{cases}
                                     ${formatFirstCoefficient(sums1[0])}a ${formatFollowingCoefficient(sums1[1])}b ${formatFollowingCoefficient(sums1[2])} ${formatFollowingCoefficient(-sums1[3])} = 0 \\\\[1.1ex]
@@ -644,7 +648,6 @@
                         const b2 = -sums2[3] + sums2[2];
 
                         document.getElementById('equation-system').innerHTML = `
-                            <p>Hệ phương trình</p>
                             <p>\\[
                                 \\begin{cases}
                                     ${formatFirstCoefficient(a11)}a ${formatFollowingCoefficient(a12)}b = ${formatFirstCoefficient(formatNumber(-b1))} \\\\[1.1ex]
