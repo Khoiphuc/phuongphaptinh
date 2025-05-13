@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="vi">
 
 <head>
     <meta charset="UTF-8">
@@ -107,11 +107,17 @@
             font-size: 16px;
             display: block;
             margin: 25px auto;
+            /* Để căn giữa */
             transition: all 0.3s;
             width: 220px;
+            /* Chiều rộng mặc định */
+            max-width: 100%;
+            /* Đảm bảo không tràn */
             font-weight: 500;
             letter-spacing: 0.5px;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            box-sizing: border-box;
+            /* Thêm để padding không làm tăng kích thước tổng */
         }
 
         button:hover {
@@ -119,27 +125,36 @@
             transform: translateY(-2px);
         }
 
+        /* Nút Home riêng biệt */
+        body>button:first-of-type {
+            /* Giả sử nút Home là con trực tiếp đầu tiên của body */
+            width: auto;
+            /* Để chiều rộng tự điều chỉnh theo nội dung */
+            min-width: 150px;
+            /* Đặt chiều rộng tối thiểu nếu cần */
+            max-width: 400px;
+            /* Giữ nguyên max-width bạn đã đặt hoặc điều chỉnh */
+            /* padding-left: 20px; /* Thêm padding nếu cần */
+            /* padding-right: 20px; */
+        }
+
+
         .result-section {
             background-color: white;
             padding: 25px;
             border-radius: 10px;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
             margin-top: 25px;
-            /* CSS for animation */
             opacity: 0;
             transform: translateY(30px);
             transition: opacity 0.5s ease-out, transform 0.5s ease-out;
             display: none;
-            /* << THAY ĐỔI Ở ĐÂY */
-            /* Initially hidden */
         }
 
         .result-section.show {
             display: block;
-            /* << THÊM DÒNG NÀY (hoặc 'flex', 'grid', ...) */
             opacity: 1;
             transform: translateY(0);
-            /* visibility: visible; /* Dòng này có thể bỏ vì display đã xử lý việc hiển thị */
         }
 
         .result-title {
@@ -151,13 +166,14 @@
 
         table {
             width: 100%;
+            /* Bảng sẽ cố gắng chiếm 100% của scrollable-table-wrapper */
             border-collapse: separate;
             border-spacing: 0;
             margin: 25px 0;
             font-family: 'Consolas', 'Monaco', monospace;
             font-size: 14px;
             border-radius: 8px;
-            overflow: hidden;
+            /* overflow: hidden; /* Bỏ overflow ở đây, để wrapper xử lý */
             box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
         }
 
@@ -167,6 +183,12 @@
             padding: 12px 15px;
             text-align: center;
             font-weight: 500;
+            position: sticky;
+            /* Giúp header dính lại khi cuộn (nếu wrapper có chiều cao cố định và cuộn dọc) */
+            top: 0;
+            /* Cần thiết cho sticky header */
+            z-index: 1;
+            /* Đảm bảo header nổi lên trên nội dung */
         }
 
         td {
@@ -174,6 +196,9 @@
             text-align: center;
             border: 1px solid #eee;
             background-color: white;
+            /* Thêm để xử lý tràn chữ trong ô nếu có */
+            word-break: break-word;
+            overflow-wrap: break-word;
         }
 
         tr:nth-child(even) td {
@@ -186,6 +211,9 @@
             border-radius: 8px;
             margin: 20px 0;
             overflow-x: auto;
+            /* Đã có, tốt! */
+            -webkit-overflow-scrolling: touch;
+            /* Cải thiện cuộn trên iOS */
             box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
             border-left: 4px solid var(--primary-color);
         }
@@ -223,6 +251,7 @@
 
         .mjx-chtml {
             font-size: 1.1em !important;
+            /* Có thể cần điều chỉnh cho mobile trong media query */
         }
 
         .success-box {
@@ -244,42 +273,147 @@
             margin-bottom: 15px;
         }
 
-        @media (max-width: 768px) {
-            .input-row {
-                flex-direction: column;
-                gap: 15px;
-            }
-        }
-
+        /* Container cho bảng, loại bỏ overflow ở đây vì đã có wrapper */
         #table-container {
-            /* Adjusted this - it was likely for the table itself, not a scroll container around it */
             width: 100%;
-            /* Make table responsive */
-            /* height: 600px; Remove fixed height */
-            overflow-x: auto;
-            /* Allow horizontal scroll for table if needed */
-            display: block;
-            /* Ensure it behaves as a block for overflow to work */
+            /* display: block; /* Không cần thiết nữa */
+            /* overflow-x: auto; /* Đã chuyển cho .scrollable-table-wrapper */
         }
 
-        /* If you want a scrollable container for the table specifically, you'd wrap the table in a div with these properties */
+        /* Wrapper cho bảng để cuộn ngang */
         .scrollable-table-wrapper {
             width: 100%;
-            /* Or fixed width like 820px */
-            max-height: 600px;
-            /* Or desired fixed height */
-            overflow: auto;
+            overflow-x: auto;
+            /* Cho phép cuộn ngang */
+            -webkit-overflow-scrolling: touch;
+            /* Cải thiện cuộn trên iOS */
+            /* max-height: 600px; /* Bỏ nếu không muốn giới hạn chiều cao và cuộn dọc */
             margin-bottom: 20px;
-            /* Add some spacing */
             border: 1px solid #ddd;
-            /* Optional border */
             border-radius: 6px;
-            /* Optional border radius */
+            box-sizing: border-box;
         }
 
         .scrollable-table-wrapper table {
-            /* Ensure table inside takes full width of wrapper */
-            width: 100%;
+            /* width: 100%; /* Bảng sẽ cố gắng vừa với wrapper */
+            min-width: 600px;
+            /* VÍ DỤ: Buộc bảng có chiều rộng tối thiểu là 600px. */
+            /* Điều chỉnh giá trị này dựa trên số cột và nội dung của bạn. */
+            /* Nếu bảng rộng hơn wrapper, thanh cuộn ngang sẽ xuất hiện. */
+        }
+
+        /* Media Queries for smaller screens */
+        @media (max-width: 768px) {
+            body {
+                padding: 15px;
+                /* Giảm padding body */
+            }
+
+            h1 {
+                font-size: 1.6em;
+                /* Giảm font H1 */
+                margin-bottom: 25px;
+                padding-bottom: 10px;
+            }
+
+            h1::after {
+                width: 80px;
+            }
+
+            .input-section,
+            .result-section,
+            .step,
+            .final-result,
+            .math-formula {
+                padding: 15px;
+                /* Giảm padding các khối */
+            }
+
+            .input-row {
+                flex-direction: column;
+                gap: 15px;
+                /* Giữ nguyên */
+            }
+
+            button {
+                /* Áp dụng cho tất cả các nút */
+                width: 90%;
+                /* Nút chiếm 90% chiều rộng cha */
+                padding: 12px 20px;
+                font-size: 15px;
+            }
+
+            /* Nút Home có thể cần style cụ thể nếu cần */
+            body>button:first-of-type {
+                width: auto;
+                /* Hoặc giữ 90% nếu muốn đồng nhất */
+                max-width: 90%;
+            }
+
+            table {
+                font-size: 13px;
+                /* Giảm font chữ trong bảng */
+                min-width: 500px;
+                /* Điều chỉnh min-width cho bảng trên tablet */
+            }
+
+            th,
+            td {
+                padding: 8px 10px;
+                /* Giảm padding ô bảng */
+            }
+
+            .mjx-chtml {
+                font-size: 1em !important;
+                /* Giảm font MathJax */
+            }
+        }
+
+        @media (max-width: 480px) {
+
+            /* Breakpoint nhỏ hơn cho điện thoại */
+            body {
+                padding: 10px;
+            }
+
+            h1 {
+                font-size: 1.4em;
+            }
+
+            h1::after {
+                width: 60px;
+            }
+
+            .input-section,
+            .result-section,
+            .step,
+            .final-result,
+            .math-formula {
+                padding: 10px;
+            }
+
+            button,
+            body>button:first-of-type {
+                /* Áp dụng cho tất cả các nút */
+                width: 95%;
+                /* Nút chiếm gần hết chiều rộng */
+                font-size: 14px;
+            }
+
+            table {
+                font-size: 12px;
+                min-width: 400px;
+                /* Điều chỉnh min-width cho bảng trên điện thoại nhỏ */
+            }
+
+            th,
+            td {
+                padding: 6px 8px;
+            }
+
+            .mjx-chtml {
+                font-size: 0.9em !important;
+            }
         }
     </style>
 </head>
