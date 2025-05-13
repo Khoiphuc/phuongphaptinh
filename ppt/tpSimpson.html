@@ -129,14 +129,17 @@
             opacity: 0;
             transform: translateY(30px);
             transition: opacity 0.5s ease-out, transform 0.5s ease-out;
-            visibility: hidden;
+            display: none;
+            /* << THAY ĐỔI Ở ĐÂY */
             /* Initially hidden */
         }
 
         .result-section.show {
+            display: block;
+            /* << THÊM DÒNG NÀY (hoặc 'flex', 'grid', ...) */
             opacity: 1;
             transform: translateY(0);
-            visibility: visible;
+            /* visibility: visible; /* Dòng này có thể bỏ vì display đã xử lý việc hiển thị */
         }
 
         .result-title {
@@ -382,7 +385,7 @@
             const resultSection = document.getElementById('result');
             // Reset opacity and transform before new calculation for re-triggering animation
             resultSection.classList.remove('show');
-
+            resultSection.style.display = 'block'; // << THÊM DÒNG NÀY
             // Ensure a small delay to allow the browser to apply the 'hide' state before 'show'
             requestAnimationFrame(() => {
                 requestAnimationFrame(() => { // Double RAF for more robust reflow
