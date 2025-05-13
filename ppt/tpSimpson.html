@@ -435,8 +435,8 @@
                                     <tr>
                                         <th> \\(i\\) </th>
                                         <th> \\(x_i\\) </th>
-                                        <th> \\(f(x_i)\\) (Chẵn) </th>
-                                        <th> \\(f(x_i)\\) (Lẻ) </th>
+                                        <th> \\(f(x_i)\\text{(Chẵn)}\\)  </th>
+                                        <th> \\(f(x_i)\\text{(Lẻ)}\\)  </th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -493,17 +493,17 @@
                         // s_chan is sum of y_i for even i (excluding y_0, y_n)
 
                         const I = (h / 3) * (y_0 + 4 * s_le + 2 * s_chan + y_n);
+                        let dc = y_0 + y_n;
 
                         document.getElementById('sums-calculation').innerHTML = `
-                            <p>\\[ y_0 = f(${fr(a)}) = ${froundf(y_0)} \\]</p>
-                            <p>\\[ y_n = f(${fr(b)}) = ${froundf(y_n)} \\]</p>
-                            <p>\\[ 2 \\sum_{i=2, i \\text{ chẵn}}^{n-2} y_i = 2 \\times ${froundf(s_chan)} = ${froundf(2 * s_chan)} \\]</p>
-                            <p>\\[ 4 \\sum_{i=1, i \\text{ lẻ}}^{n-1} y_i = 4 \\times ${froundf(s_le)} = ${froundf(4 * s_le)} \\]</p>
+                            <p>\\[ {Đầu + cuối} = f(${fr(b)}) + f(${fr(a)})  = ${froundf(y_0)} + ${froundf(y_n)} = ${froundf(dc)} \\]</p>
+                            <p>\\[ 2 \\Sigma_{chẵn} = 2 \\times ${froundf(s_chan)} = ${froundf(2 * s_chan)} \\]</p>
+                            <p>\\[ 4 \\Sigma_{lẻ} = 4 \\times ${froundf(s_le)} = ${froundf(4 * s_le)} \\]</p>
                         `;
 
                         document.getElementById('final-calculation').innerHTML = `
-                            <p>\\[ I = \\frac{h}{3} \\left[ y_0 + 4\\sum_{i=1, i \\text{ lẻ}}^{n-1} y_i + 2\\sum_{i=2, i \\text{ chẵn}}^{n-2} y_i + y_n \\right] \\]</p>
-                            <p>\\[ I = \\frac{${fr(h)}}{3} \\left[ ${froundf(y_0)} + ${froundf(4 * s_le)} + ${froundf(2 * s_chan)} + ${froundf(y_n)} \\right] \\]</p>
+                            <p>\\[ I = \\frac{h}{3} \\left[ (\\text{Đầu + cuối}) + 2\\Sigma_{chẵn} + 4\\Sigma_{lẻ} \\right] \\]</p>
+                            <p>\\[ I = \\frac{${fr(h)}}{3} \\left[ ${froundf(dc)} + ${froundf(2 * s_chan)} + ${froundf(4 * s_le)}  \\right] \\]</p>
                             <p>\\[ I = ${froundf(I)} \\]</p>
                             <div class="success-box">
                                 <h3>Kết quả Tích Phân xấp xỉ</h3>
