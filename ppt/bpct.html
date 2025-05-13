@@ -130,14 +130,17 @@
             opacity: 0;
             transform: translateY(30px);
             transition: opacity 0.7s ease-out, transform 0.7s ease-out;
-            visibility: hidden;
+            display: none;
+            /* << THAY ĐỔI Ở ĐÂY */
             /* Initially hidden, to be managed by JS */
         }
 
         .result-section.show {
+            display: block;
+            /* << THÊM DÒNG NÀY (hoặc 'flex', 'grid', ...) */
             opacity: 1;
             transform: translateY(0);
-            visibility: visible;
+            /* visibility: visible; /* Dòng này có thể bỏ vì display đã xử lý việc hiển thị */
         }
 
 
@@ -486,11 +489,10 @@
 
         function calculateLeastSquares() {
             const resultSection = document.getElementById('result');
-            // Reset opacity and transform before new calculation for re-triggering animation
+
             resultSection.classList.remove('show');
-            // Ensure a small delay to allow the browser to apply the 'hide' state before 'show' for re-animation
-            // If you calculate multiple times, you want the animation to replay.
-            // Using requestAnimationFrame or a small timeout can help.
+            resultSection.style.display = 'block'; // << THÊM DÒNG NÀY
+
             requestAnimationFrame(() => {
                 requestAnimationFrame(() => { // Double RAF for more robust reflow
                     try {
