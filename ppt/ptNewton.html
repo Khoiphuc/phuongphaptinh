@@ -283,6 +283,14 @@
             }
         }
 
+        @media (max-width: 480px) {
+            body>button:first-of-type {
+                /* Nút Home */
+                width: 95% !important;
+                font-size: 0.9em;
+                padding: 10px;
+            }
+        }
 
 
 
@@ -342,7 +350,8 @@
 
 
     <div id="result" class="result-section" style="display: none;">
-        <div style="background-color: #24ff7f; color: white; padding: 8px 15px; border-radius: 4px; margin-top: 10px;">
+        <div
+            style="background: linear-gradient(to top, #C8E6C9, #81C784, #4CAF50); color: white; padding: 8px 15px; border-radius: 4px; margin-top: 10px;">
             Tính toán thành công ✅</div>
         <h2 class="result-title">Kết quả tính toán</h2>
 
@@ -360,7 +369,7 @@
 
         <div class="step">
             <h3>Xây dựng dãy <span> \( \{x_{n}\} \)</span></h3>
-            <div id="iteration-process"></div>
+            <div id="iteration-process" class="math-formula"></div>
         </div>
 
         <div class="step">
@@ -491,7 +500,6 @@
                     .replace(/([^+\-*/()]+)\/([^+\-*/()]+)/g, '\\frac{$1}{$2}'); // Tổng quát hơn
 
                 document.getElementById('function-display').innerHTML = `
-                    <p>Hàm cần tìm nghiệm: </p>
                     <p>\\[ f(x) = ${fDisplay} \\]</p>
                 `;
 
@@ -535,9 +543,7 @@
 
                 // Display derivatives
                 document.getElementById('derivatives').innerHTML = `
-                    <p>Đạo hàm cấp 1 : </p>
                     <p>\\[ f'(x) = ${fPrimeDisplay} > 0 \\text{ } \\forall x \\in [${a};${b}] \\]</p>
-                    <p>Đạo hàm cấp 2 :</p>
                     <p>\\[ f''(x) = ${fDoublePrimeDisplay} > 0 \\text{ } \\forall x \\in [${a};${b}] \\]</p>
                 `;
 
@@ -554,8 +560,7 @@
                 }
 
                 document.getElementById('initial-point').innerHTML = `
-                    <p>Kiểm tra điều kiện cho điểm ban đầu:</p>
-                    <p>\\[ f(${a}) \\cdot f''(${a}) = ${formatNumber(fA)} \\times ${formatNumber(fDoublePrimeA)} = ${formatNumber(productA)} ${productA > 0 ? '> 0' : '< 0'} \\]</p>
+                    <p>\\[ f(a)f''(a) = f(${a}) f''(${a}) = ${formatNumber(fA)} \\times ${formatNumber(fDoublePrimeA)} = ${formatNumber(productA)} ${productA > 0 ? '> 0' : '< 0'} \\]</p>
                     <p>\\[ \\Rightarrow x_0 = ${x0} \\]</p>
                 `;
 
@@ -587,11 +592,11 @@
                     .replace(/\bx\b/g, 'x_{n}'); // Đổi x thành x_n
 
                 // First, show the Newton's formula for each iteration
-                iterationHTML += `<div class="math-formula"><p>Công thức lặp Newton:</p>`;
+                iterationHTML += `<div class="math-formula">`;
                 iterationHTML += `
-                        <p>\\[ x_{n+1} = x_{n} - \\frac{f(x_{n})} {f'(x_{n})} = x_{n} - \\frac{${f_xn}}{${f_prime_xn}} \\]</p>
+                        <p>\\[ x_{n+1} = x_{n} - \\frac{f(x_{n})} {f'(x_{n})}   \\]</p>
+                        <p>\\[ x_{n+1} = x_{n} - \\frac{${f_xn}}{${f_prime_xn}} \\]</p>
                     `;
-                iterationHTML += `</div><br>`;
 
                 // Display iteration process
                 iterationHTML += `<div class="iteration-row" style="font-weight: bold; margin-bottom: 10px;">
@@ -599,13 +604,14 @@
                     <div class="iteration-value"> \\(x_{n+1}\\) </div>
                 </div>`;
 
+
                 for (const iter of iterationValues) {
                     iterationHTML += `<div class="iteration-row ">
-                        <div class="iteration-value" style="flex: 0.5;"> \\(x_{${iter.iteration}}\\)</div>
-                        <div class="iteration-value"> \\(${formatNumber(iter.nextX)}\\) </div>
-                    </div>`;
+                            <div class="iteration-value" style="flex: 0.5;"> \\(x_{${iter.iteration}}\\)</div>
+                            <div class="iteration-value"> \\(${formatNumber(iter.nextX)}\\) </div>
+                        </div>`;
                 }
-
+                iterationHTML += `</div>`;
                 document.getElementById('iteration-process').innerHTML = iterationHTML;
 
                 // Calculate error estimation
@@ -621,12 +627,10 @@
                     x_temp = last.nextX;
 
                     errorEstimation = `
-                        <p>Ở :</p>
                         <p>\\[ m = \\min_{[${a},${b}]} |f'(x)| = ${formatNumber(fPrimeMin)} \\]</p>
                         <p>\\[ M = \\max_{[${a},${b}]} |f''(x)| = ${formatNumber(fDoublePrimeMax)} \\]</p>
-                        <p>Đánh giá sai số:</p>
+                        <p> \\( \\text{Đánh giá}\\) </p>
                         <p>\\[ |x_{${iterations}} - x^*| \\leq \\frac{M}{2m} (x_{${iterations}} - x_{${iterations - 1}})^2 \\]</p>
-                        <p>Đối với lần lặp cuối cùng::</p>
                         <p>\\[ |x_{${iterations}} - x^*| \\leq \\frac{${formatNumber(fDoublePrimeMax)}}{2 \\times ${formatNumber(fPrimeMin)}} (${formatNumber(last.nextX)} - ${formatNumber(prev.nextX)})^2 \\]</p>
                         <p>\\[ \\approx ${formatNumber(error)} \\]</p>
                     `;
@@ -637,8 +641,8 @@
                 // Display final result
                 document.getElementById('final-result').innerHTML = `
                     <div class="success-box">
-                        <h3>Đã tìm thấy nghiệm gần đúng</h3>
-                        <p style="font-size: 1.3em; text-align: center;">\\[ x \\approx ${formatNumber(x_temp)} \\]</p>
+                        <p>Sau ${iterations} lần lặp:  </p>
+                        <p style="font-size: 1.3em; text-align: center;">\\[ \\boxed{x \\approx ${formatNumber(x_temp)}} \\]</p>
                         <p>\\[ f(${formatNumber(x_temp)}) \\approx ${formatNumber(math.evaluate(fInput, { x: x_temp }))} \\]</p>
                     </div>
                 `;
