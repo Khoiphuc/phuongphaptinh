@@ -4,55 +4,102 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tính Toán số</title>
+    <title>Tính Toán số - Hiện Đại</title>
     <link rel="icon" href="./img/icon-webs.png" type="image/x-icon">
     <style>
         html,
         body {
             height: 100vh;
             margin: 0;
+            overflow: hidden;
         }
 
         body {
-            background: linear-gradient(to right, #B3E5FC, #FFCCBC, #FFF5EE);
-            font-family: sans-serif;
+            background: linear-gradient(-45deg, #A0D2DB, #B2FCE5, #CFEAF7, #E6E6FA, #FFFDD0, #A0D2DB);
+            background-size: 500% 500%;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             opacity: 1;
-            /* Thêm để kiểm soát hiệu ứng fade */
             transition: opacity 0.3s ease-out;
-            /* Thời gian hiệu ứng fade out */
+            position: relative;
+            animation: fluidBackground 35s ease infinite;
         }
 
-        /* Class cho hiệu ứng fade out */
         body.page-fade-out {
             opacity: 0;
+        }
+
+        @keyframes fluidBackground {
+            0% {
+                background-position: 0% 50%;
+            }
+
+            25% {
+                background-position: 100% 0%;
+            }
+
+            50% {
+                background-position: 100% 100%;
+            }
+
+            75% {
+                background-position: 0% 100%;
+            }
+
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        @keyframes oneWayFlow {
+            0% {
+                background-position: 0% 50%;
+            }
+
+            100% {
+                background-position: var(--bg-pos-end) 50%;
+            }
         }
 
         .open-menu-button-container {
             display: flex;
             justify-content: center;
             margin-top: 20px;
+            z-index: 10;
         }
 
         .open-menu-button {
-            background: linear-gradient(to right, #00B7EB, #1E90FF, #8A2BE2);
+            background: linear-gradient(to right, #00B7EB, #1E90FF, #8A2BE2, #1E90FF, #00B7EB);
+            background-size: 250% auto;
             color: white;
             border: none;
-            padding: 10px 20px;
-            border-radius: 6px;
+            padding: 12px 25px;
+            border-radius: 8px;
             cursor: pointer;
             font-size: 16px;
-            transition: background 0.3s ease, transform 0.2s ease;
-            /* Thêm transition cho background */
+            font-weight: 500;
+            letter-spacing: 0.5px;
+            transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1),
+                filter 0.3s ease,
+                box-shadow 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            --bg-pos-end: 150%;
+            animation: oneWayFlow 6s linear infinite;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
         }
 
         .open-menu-button:hover {
-            background: linear-gradient(to right, #0095c7, #187bcd, #7423bf);
-            /* Đổi màu đậm hơn khi hover */
-            transform: translateY(-2px);
+            transform: translateY(-4px) scale(1.05);
+            filter: brightness(120%);
+            box-shadow: 0 10px 25px rgba(30, 144, 255, 0.3);
+        }
+
+        .open-menu-button:active {
+            transform: translateY(-2px) scale(1.02);
+            filter: brightness(110%);
+            box-shadow: 0 6px 18px rgba(30, 144, 255, 0.2);
         }
 
         .modal {
@@ -60,13 +107,14 @@
             opacity: 0;
             position: fixed;
             z-index: 1000;
+            /* Modal luôn ở trên cùng */
             left: 0;
             top: 0;
             width: 100%;
             height: 100%;
             overflow: hidden;
-            background-color: rgba(0, 0, 0, 0.4);
-            transition: opacity 0.3s ease-out, visibility 0s linear 0.3s;
+            background-color: rgba(0, 0, 0, 0.5);
+            transition: opacity 0.4s ease-out, visibility 0s linear 0.4s;
         }
 
         .modal.active {
@@ -76,21 +124,23 @@
         }
 
         .modal-content {
-            background-color: #fefefe;
-            padding: 20px;
-            border: 1px solid #888;
-            width: 80%;
-            max-width: 320px;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-            max-height: 70vh;
+            background-color: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            padding: 25px;
+            border: 1px solid rgba(200, 200, 200, 0.3);
+            width: 85%;
+            max-width: 340px;
+            border-radius: 12px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+            max-height: 75vh;
             display: flex;
             flex-direction: column;
             position: absolute;
             left: 50%;
             bottom: 0;
             transform: translate(-50%, 100%);
-            transition: transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+            transition: transform 0.5s cubic-bezier(0.25, 0.8, 0.25, 1);
         }
 
         .modal.active .modal-content {
@@ -99,9 +149,9 @@
         }
 
         .modal-header {
-            padding-bottom: 10px;
-            border-bottom: 1px solid #eee;
-            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+            margin-bottom: 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -109,19 +159,24 @@
 
         .modal-header h2 {
             margin: 0;
+            font-size: 22px;
+            font-weight: 600;
+            color: #333;
         }
 
         .close-button {
-            color: #aaa;
-            font-size: 28px;
-            font-weight: bold;
+            color: #888;
+            font-size: 32px;
+            font-weight: normal;
+            transition: color 0.3s ease, transform 0.3s ease;
         }
 
         .close-button:hover,
         .close-button:focus {
-            color: black;
+            color: #E91E63;
             text-decoration: none;
             cursor: pointer;
+            transform: rotate(90deg) scale(1.1);
         }
 
         .button-containerk {
@@ -129,118 +184,203 @@
             flex-direction: column;
             align-items: center;
             overflow-y: auto;
-            max-height: calc(70vh - 80px);
+            max-height: calc(75vh - 90px);
             padding-right: 10px;
         }
 
         .button-containerk::-webkit-scrollbar {
-            width: 8px;
+            width: 6px;
         }
 
         .button-containerk::-webkit-scrollbar-track {
-            background: #f1f1f1;
+            background: rgba(0, 0, 0, 0.05);
             border-radius: 10px;
         }
 
         .button-containerk::-webkit-scrollbar-thumb {
-            background: #888;
+            background: rgba(0, 0, 0, 0.2);
             border-radius: 10px;
         }
 
         .button-containerk::-webkit-scrollbar-thumb:hover {
-            background: #555;
+            background: rgba(0, 0, 0, 0.3);
         }
 
         .nav-button {
-            background: linear-gradient(45deg, #007BFF, #00C4B4);
+            background: linear-gradient(45deg, #007BFF, #00C4B4, #0056b3, #00a294, #007BFF);
+            background-size: 300% auto;
             color: white;
             border: none;
             padding: 14px 24px;
-            border-radius: 6px;
+            border-radius: 8px;
             cursor: pointer;
             font-size: 16px;
-            margin: 8px 0;
-            transition: background 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
-            /* Cập nhật transition */
-            width: calc(100% - 10px);
             font-weight: 500;
+            margin: 10px 0;
+            transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1),
+                box-shadow 0.3s cubic-bezier(0.25, 0.8, 0.25, 1),
+                filter 0.3s ease;
+            width: calc(100% - 10px);
             letter-spacing: 0.5px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
             text-align: center;
             display: block;
             flex-shrink: 0;
+            --bg-pos-end: 200%;
+            animation: oneWayFlow 9s linear infinite;
         }
 
         .nav-button:hover {
-            background: linear-gradient(45deg, #0056b3, #00a294);
-            /* Đậm hơn khi hover */
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+            transform: translateY(-4px) scale(1.05);
+            box-shadow: 0 10px 25px rgba(0, 123, 255, 0.25);
+            filter: brightness(120%);
         }
 
         .nav-button:active {
-            transform: translateY(0px);
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transform: translateY(-2px) scale(1.02);
+            box-shadow: 0 6px 18px rgba(0, 123, 255, 0.18);
+            filter: brightness(110%);
         }
-
 
         h1 {
             text-align: center;
-            /* Đã có style inline color: black; */
-        }
-
-        .image-container {
-            display: flex;
-            justify-content: center;
+            font-size: 36px;
+            font-weight: 300;
+            color: #2c3e50;
+            margin-bottom: 30px;
+            z-index: 10;
         }
 
         .submenu-vi-phan {
             width: calc(100% - 10px);
-            padding-left: 20px;
+            padding-left: 0;
             box-sizing: border-box;
             overflow: hidden;
             max-height: 0;
             opacity: 0;
-            transition: max-height 0.4s ease-in-out, opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
-            transform: translateY(-10px);
+            transition: max-height 0.5s cubic-bezier(0.25, 0.8, 0.25, 1),
+                opacity 0.4s ease-in-out,
+                transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+            transform: translateY(-15px);
         }
 
         .submenu-vi-phan.active {
-            max-height: 150px;
+            max-height: 200px;
             opacity: 1;
             transform: translateY(0);
+            margin-top: 5px;
         }
 
         .submenu-vi-phan .nav-button {
-            background-color: #00ddff;
-            color: black;
+            background: linear-gradient(45deg, #6C7A89, #4B5C6B, #2E3B44, #4B5C6B, #6C7A89);
+            color: white;
             font-size: 15px;
             padding: 12px 20px;
-            margin: 6px 0;
             width: 95%;
-            /* Giữ nguyên hoặc điều chỉnh nếu cần */
-            border-radius: 8px;
-            box-shadow: 0 2px 3px rgba(0, 0, 0, 0.15);
-            transition: background-color 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease;
+            margin: 8px auto;
+            --bg-pos-end: 200%;
+            animation: oneWayFlow 10s linear infinite;
         }
 
         .submenu-vi-phan .nav-button:hover {
-            background-color: #00a5be;
-            transform: scale(1.03) translateY(-1px);
-            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
+            transform: scale(1.06) translateY(-3px);
+            box-shadow: 0 8px 20px rgba(46, 59, 68, 0.25);
+            filter: brightness(115%);
         }
 
         .submenu-vi-phan .nav-button:active {
-            background-color: #117a8b;
-            transform: scale(1.01) translateY(0px);
+            transform: scale(1.03) translateY(-1px);
+            filter: brightness(105%);
+        }
+
+        /* CSS cho bong bóng - ĐÃ CẬP NHẬT */
+        .bubble {
+            position: fixed;
+            border-radius: 50%;
+            pointer-events: none;
+            /* transform ban đầu để căn giữa, sẽ bị ghi đè bởi keyframe 0% */
+            transform: translate(-50%, -50%);
+            animation: floatBubble ease-out forwards;
+            /* Thời gian sẽ được set bởi JS */
+
+            /* Cải thiện hiển thị */
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            /* Viền trắng mờ */
+            box-shadow: inset 0 0 10px rgba(255, 255, 255, 0.6),
+                /* Sáng bên trong */
+                0 0 4px rgba(255, 255, 255, 0.35),
+                /* Viền sáng nhẹ bên ngoài */
+                0 0 15px var(--bubble-glow-color, rgba(220, 240, 255, 0.3));
+            /* Hào quang màu theo bong bóng */
+            z-index: 990;
+            /* Nằm trên nền, dưới modal */
+        }
+
+        @keyframes floatBubble {
+            0% {
+                opacity: 0;
+                transform: translate(-50%, -50%) scale(0.2);
+                /* Bắt đầu nhỏ và mờ */
+            }
+
+            15% {
+                /* Xuất hiện nhanh */
+                opacity: 1;
+                /* Độ mờ thực tế phụ thuộc vào alpha của màu nền bong bóng */
+            }
+
+            100% {
+                opacity: 0;
+                /* Di chuyển và thay đổi kích thước cuối cùng */
+                transform: translate(calc(-50% + var(--bubble-drift-x, 0px)), calc(-50% + var(--bubble-drift-y, -150px))) scale(var(--bubble-end-scale, 1.0));
+            }
+        }
+
+        /* thiết kế tiêu đề  */
+        .custom-title {
+            position: relative;
+            display: inline-block;
+            /* Chỉ chiếm không gian cần thiết */
+            font-family: 'Playfair Display', serif;
+            font-size: 48px;
+            font-weight: 700;
+            background: linear-gradient(45deg, #4FC3F7, #FFCCFF);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+            margin: 0;
+            padding: 10px;
+            transition: transform 0.3s ease, text-shadow 0.3s ease;
+            user-select: none;
+            /* Ngăn chọn văn bản */
+        }
+
+        .custom-title:hover {
+            transform: scale(1.05);
+            text-shadow: 4px 4px 8px rgba(0, 0, 0, 0.3);
+            background: linear-gradient(45deg, #FFCCFF, #4FC3F7);
+            -webkit-background-clip: text;
+            background-clip: text;
+        }
+
+        .custom-title .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 10;
+            pointer-events: auto;
         }
     </style>
 </head>
 
 <body>
-
-    <h1 style="color: black;">Toán học Ứng dụng</h1>
-
+    <h1 class="custom-title">
+        Toán học Ứng dụng
+        <div class="overlay" oncontextmenu="return false;"></div>
+    </h1>
     <div class="open-menu-button-container">
         <button class="open-menu-button" id="openMenuBtn">Mở Menu Tính Năng</button>
     </div>
@@ -260,7 +400,6 @@
                     tiểu</button>
                 <button class="nav-button" onclick="navigateWithTransition('./ppt/tpSimpson.html')">Tính Tích
                     phân</button>
-
                 <button class="nav-button" id="phuongTrinhViPhanBtn">Phương trình vi phân</button>
                 <div id="subMenuViPhan" class="submenu-vi-phan">
                     <button class="nav-button" onclick="navigateWithTransition('./ppt/ptvp_Euler_caitien.html')">PP
@@ -273,63 +412,102 @@
     </div>
 
     <script>
+        // JavaScript cho hiệu ứng chuyển trang và modal (giữ nguyên)
         var modal = document.getElementById("myModal");
         var btnOpen = document.getElementById("openMenuBtn");
         var btnClose = document.getElementById("closeBtn");
-
-        // Thời gian của hiệu ứng fade out (tính bằng mili giây)
-        // Phải khớp với thời gian transition của body trong CSS (0.5s = 500ms)
         const FADE_DURATION = 300;
 
         function navigateWithTransition(url) {
             document.body.classList.add('page-fade-out');
-            setTimeout(function () {
-                window.location.href = url;
-            }, FADE_DURATION);
+            setTimeout(function () { window.location.href = url; }, FADE_DURATION);
         }
 
-        btnOpen.onclick = function () {
-            modal.classList.add("active");
-            // Khi mở lại modal, nếu muốn reset hiệu ứng fade của body (nếu có)
-            // document.body.classList.remove('page-fade-out'); 
-        }
-
-        btnClose.onclick = function () {
-            modal.classList.remove("active");
-        }
-
+        btnOpen.onclick = function () { modal.classList.add("active"); }
+        btnClose.onclick = function () { modal.classList.remove("active"); }
         modal.onclick = function (event) {
-            if (event.target === modal) {
-                modal.classList.remove("active");
-            }
+            if (event.target === modal) { modal.classList.remove("active"); }
         }
 
         var phuongTrinhViPhanBtn = document.getElementById("phuongTrinhViPhanBtn");
         var subMenuViPhan = document.getElementById("subMenuViPhan");
-
         phuongTrinhViPhanBtn.onclick = function (event) {
             event.preventDefault();
             subMenuViPhan.classList.toggle("active");
         }
 
-        // Đảm bảo body không bị fade out nếu người dùng chỉ đóng modal mà không điều hướng
-        // Hoặc khi modal mở ra
-        function resetBodyFade() {
-            if (document.body.classList.contains('page-fade-out')) {
-                // Có thể không cần thiết nếu chỉ dựa vào tải lại trang mới
-                // document.body.classList.remove('page-fade-out');
+        // JavaScript cho hiệu ứng bong bóng khi click - ĐÃ CẬP NHẬT
+        const bubbleColors = [ // Màu sáng hơn, alpha cao hơn
+            'rgba(225, 240, 255, 0.45)', // Pastel Blue nhạt hơn
+            'rgba(220, 255, 235, 0.45)', // Pastel Mint nhạt hơn
+            'rgba(240, 230, 255, 0.45)', // Pastel Lavender nhạt hơn
+            'rgba(255, 235, 240, 0.45)'  // Pastel Pink/Cream nhạt
+        ];
+
+        document.addEventListener('click', function (e) {
+            const interactiveElements = ['button', 'a', 'span', 'h2', 'input', 'textarea', 'select'];
+            let targetElement = e.target;
+            let clickedOnInteractive = false;
+
+            while (targetElement != null) {
+                const tagName = targetElement.tagName ? targetElement.tagName.toLowerCase() : '';
+                if (interactiveElements.includes(tagName) || targetElement.classList.contains('modal-content') || targetElement.closest('.modal-content')) {
+                    clickedOnInteractive = true;
+                    break;
+                }
+                targetElement = targetElement.parentElement;
             }
-        }
-        // Gọi khi mở modal hoặc khi có tương tác không điều hướng
-        btnOpen.addEventListener('click', resetBodyFade);
-        btnClose.addEventListener('click', resetBodyFade);
-        // modal.addEventListener('click', function(event) { // Nếu click ra ngoài cũng cần reset
-        //     if (event.target === modal) {
-        //        resetBodyFade();
-        //     }
-        // });
+
+            if (clickedOnInteractive) return;
+
+            const numBubbles = Math.floor(Math.random() * 3) + 2; // Tạo từ 2 đến 4 bong bóng
+
+            for (let i = 0; i < numBubbles; i++) {
+                let bubble = document.createElement('div');
+                bubble.classList.add('bubble');
+                document.body.appendChild(bubble);
+
+                // Kích thước lớn hơn: từ 25px đến 65px
+                const size = Math.random() * 40 + 25;
+                bubble.style.width = size + 'px';
+                bubble.style.height = size + 'px';
+
+                bubble.style.left = e.clientX + 'px';
+                bubble.style.top = e.clientY + 'px';
+
+                const chosenColorRgbaString = bubbleColors[Math.floor(Math.random() * bubbleColors.length)];
+                bubble.style.backgroundColor = chosenColorRgbaString;
+
+                // Tạo màu cho hào quang (glow) dựa trên màu bong bóng
+                try {
+                    const match = chosenColorRgbaString.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)(?:,\s*[\d.]+)?\)/);
+                    if (match) {
+                        const glowRgba = `rgba(${match[1]}, ${match[2]}, ${match[3]}, 0.25)`;
+                        bubble.style.setProperty('--bubble-glow-color', glowRgba);
+                    } else { // Fallback
+                        bubble.style.setProperty('--bubble-glow-color', 'rgba(220, 240, 255, 0.2)');
+                    }
+                } catch (error) { // Fallback
+                    bubble.style.setProperty('--bubble-glow-color', 'rgba(220, 240, 255, 0.2)');
+                }
 
 
+                // Hướng trôi dạt (drift) và tỉ lệ cuối cùng ngẫu nhiên
+                const driftX = (Math.random() - 0.5) * 120; // Ngang: -60px đến +60px
+                const driftY = (Math.random() * -120) - 100; // Lên trên: -100px đến -220px
+                const endScale = Math.random() * 0.5 + 0.8; // Tỉ lệ cuối: 0.8 đến 1.3
+
+                bubble.style.setProperty('--bubble-drift-x', driftX + 'px');
+                bubble.style.setProperty('--bubble-drift-y', driftY + 'px');
+                bubble.style.setProperty('--bubble-end-scale', endScale);
+
+                bubble.style.animationDuration = (Math.random() * 1.5 + 2.5) + 's'; // 2.5s đến 4s
+
+                bubble.addEventListener('animationend', function () {
+                    bubble.remove();
+                });
+            }
+        });
     </script>
 
 </body>
