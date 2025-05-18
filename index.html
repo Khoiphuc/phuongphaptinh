@@ -6,32 +6,30 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tính Toán số - Hiện Đại</title>
     <link rel="icon" href="./img/icon-webs.png" type="image/x-icon">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&family=Playfair+Display:wght@700&display=swap"
+        rel="stylesheet">
     <style>
+        /* --- CÀI ĐẶT CHUNG & NỀN BODY --- */
         html,
         body {
             height: 100vh;
             margin: 0;
             overflow: hidden;
+            /* Ngăn cuộn trang không mong muốn */
         }
 
         body {
             background: linear-gradient(-45deg, #A0D2DB, #B2FCE5, #CFEAF7, #E6E6FA, #FFFDD0, #A0D2DB);
             background-size: 500% 500%;
-            /* Sử dụng Poppins làm font chính cho body, các nút sẽ kế thừa hoặc ghi đè */
             font-family: 'Poppins', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            opacity: 1;
-            transition: opacity 0.3s ease-out;
             position: relative;
+            /* Cho định vị các phần tử con */
             animation: fluidBackground 35s ease infinite;
-        }
-
-        body.page-fade-out {
-            opacity: 0;
         }
 
         @keyframes fluidBackground {
@@ -56,6 +54,48 @@
             }
         }
 
+        /* --- HIỆU ỨNG CHUYỂN TRANG --- */
+        #page-transition-effect {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(60deg,
+                    #B9E1F9,
+                    /* Xanh lam nhạt */
+                    #D8BFD8,
+                    /* Tím Pastel / Hồng khói */
+                    #FADADD
+                    /* Hồng phấn nhạt */
+                );
+            z-index: 99999;
+            opacity: 0;
+            transform: scale(1.1);
+            pointer-events: none;
+            transition: opacity 0.6s cubic-bezier(0.7, 0, 0.3, 1),
+                transform 0.6s cubic-bezier(0.7, 0, 0.3, 1);
+        }
+
+        #page-transition-effect.page-is-leaving {
+            opacity: 1;
+            transform: scale(1);
+            pointer-events: auto;
+        }
+
+        #page-transition-effect.page-is-entering {
+            opacity: 1;
+            transform: scale(1);
+            pointer-events: auto;
+        }
+
+        #page-transition-effect.page-is-entering.revealing-page {
+            opacity: 0;
+            transform: scale(0.9);
+            pointer-events: none;
+        }
+
+        /* --- KEYFRAMES CHO ANIMATION NÚT --- */
         @keyframes oneWayFlow {
             0% {
                 background-position: 0% 50%;
@@ -66,29 +106,71 @@
             }
         }
 
-        /* ... (Phần CSS import font Poppins và các style khác giữ nguyên) ... */
+        /* --- TIÊU ĐỀ CHÍNH H1 --- */
+        .custom-title {
+            position: relative;
+            display: inline-block;
+            font-family: 'Playfair Display', serif;
+            font-size: 48px;
+            font-weight: 700;
+            background: linear-gradient(45deg, #4FC3F7, #FFCCFF);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+            margin: 0 0 30px 0;
+            padding: 10px;
+            z-index: 10;
+            transition: transform .3s ease, text-shadow .3s ease;
+            user-select: none;
+        }
 
-        /* --- CẬP NHẬT CHO NÚT BẤM ĐỂ MƯỢT MÀ HƠN --- */
+        .custom-title:hover {
+            transform: scale(1.05);
+            text-shadow: 4px 4px 8px rgba(0, 0, 0, 0.3);
+            background: linear-gradient(45deg, #FFCCFF, #4FC3F7);
+            -webkit-background-clip: text;
+            background-clip: text;
+        }
+
+        .custom-title .overlay {
+            /* Để chặn context menu nếu cần */
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 10;
+            pointer-events: auto;
+        }
+
+
+        /* --- NÚT BẤM CHUNG & TEXT CUSTOM --- */
+        .open-menu-button-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+            z-index: 10;
+        }
 
         .open-menu-button,
         .nav-button {
-            /* Áp dụng cho cả .submenu-vi-phan .nav-button qua kế thừa */
-            /* Các style cơ bản của nút (background, padding, border-radius, etc.) giữ nguyên như trước */
-            /* Thêm gợi ý tăng tốc phần cứng (tùy chọn, có thể thử nghiệm) */
-            /* transform: translateZ(0); */
-
-            /* Transition mặc định cho hover và khi nhả nút từ active */
+            /* Style chung cho nút, giữ lại các style nền, padding, radius, animation đã có */
+            border: none;
+            cursor: pointer;
+            text-align: center;
+            display: block;
+            flex-shrink: 0;
+            /* Transition mặc định cho nút (không phải text) */
             transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1),
                 filter 0.3s cubic-bezier(0.25, 0.8, 0.25, 1),
                 box-shadow 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-
-            /* Style cho text ẩn và hiển thị bằng pseudo-element (giữ nguyên từ lần trước) */
+            /* Style cho text ẩn và hiển thị bằng pseudo-element */
             position: relative;
             color: transparent !important;
             user-select: none;
         }
 
-        /* Pseudo-element cho text (chung) */
         .open-menu-button::before,
         .nav-button::before {
             content: attr(data-text);
@@ -105,187 +187,142 @@
             letter-spacing: 0.03em;
             pointer-events: none;
             font-size: inherit;
-            /* transform: translateZ(0); */
-            /* Tùy chọn cho pseudo-element */
-            /* Transition mặc định cho text shadow */
+            /* Kế thừa font-size từ nút cha */
             transition: text-shadow 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
         }
 
-        /* --- Trạng thái HOVER cho nút và text (Giữ nguyên hoặc tinh chỉnh nếu muốn) --- */
-        .open-menu-button:hover {
-            transform: translateY(-4px) scale(1.05);
-            /* translateZ(0) nếu đã thêm ở trên */
-            filter: brightness(120%);
-            box-shadow: 0 10px 25px rgba(30, 144, 255, 0.3);
-        }
-
-        .nav-button:hover {
-            transform: translateY(-4px) scale(1.05);
-            /* translateZ(0) nếu đã thêm ở trên */
-            box-shadow: 0 10px 25px rgba(0, 123, 255, 0.25);
-            filter: brightness(120%);
-        }
-
-        .submenu-vi-phan .nav-button:hover {
-            transform: scale(1.06) translateY(-3px);
-            /* translateZ(0) nếu đã thêm ở trên */
-            box-shadow: 0 8px 20px rgba(46, 59, 68, 0.25);
-            filter: brightness(115%);
-        }
-
-        /* Text shadow cho từng loại nút khi HOVER (Giữ nguyên từ lần trước) */
-        .open-menu-button:hover::before {
-            text-shadow: 0 0 7px rgba(255, 255, 255, 0.9), 0 0 15px rgba(173, 226, 230, 0.7), 0 0 25px rgba(220, 210, 250, 0.6), 0 0 30px rgba(100, 200, 255, 0.3);
-        }
-
-        .nav-button:hover::before {
-            /* Chung cho nav-button và submenu kế thừa */
-            text-shadow: 0 0 6px rgba(255, 255, 255, 0.8), 0 0 12px rgba(173, 226, 230, 0.6), 0 0 20px rgba(200, 225, 255, 0.4);
-        }
-
-        .submenu-vi-phan .nav-button:hover::before {
-            /* Ghi đè nếu cần cho submenu */
-            text-shadow: 0 0 5px rgba(255, 255, 255, 0.8), 0 0 10px rgba(200, 225, 255, 0.5);
-        }
-
-
-        /* --- Trạng thái ACTIVE cho nút và text (Được tối ưu cho cảm giác "nhạy") --- */
+        /* Trạng thái ACTIVE chung cho nút và text (để mượt mà) */
         .open-menu-button:active,
         .nav-button:active {
-            /* Áp dụng cho tất cả các nút */
-            /* Các style transform, filter, box-shadow cho :active của nút giữ nguyên như lần trước */
-            /* Ví dụ cho open-menu-button: */
-            /* transform: translateY(-2px) scale(1.02); */
-            /* filter: brightness(110%); */
-            /* box-shadow: 0 6px 18px rgba(30, 144, 255, 0.2); */
-
-            /* Quan trọng: Transition khi NHẤN XUỐNG phải thật nhanh */
             transition-duration: 0.05s !important;
-            /* Ghi đè transition-duration mặc định */
+            /* Nhấn xuống nhanh */
         }
 
         .open-menu-button:active::before,
         .nav-button:active::before {
-            /* Áp dụng cho text của tất cả các nút khi active */
-            /* Quan trọng: Transition cho text khi NHẤN XUỐNG cũng phải thật nhanh */
             transition-duration: 0.05s !important;
-            /* Ghi đè transition-duration mặc định */
+            /* Text cũng phản hồi nhanh */
         }
 
-        /* --- Style cụ thể cho TEXT và TEXT SHADOW khi ACTIVE (Tinh chỉnh độ "lún" của text) --- */
-
-        /* .open-menu-button text (kế thừa font-weight 600 từ ::before) */
-        .open-menu-button::before {
-            font-weight: 600;
-            text-shadow: 0 0 5px rgba(255, 255, 255, 0.7), 0 0 10px rgba(173, 226, 230, 0.5), 0 0 15px rgba(220, 210, 250, 0.4);
-        }
-
-        .open-menu-button:active::before {
-            text-shadow: 0 0 3px rgba(255, 255, 255, 0.6), 0 0 8px rgba(173, 226, 230, 0.4), 0 0 12px rgba(220, 210, 250, 0.3);
-            /* Glow giảm nhẹ */
-        }
-
-        /* .nav-button text (kế thừa font-weight 500 từ ::before) */
-        .nav-button::before {
-            font-weight: 500;
-            text-shadow: 0 0 4px rgba(255, 255, 255, 0.6), 0 0 8px rgba(173, 226, 230, 0.4);
-        }
-
-        .nav-button:active::before {
-            text-shadow: 0 0 2px rgba(255, 255, 255, 0.5), 0 0 5px rgba(173, 226, 230, 0.3);
-            /* Glow giảm đáng kể */
-        }
-
-        /* .submenu-vi-phan .nav-button text (kế thừa font-weight 400 từ ::before) */
-        .submenu-vi-phan .nav-button::before {
-            font-weight: 400;
-            text-shadow: 0 0 3px rgba(255, 255, 255, 0.6), 0 0 6px rgba(200, 225, 255, 0.3);
-        }
-
-        .submenu-vi-phan .nav-button:active::before {
-            text-shadow: 0 0 1px rgba(255, 255, 255, 0.5), 0 0 3px rgba(200, 225, 255, 0.2);
-            /* Glow rất nhẹ */
-        }
-
-
-        /* Các style cũ của nút (background, padding, border-radius, animation, box-shadow etc.) cần được giữ nguyên */
-        /* Ví dụ: .open-menu-button */
+        /* --- NÚT MỞ MENU CHÍNH --- */
         .open-menu-button {
             background: linear-gradient(to right, #00B7EB, #1E90FF, #8A2BE2, #1E90FF, #00B7EB);
             background-size: 250% auto;
-            border: none;
             padding: 12px 25px;
             border-radius: 8px;
-            cursor: pointer;
             font-size: 16px;
-            /* Quan trọng cho ::before kế thừa */
-            /* Các style khác như animation, box-shadow ban đầu, --bg-pos-end giữ nguyên */
             --bg-pos-end: 150%;
             animation: oneWayFlow 6s linear infinite;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
         }
 
-        /* Active state cho bản thân nút (ngoài text) */
+        .open-menu-button::before {
+            font-weight: 600;
+            text-shadow: 0 0 5px rgba(255, 255, 255, 0.7), 0 0 10px rgba(173, 226, 230, 0.5), 0 0 15px rgba(220, 210, 250, 0.4);
+        }
+
+        .open-menu-button:hover {
+            transform: translateY(-4px) scale(1.05);
+            filter: brightness(120%);
+            box-shadow: 0 10px 25px rgba(30, 144, 255, 0.3);
+        }
+
+        .open-menu-button:hover::before {
+            text-shadow: 0 0 7px rgba(255, 255, 255, 0.9), 0 0 15px rgba(173, 226, 230, 0.7), 0 0 25px rgba(220, 210, 250, 0.6), 0 0 30px rgba(100, 200, 255, 0.3);
+        }
+
         .open-menu-button:active {
+            /* Style nút khi active */
             transform: translateY(-2px) scale(1.02);
             filter: brightness(110%);
             box-shadow: 0 6px 18px rgba(30, 144, 255, 0.2);
-            /* transition-duration: 0.05s !important; đã được áp dụng ở rule chung */
         }
 
+        .open-menu-button:active::before {
+            /* Style text khi active */
+            text-shadow: 0 0 3px rgba(255, 255, 255, 0.6), 0 0 8px rgba(173, 226, 230, 0.4), 0 0 12px rgba(220, 210, 250, 0.3);
+        }
 
-        /* Ví dụ: .nav-button */
+        /* --- NÚT ĐIỀU HƯỚNG TRONG MODAL (NAV-BUTTON CHÍNH) --- */
         .nav-button {
             background: linear-gradient(45deg, #007BFF, #00C4B4, #0056b3, #00a294, #007BFF);
             background-size: 300% auto;
-            border: none;
             padding: 14px 24px;
             border-radius: 8px;
-            cursor: pointer;
             font-size: 16px;
-            /* Quan trọng cho ::before kế thừa */
             margin: 10px 0;
             width: calc(100% - 10px);
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
-            text-align: center;
-            display: block;
-            flex-shrink: 0;
             --bg-pos-end: 200%;
             animation: oneWayFlow 9s linear infinite;
         }
 
-        /* Active state cho bản thân nút (ngoài text) */
+        .nav-button::before {
+            font-weight: 500;
+            text-shadow: 0 0 4px rgba(255, 255, 255, 0.6), 0 0 8px rgba(173, 226, 230, 0.4);
+        }
+
+        .nav-button:hover {
+            transform: translateY(-4px) scale(1.05);
+            box-shadow: 0 10px 25px rgba(0, 123, 255, 0.25);
+            filter: brightness(120%);
+        }
+
+        .nav-button:hover::before {
+            text-shadow: 0 0 6px rgba(255, 255, 255, 0.8), 0 0 12px rgba(173, 226, 230, 0.6), 0 0 20px rgba(200, 225, 255, 0.4);
+        }
+
         .nav-button:active {
+            /* Style nút khi active */
             transform: translateY(-2px) scale(1.02);
             box-shadow: 0 6px 18px rgba(0, 123, 255, 0.18);
             filter: brightness(110%);
-            /* transition-duration: 0.05s !important; đã được áp dụng ở rule chung */
         }
 
-        /* Ví dụ: .submenu-vi-phan .nav-button */
+        .nav-button:active::before {
+            /* Style text khi active */
+            text-shadow: 0 0 2px rgba(255, 255, 255, 0.5), 0 0 5px rgba(173, 226, 230, 0.3);
+        }
+
+        /* --- NÚT TRONG SUBMENU --- */
         .submenu-vi-phan .nav-button {
             background: linear-gradient(45deg, #6C7A89, #4B5C6B, #2E3B44, #4B5C6B, #6C7A89);
             font-size: 15px;
-            /* Quan trọng cho ::before kế thừa */
             padding: 12px 20px;
             width: 95%;
             margin: 8px auto;
             --bg-pos-end: 200%;
             animation: oneWayFlow 10s linear infinite;
+            /* Kế thừa nhiều style từ .nav-button gốc, bao gồm position, color transparent, user-select */
         }
 
-        /* Active state cho bản thân nút (ngoài text) */
+        .submenu-vi-phan .nav-button::before {
+            font-weight: 400;
+            text-shadow: 0 0 3px rgba(255, 255, 255, 0.6), 0 0 6px rgba(200, 225, 255, 0.3);
+        }
+
+        .submenu-vi-phan .nav-button:hover {
+            transform: scale(1.06) translateY(-3px);
+            box-shadow: 0 8px 20px rgba(46, 59, 68, 0.25);
+            filter: brightness(115%);
+        }
+
+        .submenu-vi-phan .nav-button:hover::before {
+            text-shadow: 0 0 5px rgba(255, 255, 255, 0.8), 0 0 10px rgba(200, 225, 255, 0.5);
+        }
+
         .submenu-vi-phan .nav-button:active {
+            /* Style nút khi active */
             transform: scale(1.03) translateY(-1px);
-            /* Giữ lại style active riêng của submenu nếu muốn */
             filter: brightness(105%);
-            /* Giữ lại style active riêng của submenu nếu muốn */
-            /* transition-duration: 0.05s !important; đã được áp dụng ở rule chung */
         }
 
-        /* --- Kết thúc phần CSS cho nút bấm --- */
+        .submenu-vi-phan .nav-button:active::before {
+            /* Style text khi active */
+            text-shadow: 0 0 1px rgba(255, 255, 255, 0.5), 0 0 3px rgba(200, 225, 255, 0.2);
+        }
 
-
+        /* --- MODAL --- */
         .modal {
             visibility: hidden;
             opacity: 0;
@@ -389,15 +426,7 @@
             background: rgba(0, 0, 0, 0.3);
         }
 
-        h1 {
-            text-align: center;
-            font-size: 36px;
-            font-weight: 300;
-            color: #2c3e50;
-            margin-bottom: 30px;
-            z-index: 10;
-        }
-
+        /* --- SUBMENU --- */
         .submenu-vi-phan {
             width: calc(100% - 10px);
             padding-left: 0;
@@ -405,7 +434,9 @@
             overflow: hidden;
             max-height: 0;
             opacity: 0;
-            transition: max-height .5s cubic-bezier(.25, .8, .25, 1), opacity .4s ease-in-out, transform .4s cubic-bezier(.25, .8, .25, 1);
+            transition: max-height 0.8s cubic-bezier(0.25, 0.8, 0.25, 1),
+                opacity 0.8s ease-in-out,
+                transform 0.8s cubic-bezier(0.25, 0.8, 0.25, 1);
             transform: translateY(-15px);
         }
 
@@ -416,6 +447,7 @@
             margin-top: 5px;
         }
 
+        /* --- BONG BÓNG --- */
         .bubble {
             position: fixed;
             border-radius: 50%;
@@ -442,45 +474,11 @@
                 transform: translate(calc(-50% + var(--bubble-drift-x, 0px)), calc(-50% + var(--bubble-drift-y, -150px))) scale(var(--bubble-end-scale, 1.0));
             }
         }
-
-        .custom-title {
-            position: relative;
-            display: inline-block;
-            font-family: 'Playfair Display', serif;
-            font-size: 48px;
-            font-weight: 700;
-            background: linear-gradient(45deg, #4FC3F7, #FFCCFF);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
-            margin: 0;
-            padding: 10px;
-            transition: transform .3s ease, text-shadow .3s ease;
-            user-select: none;
-        }
-
-        .custom-title:hover {
-            transform: scale(1.05);
-            text-shadow: 4px 4px 8px rgba(0, 0, 0, 0.3);
-            background: linear-gradient(45deg, #FFCCFF, #4FC3F7);
-            -webkit-background-clip: text;
-            background-clip: text;
-        }
-
-        .custom-title .overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 10;
-            pointer-events: auto;
-        }
     </style>
 </head>
 
 <body>
+    <div id="page-transition-effect"></div>
     <h1 class="custom-title">
         Toán học Ứng dụng
         <div class="overlay" oncontextmenu="return false;"></div>
@@ -517,15 +515,47 @@
     </div>
 
     <script>
+        // --- JavaScript cho Hiệu ứng chuyển trang ---
+        const PAGE_TRANSITION_DURATION = 600; // Phải khớp với CSS transition duration của #page-transition-effect
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const transitioner = document.getElementById('page-transition-effect');
+            if (transitioner) {
+                transitioner.classList.add('page-is-entering');
+                requestAnimationFrame(() => {
+                    setTimeout(() => {
+                        transitioner.classList.add('revealing-page');
+                    }, 20);
+                });
+                transitioner.addEventListener('transitionend', () => {
+                    if (transitioner.classList.contains('revealing-page')) {
+                        transitioner.classList.remove('page-is-entering');
+                        transitioner.classList.remove('revealing-page');
+                        transitioner.style.pointerEvents = 'none';
+                    }
+                }, { once: true });
+            }
+        });
+
+        function navigateWithTransition(url) {
+            const transitioner = document.getElementById('page-transition-effect');
+            if (transitioner) {
+                transitioner.style.pointerEvents = 'auto';
+                transitioner.classList.add('page-is-leaving');
+                setTimeout(() => {
+                    window.location.href = url;
+                }, PAGE_TRANSITION_DURATION);
+            } else { // Fallback
+                document.body.style.transition = 'opacity 0.3s ease-out';
+                document.body.style.opacity = '0';
+                setTimeout(() => { window.location.href = url; }, 300);
+            }
+        }
+
+        // --- JavaScript cho Modal ---
         var modal = document.getElementById("myModal");
         var btnOpen = document.getElementById("openMenuBtn");
         var btnClose = document.getElementById("closeBtn");
-        const FADE_DURATION = 300;
-
-        function navigateWithTransition(url) {
-            document.body.classList.add('page-fade-out');
-            setTimeout(function () { window.location.href = url; }, FADE_DURATION);
-        }
 
         btnOpen.onclick = function () { modal.classList.add("active"); }
         btnClose.onclick = function () { modal.classList.remove("active"); }
@@ -533,6 +563,7 @@
             if (event.target === modal) { modal.classList.remove("active"); }
         }
 
+        // --- JavaScript cho Submenu ---
         var phuongTrinhViPhanBtn = document.getElementById("phuongTrinhViPhanBtn");
         var subMenuViPhan = document.getElementById("subMenuViPhan");
         phuongTrinhViPhanBtn.onclick = function (event) {
@@ -540,20 +571,22 @@
             subMenuViPhan.classList.toggle("active");
         }
 
+        // --- JavaScript cho Bong bóng ---
         const bubbleColors = ['rgba(225,240,255,0.45)', 'rgba(220,255,235,0.45)', 'rgba(240,230,255,0.45)', 'rgba(255,235,240,0.45)'];
         document.addEventListener('click', function (e) {
-            const interactiveElements = ['button', 'a', 'span', 'h2', 'input', 'textarea', 'select'];
+            const interactiveElements = ['button', 'a', 'input', 'textarea', 'select', 'span', 'h2']; //Thêm span, h2 để tránh bubble khi click vào header modal
             let targetElement = e.target;
             let clickedOnInteractive = false;
             while (targetElement != null) {
                 const tagName = targetElement.tagName ? targetElement.tagName.toLowerCase() : '';
-                if (interactiveElements.includes(tagName) || targetElement.classList.contains('modal-content') || targetElement.closest('.modal-content')) {
+                if (interactiveElements.includes(tagName) || targetElement.classList.contains('modal-content') || targetElement.closest('.modal-content') || targetElement.classList.contains('custom-title') || targetElement.closest('.custom-title')) {
                     clickedOnInteractive = true;
                     break;
                 }
                 targetElement = targetElement.parentElement;
             }
             if (clickedOnInteractive) return;
+
             const numBubbles = Math.floor(Math.random() * 3) + 2;
             for (let i = 0; i < numBubbles; i++) {
                 let bubble = document.createElement('div');
