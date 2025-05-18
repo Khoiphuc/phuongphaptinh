@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tính Toán số - Hiện Đại</title>
     <link rel="icon" href="./img/icon-webs.png" type="image/x-icon">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
     <style>
         html,
         body {
@@ -17,7 +18,8 @@
         body {
             background: linear-gradient(-45deg, #A0D2DB, #B2FCE5, #CFEAF7, #E6E6FA, #FFFDD0, #A0D2DB);
             background-size: 500% 500%;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            /* Sử dụng Poppins làm font chính cho body, các nút sẽ kế thừa hoặc ghi đè */
+            font-family: 'Poppins', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -64,57 +66,238 @@
             }
         }
 
-        .open-menu-button-container {
-            display: flex;
-            justify-content: center;
-            margin-top: 20px;
-            z-index: 10;
+        /* ... (Phần CSS import font Poppins và các style khác giữ nguyên) ... */
+
+        /* --- CẬP NHẬT CHO NÚT BẤM ĐỂ MƯỢT MÀ HƠN --- */
+
+        .open-menu-button,
+        .nav-button {
+            /* Áp dụng cho cả .submenu-vi-phan .nav-button qua kế thừa */
+            /* Các style cơ bản của nút (background, padding, border-radius, etc.) giữ nguyên như trước */
+            /* Thêm gợi ý tăng tốc phần cứng (tùy chọn, có thể thử nghiệm) */
+            /* transform: translateZ(0); */
+
+            /* Transition mặc định cho hover và khi nhả nút từ active */
+            transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1),
+                filter 0.3s cubic-bezier(0.25, 0.8, 0.25, 1),
+                box-shadow 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+
+            /* Style cho text ẩn và hiển thị bằng pseudo-element (giữ nguyên từ lần trước) */
+            position: relative;
+            color: transparent !important;
+            user-select: none;
         }
 
+        /* Pseudo-element cho text (chung) */
+        .open-menu-button::before,
+        .nav-button::before {
+            content: attr(data-text);
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Poppins', sans-serif;
+            color: white;
+            letter-spacing: 0.03em;
+            pointer-events: none;
+            font-size: inherit;
+            /* transform: translateZ(0); */
+            /* Tùy chọn cho pseudo-element */
+            /* Transition mặc định cho text shadow */
+            transition: text-shadow 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        /* --- Trạng thái HOVER cho nút và text (Giữ nguyên hoặc tinh chỉnh nếu muốn) --- */
+        .open-menu-button:hover {
+            transform: translateY(-4px) scale(1.05);
+            /* translateZ(0) nếu đã thêm ở trên */
+            filter: brightness(120%);
+            box-shadow: 0 10px 25px rgba(30, 144, 255, 0.3);
+        }
+
+        .nav-button:hover {
+            transform: translateY(-4px) scale(1.05);
+            /* translateZ(0) nếu đã thêm ở trên */
+            box-shadow: 0 10px 25px rgba(0, 123, 255, 0.25);
+            filter: brightness(120%);
+        }
+
+        .submenu-vi-phan .nav-button:hover {
+            transform: scale(1.06) translateY(-3px);
+            /* translateZ(0) nếu đã thêm ở trên */
+            box-shadow: 0 8px 20px rgba(46, 59, 68, 0.25);
+            filter: brightness(115%);
+        }
+
+        /* Text shadow cho từng loại nút khi HOVER (Giữ nguyên từ lần trước) */
+        .open-menu-button:hover::before {
+            text-shadow: 0 0 7px rgba(255, 255, 255, 0.9), 0 0 15px rgba(173, 226, 230, 0.7), 0 0 25px rgba(220, 210, 250, 0.6), 0 0 30px rgba(100, 200, 255, 0.3);
+        }
+
+        .nav-button:hover::before {
+            /* Chung cho nav-button và submenu kế thừa */
+            text-shadow: 0 0 6px rgba(255, 255, 255, 0.8), 0 0 12px rgba(173, 226, 230, 0.6), 0 0 20px rgba(200, 225, 255, 0.4);
+        }
+
+        .submenu-vi-phan .nav-button:hover::before {
+            /* Ghi đè nếu cần cho submenu */
+            text-shadow: 0 0 5px rgba(255, 255, 255, 0.8), 0 0 10px rgba(200, 225, 255, 0.5);
+        }
+
+
+        /* --- Trạng thái ACTIVE cho nút và text (Được tối ưu cho cảm giác "nhạy") --- */
+        .open-menu-button:active,
+        .nav-button:active {
+            /* Áp dụng cho tất cả các nút */
+            /* Các style transform, filter, box-shadow cho :active của nút giữ nguyên như lần trước */
+            /* Ví dụ cho open-menu-button: */
+            /* transform: translateY(-2px) scale(1.02); */
+            /* filter: brightness(110%); */
+            /* box-shadow: 0 6px 18px rgba(30, 144, 255, 0.2); */
+
+            /* Quan trọng: Transition khi NHẤN XUỐNG phải thật nhanh */
+            transition-duration: 0.05s !important;
+            /* Ghi đè transition-duration mặc định */
+        }
+
+        .open-menu-button:active::before,
+        .nav-button:active::before {
+            /* Áp dụng cho text của tất cả các nút khi active */
+            /* Quan trọng: Transition cho text khi NHẤN XUỐNG cũng phải thật nhanh */
+            transition-duration: 0.05s !important;
+            /* Ghi đè transition-duration mặc định */
+        }
+
+        /* --- Style cụ thể cho TEXT và TEXT SHADOW khi ACTIVE (Tinh chỉnh độ "lún" của text) --- */
+
+        /* .open-menu-button text (kế thừa font-weight 600 từ ::before) */
+        .open-menu-button::before {
+            font-weight: 600;
+            text-shadow: 0 0 5px rgba(255, 255, 255, 0.7), 0 0 10px rgba(173, 226, 230, 0.5), 0 0 15px rgba(220, 210, 250, 0.4);
+        }
+
+        .open-menu-button:active::before {
+            text-shadow: 0 0 3px rgba(255, 255, 255, 0.6), 0 0 8px rgba(173, 226, 230, 0.4), 0 0 12px rgba(220, 210, 250, 0.3);
+            /* Glow giảm nhẹ */
+        }
+
+        /* .nav-button text (kế thừa font-weight 500 từ ::before) */
+        .nav-button::before {
+            font-weight: 500;
+            text-shadow: 0 0 4px rgba(255, 255, 255, 0.6), 0 0 8px rgba(173, 226, 230, 0.4);
+        }
+
+        .nav-button:active::before {
+            text-shadow: 0 0 2px rgba(255, 255, 255, 0.5), 0 0 5px rgba(173, 226, 230, 0.3);
+            /* Glow giảm đáng kể */
+        }
+
+        /* .submenu-vi-phan .nav-button text (kế thừa font-weight 400 từ ::before) */
+        .submenu-vi-phan .nav-button::before {
+            font-weight: 400;
+            text-shadow: 0 0 3px rgba(255, 255, 255, 0.6), 0 0 6px rgba(200, 225, 255, 0.3);
+        }
+
+        .submenu-vi-phan .nav-button:active::before {
+            text-shadow: 0 0 1px rgba(255, 255, 255, 0.5), 0 0 3px rgba(200, 225, 255, 0.2);
+            /* Glow rất nhẹ */
+        }
+
+
+        /* Các style cũ của nút (background, padding, border-radius, animation, box-shadow etc.) cần được giữ nguyên */
+        /* Ví dụ: .open-menu-button */
         .open-menu-button {
             background: linear-gradient(to right, #00B7EB, #1E90FF, #8A2BE2, #1E90FF, #00B7EB);
             background-size: 250% auto;
-            color: white;
             border: none;
             padding: 12px 25px;
             border-radius: 8px;
             cursor: pointer;
             font-size: 16px;
-            font-weight: 500;
-            letter-spacing: 0.5px;
-            transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1),
-                filter 0.3s ease,
-                box-shadow 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            /* Quan trọng cho ::before kế thừa */
+            /* Các style khác như animation, box-shadow ban đầu, --bg-pos-end giữ nguyên */
             --bg-pos-end: 150%;
             animation: oneWayFlow 6s linear infinite;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
         }
 
-        .open-menu-button:hover {
-            transform: translateY(-4px) scale(1.05);
-            filter: brightness(120%);
-            box-shadow: 0 10px 25px rgba(30, 144, 255, 0.3);
-        }
-
+        /* Active state cho bản thân nút (ngoài text) */
         .open-menu-button:active {
             transform: translateY(-2px) scale(1.02);
             filter: brightness(110%);
             box-shadow: 0 6px 18px rgba(30, 144, 255, 0.2);
+            /* transition-duration: 0.05s !important; đã được áp dụng ở rule chung */
         }
+
+
+        /* Ví dụ: .nav-button */
+        .nav-button {
+            background: linear-gradient(45deg, #007BFF, #00C4B4, #0056b3, #00a294, #007BFF);
+            background-size: 300% auto;
+            border: none;
+            padding: 14px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            /* Quan trọng cho ::before kế thừa */
+            margin: 10px 0;
+            width: calc(100% - 10px);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            text-align: center;
+            display: block;
+            flex-shrink: 0;
+            --bg-pos-end: 200%;
+            animation: oneWayFlow 9s linear infinite;
+        }
+
+        /* Active state cho bản thân nút (ngoài text) */
+        .nav-button:active {
+            transform: translateY(-2px) scale(1.02);
+            box-shadow: 0 6px 18px rgba(0, 123, 255, 0.18);
+            filter: brightness(110%);
+            /* transition-duration: 0.05s !important; đã được áp dụng ở rule chung */
+        }
+
+        /* Ví dụ: .submenu-vi-phan .nav-button */
+        .submenu-vi-phan .nav-button {
+            background: linear-gradient(45deg, #6C7A89, #4B5C6B, #2E3B44, #4B5C6B, #6C7A89);
+            font-size: 15px;
+            /* Quan trọng cho ::before kế thừa */
+            padding: 12px 20px;
+            width: 95%;
+            margin: 8px auto;
+            --bg-pos-end: 200%;
+            animation: oneWayFlow 10s linear infinite;
+        }
+
+        /* Active state cho bản thân nút (ngoài text) */
+        .submenu-vi-phan .nav-button:active {
+            transform: scale(1.03) translateY(-1px);
+            /* Giữ lại style active riêng của submenu nếu muốn */
+            filter: brightness(105%);
+            /* Giữ lại style active riêng của submenu nếu muốn */
+            /* transition-duration: 0.05s !important; đã được áp dụng ở rule chung */
+        }
+
+        /* --- Kết thúc phần CSS cho nút bấm --- */
+
 
         .modal {
             visibility: hidden;
             opacity: 0;
             position: fixed;
             z-index: 1000;
-            /* Modal luôn ở trên cùng */
             left: 0;
             top: 0;
             width: 100%;
             height: 100%;
             overflow: hidden;
             background-color: rgba(0, 0, 0, 0.5);
-            transition: opacity 0.4s ease-out, visibility 0s linear 0.4s;
+            transition: opacity .4s ease-out, visibility 0s linear .4s;
         }
 
         .modal.active {
@@ -140,7 +323,7 @@
             left: 50%;
             bottom: 0;
             transform: translate(-50%, 100%);
-            transition: transform 0.5s cubic-bezier(0.25, 0.8, 0.25, 1);
+            transition: transform .5s cubic-bezier(.25, .8, .25, 1);
         }
 
         .modal.active .modal-content {
@@ -168,7 +351,7 @@
             color: #888;
             font-size: 32px;
             font-weight: normal;
-            transition: color 0.3s ease, transform 0.3s ease;
+            transition: color .3s ease, transform .3s ease;
         }
 
         .close-button:hover,
@@ -206,42 +389,6 @@
             background: rgba(0, 0, 0, 0.3);
         }
 
-        .nav-button {
-            background: linear-gradient(45deg, #007BFF, #00C4B4, #0056b3, #00a294, #007BFF);
-            background-size: 300% auto;
-            color: white;
-            border: none;
-            padding: 14px 24px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 16px;
-            font-weight: 500;
-            margin: 10px 0;
-            transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1),
-                box-shadow 0.3s cubic-bezier(0.25, 0.8, 0.25, 1),
-                filter 0.3s ease;
-            width: calc(100% - 10px);
-            letter-spacing: 0.5px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
-            text-align: center;
-            display: block;
-            flex-shrink: 0;
-            --bg-pos-end: 200%;
-            animation: oneWayFlow 9s linear infinite;
-        }
-
-        .nav-button:hover {
-            transform: translateY(-4px) scale(1.05);
-            box-shadow: 0 10px 25px rgba(0, 123, 255, 0.25);
-            filter: brightness(120%);
-        }
-
-        .nav-button:active {
-            transform: translateY(-2px) scale(1.02);
-            box-shadow: 0 6px 18px rgba(0, 123, 255, 0.18);
-            filter: brightness(110%);
-        }
-
         h1 {
             text-align: center;
             font-size: 36px;
@@ -258,9 +405,7 @@
             overflow: hidden;
             max-height: 0;
             opacity: 0;
-            transition: max-height 0.5s cubic-bezier(0.25, 0.8, 0.25, 1),
-                opacity 0.4s ease-in-out,
-                transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+            transition: max-height .5s cubic-bezier(.25, .8, .25, 1), opacity .4s ease-in-out, transform .4s cubic-bezier(.25, .8, .25, 1);
             transform: translateY(-15px);
         }
 
@@ -271,76 +416,36 @@
             margin-top: 5px;
         }
 
-        .submenu-vi-phan .nav-button {
-            background: linear-gradient(45deg, #6C7A89, #4B5C6B, #2E3B44, #4B5C6B, #6C7A89);
-            color: white;
-            font-size: 15px;
-            padding: 12px 20px;
-            width: 95%;
-            margin: 8px auto;
-            --bg-pos-end: 200%;
-            animation: oneWayFlow 10s linear infinite;
-        }
-
-        .submenu-vi-phan .nav-button:hover {
-            transform: scale(1.06) translateY(-3px);
-            box-shadow: 0 8px 20px rgba(46, 59, 68, 0.25);
-            filter: brightness(115%);
-        }
-
-        .submenu-vi-phan .nav-button:active {
-            transform: scale(1.03) translateY(-1px);
-            filter: brightness(105%);
-        }
-
-        /* CSS cho bong bóng - ĐÃ CẬP NHẬT */
         .bubble {
             position: fixed;
             border-radius: 50%;
             pointer-events: none;
-            /* transform ban đầu để căn giữa, sẽ bị ghi đè bởi keyframe 0% */
             transform: translate(-50%, -50%);
             animation: floatBubble ease-out forwards;
-            /* Thời gian sẽ được set bởi JS */
-
-            /* Cải thiện hiển thị */
             border: 1px solid rgba(255, 255, 255, 0.5);
-            /* Viền trắng mờ */
-            box-shadow: inset 0 0 10px rgba(255, 255, 255, 0.6),
-                /* Sáng bên trong */
-                0 0 4px rgba(255, 255, 255, 0.35),
-                /* Viền sáng nhẹ bên ngoài */
-                0 0 15px var(--bubble-glow-color, rgba(220, 240, 255, 0.3));
-            /* Hào quang màu theo bong bóng */
+            box-shadow: inset 0 0 10px rgba(255, 255, 255, 0.6), 0 0 4px rgba(255, 255, 255, 0.35), 0 0 15px var(--bubble-glow-color, rgba(220, 240, 255, 0.3));
             z-index: 990;
-            /* Nằm trên nền, dưới modal */
         }
 
         @keyframes floatBubble {
             0% {
                 opacity: 0;
-                transform: translate(-50%, -50%) scale(0.2);
-                /* Bắt đầu nhỏ và mờ */
+                transform: translate(-50%, -50%) scale(.2);
             }
 
             15% {
-                /* Xuất hiện nhanh */
                 opacity: 1;
-                /* Độ mờ thực tế phụ thuộc vào alpha của màu nền bong bóng */
             }
 
             100% {
                 opacity: 0;
-                /* Di chuyển và thay đổi kích thước cuối cùng */
                 transform: translate(calc(-50% + var(--bubble-drift-x, 0px)), calc(-50% + var(--bubble-drift-y, -150px))) scale(var(--bubble-end-scale, 1.0));
             }
         }
 
-        /* thiết kế tiêu đề  */
         .custom-title {
             position: relative;
             display: inline-block;
-            /* Chỉ chiếm không gian cần thiết */
             font-family: 'Playfair Display', serif;
             font-size: 48px;
             font-weight: 700;
@@ -351,9 +456,8 @@
             text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
             margin: 0;
             padding: 10px;
-            transition: transform 0.3s ease, text-shadow 0.3s ease;
+            transition: transform .3s ease, text-shadow .3s ease;
             user-select: none;
-            /* Ngăn chọn văn bản */
         }
 
         .custom-title:hover {
@@ -382,7 +486,7 @@
         <div class="overlay" oncontextmenu="return false;"></div>
     </h1>
     <div class="open-menu-button-container">
-        <button class="open-menu-button" id="openMenuBtn">Mở Menu Tính Năng</button>
+        <button class="open-menu-button" id="openMenuBtn" data-text="Mở Menu Tính Năng">Mở Menu Tính Năng</button>
     </div>
 
     <div id="myModal" class="modal">
@@ -392,27 +496,27 @@
                 <span class="close-button" id="closeBtn">&times;</span>
             </div>
             <div class="button-containerk">
-                <button class="nav-button" onclick="navigateWithTransition('./ppt/ptNewton.html')">Giải Phương
-                    trình</button>
-                <button class="nav-button" onclick="navigateWithTransition('./ppt/ppSeidel-Gauss.html')">Giải Hệ 3
-                    pt</button>
-                <button class="nav-button" onclick="navigateWithTransition('./ppt/bpct.html')">PP Bình phương cực
-                    tiểu</button>
-                <button class="nav-button" onclick="navigateWithTransition('./ppt/tpSimpson.html')">Tính Tích
+                <button class="nav-button" onclick="navigateWithTransition('./ppt/ptNewton.html')"
+                    data-text="Giải Phương trình">Giải Phương trình</button>
+                <button class="nav-button" onclick="navigateWithTransition('./ppt/ppSeidel-Gauss.html')"
+                    data-text="Giải Hệ 3 pt">Giải Hệ 3 pt</button>
+                <button class="nav-button" onclick="navigateWithTransition('./ppt/bpct.html')"
+                    data-text="PP Bình phương cực tiểu">PP Bình phương cực tiểu</button>
+                <button class="nav-button" onclick="navigateWithTransition('./ppt/tpSimpson.html')"
+                    data-text="Tính Tích phân">Tính Tích phân</button>
+                <button class="nav-button" id="phuongTrinhViPhanBtn" data-text="Phương trình vi phân">Phương trình vi
                     phân</button>
-                <button class="nav-button" id="phuongTrinhViPhanBtn">Phương trình vi phân</button>
                 <div id="subMenuViPhan" class="submenu-vi-phan">
-                    <button class="nav-button" onclick="navigateWithTransition('./ppt/ptvp_Euler_caitien.html')">PP
-                        Euler cải tiến</button>
-                    <button class="nav-button" onclick="navigateWithTransition('./ppt/ptvp_Runge_Kutta.html')">PP
-                        Runge-Kutta</button>
+                    <button class="nav-button" onclick="navigateWithTransition('./ppt/ptvp_Euler_caitien.html')"
+                        data-text="PP Euler cải tiến">PP Euler cải tiến</button>
+                    <button class="nav-button" onclick="navigateWithTransition('./ppt/ptvp_Runge_Kutta.html')"
+                        data-text="PP Runge-Kutta">PP Runge-Kutta</button>
                 </div>
             </div>
         </div>
     </div>
 
     <script>
-        // JavaScript cho hiệu ứng chuyển trang và modal (giữ nguyên)
         var modal = document.getElementById("myModal");
         var btnOpen = document.getElementById("openMenuBtn");
         var btnClose = document.getElementById("closeBtn");
@@ -436,19 +540,11 @@
             subMenuViPhan.classList.toggle("active");
         }
 
-        // JavaScript cho hiệu ứng bong bóng khi click - ĐÃ CẬP NHẬT
-        const bubbleColors = [ // Màu sáng hơn, alpha cao hơn
-            'rgba(225, 240, 255, 0.45)', // Pastel Blue nhạt hơn
-            'rgba(220, 255, 235, 0.45)', // Pastel Mint nhạt hơn
-            'rgba(240, 230, 255, 0.45)', // Pastel Lavender nhạt hơn
-            'rgba(255, 235, 240, 0.45)'  // Pastel Pink/Cream nhạt
-        ];
-
+        const bubbleColors = ['rgba(225,240,255,0.45)', 'rgba(220,255,235,0.45)', 'rgba(240,230,255,0.45)', 'rgba(255,235,240,0.45)'];
         document.addEventListener('click', function (e) {
             const interactiveElements = ['button', 'a', 'span', 'h2', 'input', 'textarea', 'select'];
             let targetElement = e.target;
             let clickedOnInteractive = false;
-
             while (targetElement != null) {
                 const tagName = targetElement.tagName ? targetElement.tagName.toLowerCase() : '';
                 if (interactiveElements.includes(tagName) || targetElement.classList.contains('modal-content') || targetElement.closest('.modal-content')) {
@@ -457,55 +553,32 @@
                 }
                 targetElement = targetElement.parentElement;
             }
-
             if (clickedOnInteractive) return;
-
-            const numBubbles = Math.floor(Math.random() * 3) + 2; // Tạo từ 2 đến 4 bong bóng
-
+            const numBubbles = Math.floor(Math.random() * 3) + 2;
             for (let i = 0; i < numBubbles; i++) {
                 let bubble = document.createElement('div');
                 bubble.classList.add('bubble');
                 document.body.appendChild(bubble);
-
-                // Kích thước lớn hơn: từ 25px đến 65px
                 const size = Math.random() * 40 + 25;
                 bubble.style.width = size + 'px';
                 bubble.style.height = size + 'px';
-
                 bubble.style.left = e.clientX + 'px';
                 bubble.style.top = e.clientY + 'px';
-
                 const chosenColorRgbaString = bubbleColors[Math.floor(Math.random() * bubbleColors.length)];
                 bubble.style.backgroundColor = chosenColorRgbaString;
-
-                // Tạo màu cho hào quang (glow) dựa trên màu bong bóng
                 try {
                     const match = chosenColorRgbaString.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)(?:,\s*[\d.]+)?\)/);
-                    if (match) {
-                        const glowRgba = `rgba(${match[1]}, ${match[2]}, ${match[3]}, 0.25)`;
-                        bubble.style.setProperty('--bubble-glow-color', glowRgba);
-                    } else { // Fallback
-                        bubble.style.setProperty('--bubble-glow-color', 'rgba(220, 240, 255, 0.2)');
-                    }
-                } catch (error) { // Fallback
-                    bubble.style.setProperty('--bubble-glow-color', 'rgba(220, 240, 255, 0.2)');
-                }
-
-
-                // Hướng trôi dạt (drift) và tỉ lệ cuối cùng ngẫu nhiên
-                const driftX = (Math.random() - 0.5) * 120; // Ngang: -60px đến +60px
-                const driftY = (Math.random() * -120) - 100; // Lên trên: -100px đến -220px
-                const endScale = Math.random() * 0.5 + 0.8; // Tỉ lệ cuối: 0.8 đến 1.3
-
+                    if (match) { bubble.style.setProperty('--bubble-glow-color', `rgba(${match[1]},${match[2]},${match[3]},0.25)`); }
+                    else { bubble.style.setProperty('--bubble-glow-color', 'rgba(220,240,255,0.2)'); }
+                } catch (error) { bubble.style.setProperty('--bubble-glow-color', 'rgba(220,240,255,0.2)'); }
+                const driftX = (Math.random() - .5) * 120;
+                const driftY = (Math.random() * -120) - 100;
+                const endScale = Math.random() * .5 + .8;
                 bubble.style.setProperty('--bubble-drift-x', driftX + 'px');
                 bubble.style.setProperty('--bubble-drift-y', driftY + 'px');
                 bubble.style.setProperty('--bubble-end-scale', endScale);
-
-                bubble.style.animationDuration = (Math.random() * 1.5 + 2.5) + 's'; // 2.5s đến 4s
-
-                bubble.addEventListener('animationend', function () {
-                    bubble.remove();
-                });
+                bubble.style.animationDuration = (Math.random() * 1.5 + 2.5) + 's';
+                bubble.addEventListener('animationend', function () { bubble.remove(); });
             }
         });
     </script>
