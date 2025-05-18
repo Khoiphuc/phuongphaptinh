@@ -564,12 +564,31 @@
         }
 
         // --- JavaScript cho Submenu ---
+        // --- JavaScript cho Submenu (ĐÃ CẬP NHẬT để cuộn khi mở trên di động) ---
         var phuongTrinhViPhanBtn = document.getElementById("phuongTrinhViPhanBtn");
         var subMenuViPhan = document.getElementById("subMenuViPhan");
+
         phuongTrinhViPhanBtn.onclick = function (event) {
             event.preventDefault();
+            const wasActive = subMenuViPhan.classList.contains("active"); // Kiểm tra trạng thái trước khi toggle
+
             subMenuViPhan.classList.toggle("active");
-        }
+
+            // Nếu submenu vừa được mở (tức là trước đó nó không active)
+            if (!wasActive && subMenuViPhan.classList.contains("active")) {
+                // Đợi một chút để CSS transition bắt đầu có hiệu lực và layout được cập nhật
+                setTimeout(() => {
+                    // Cuộn nút "Phương trình vi phân" vào tầm nhìn
+                    // 'behavior: 'smooth'' tạo hiệu ứng cuộn mượt
+                    // 'block: 'nearest'' cố gắng làm cho toàn bộ phần tử hiển thị mà không cuộn quá nhiều
+                    phuongTrinhViPhanBtn.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'nearest'
+                    });
+                }, 200); // 200ms là một khoảng trễ hợp lý. Bạn có thể điều chỉnh nếu cần.
+                // Tổng thời gian transition của submenu là 0.8s (800ms).
+            }
+        };
 
         // --- JavaScript cho Bong bóng ---
         const bubbleColors = ['rgba(225,240,255,0.45)', 'rgba(220,255,235,0.45)', 'rgba(240,230,255,0.45)', 'rgba(255,235,240,0.45)'];
