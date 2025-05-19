@@ -289,7 +289,7 @@
             /* Cho phép cuộn ngang */
             -webkit-overflow-scrolling: touch;
             /* Cải thiện cuộn trên iOS */
-            max-height: 600px;
+            max-height: 390px;
             margin-bottom: 20px;
             border: 1px solid #ddd;
             border-radius: 6px;
@@ -355,7 +355,7 @@
             }
 
             table {
-                font-size: 10px;
+                font-size: 11px;
                 /* Giảm font chữ trong bảng */
                 /* Điều chỉnh min-width cho bảng trên tablet */
             }
@@ -369,6 +369,10 @@
             .mjx-chtml {
                 font-size: 1em !important;
                 /* Giảm font MathJax */
+            }
+
+            .math-formula {
+                font-size: 11px;
             }
         }
 
@@ -404,7 +408,7 @@
             }
 
             table {
-                font-size: 10px;
+                font-size: 11px;
                 /* Điều chỉnh min-width cho bảng trên điện thoại nhỏ */
             }
 
@@ -636,7 +640,7 @@
                         let dc = y_0 + y_n;
 
                         document.getElementById('sums-calculation').innerHTML = `
-                            <p>\\[ {Đầu + cuối} = f(${fr(b)}) + f(${fr(a)})  = ${froundf(y_0)} + ${froundf(y_n)} = ${froundf(dc)} \\]</p>
+                            <p>\\[ {Đầu + cuối} = ${froundf(y_0)} + ${froundf(y_n)} = ${froundf(dc)} \\]</p>
                             <p>\\[ 2 \\Sigma_{chẵn} = 2 \\times ${froundf(s_chan)} = ${froundf(2 * s_chan)} \\]</p>
                             <p>\\[ 4 \\Sigma_{lẻ} = 4 \\times ${froundf(s_le)} = ${froundf(4 * s_le)} \\]</p>
                         `;
