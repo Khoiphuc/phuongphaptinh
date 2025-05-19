@@ -20,6 +20,7 @@
         }
 
         body {
+            background: linear-gradient(180deg, #4FC3F7, #94df97, #FFFFFF);
             font-family: 'Roboto', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             max-width: 900px;
             margin: 0 auto;
@@ -295,8 +296,10 @@
         }
 
         .scrollable-table-wrapper table {
-            /* width: 100%; /* Bảng sẽ cố gắng vừa với wrapper */
-            min-width: 600px;
+            width: 100%;
+            min-width: 500px;
+            /* Bảng sẽ cố gắng vừa với wrapper
+            
             /* VÍ DỤ: Buộc bảng có chiều rộng tối thiểu là 600px. */
             /* Điều chỉnh giá trị này dựa trên số cột và nội dung của bạn. */
             /* Nếu bảng rộng hơn wrapper, thanh cuộn ngang sẽ xuất hiện. */
@@ -353,7 +356,7 @@
             table {
                 font-size: 13px;
                 /* Giảm font chữ trong bảng */
-                min-width: 500px;
+                /* min-width: 500px; */
                 /* Điều chỉnh min-width cho bảng trên tablet */
             }
 
@@ -400,7 +403,7 @@
                 font-size: 14px;
             }
 
-           table {
+            table {
                 font-size: 12px;
                 max-height: 200px;
                 /* Điều chỉnh min-width cho bảng trên điện thoại nhỏ */
@@ -415,6 +418,7 @@
                 font-size: 0.9em !important;
             }
         }
+
         @media (max-width: 768px) {
             table {
                 max-height: 200px;
@@ -566,7 +570,8 @@
                         `;
 
                         document.getElementById('h-calculation').innerHTML = `
-                            <p>\\[ \\text{Đặt } f(x) = ${fDisplay} ; h = \\frac{b - a}{n} = \\frac{${fr(b)} - ${fr(a)}}{${n}} = ${fr(h)} \\]</p>
+                            <p>\\[ f(x) = ${fDisplay} \\]</p>
+                            <p>\\[ h = \\frac{b - a}{n} = \\frac{${fr(b)} - ${fr(a)}}{${n}} = ${fr(h)} \\]</p>
                         `;
 
                         let s_chan = 0;
