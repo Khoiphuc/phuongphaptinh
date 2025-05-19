@@ -279,6 +279,15 @@
             /* Căn giữa theo chiều dọc */
         }
 
+        @media (max-width: 480px) {
+            body>button:first-of-type {
+                /* Nút Home */
+                width: 95% !important;
+                font-size: 0.9em;
+                padding: 10px;
+            }
+        }
+
 
         .toggle-btn:hover {
             background-color: #5a6268;
@@ -727,7 +736,7 @@
                 y2ResultEl.innerHTML = `
                     <div class="success-box">
                         <h3>Kết quả gần đúng</h3>
-                        <p style="font-size: 1.3em; text-align: center; overflow-x: auto;">
+                        <p style="text-align: center; overflow-x: auto;">
                             \\[ \\boxed{y(${froundf(x_for_y1)}) \\approx ${froundf(y1_calculated)}} \\]
                             \\[ \\boxed{y(${froundf(x_for_y2)}) \\approx ${froundf(y2_calculated)}} \\]
                         </p>
