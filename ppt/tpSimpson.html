@@ -285,10 +285,11 @@
         .scrollable-table-wrapper {
             width: 100%;
             overflow-x: auto;
+            overflow-y: auto;
             /* Cho phép cuộn ngang */
             -webkit-overflow-scrolling: touch;
             /* Cải thiện cuộn trên iOS */
-            /* max-height: 600px; /* Bỏ nếu không muốn giới hạn chiều cao và cuộn dọc */
+            max-height: 600px;
             margin-bottom: 20px;
             border: 1px solid #ddd;
             border-radius: 6px;
@@ -297,7 +298,7 @@
 
         .scrollable-table-wrapper table {
             width: 100%;
-            min-width: 500px;
+            /* min-width: 500px; chỗ này là độ rộng của bảng đã  bị xoá*/
             /* Bảng sẽ cố gắng vừa với wrapper
             
             /* VÍ DỤ: Buộc bảng có chiều rộng tối thiểu là 600px. */
@@ -354,9 +355,8 @@
             }
 
             table {
-                font-size: 13px;
+                font-size: 10px;
                 /* Giảm font chữ trong bảng */
-                /* min-width: 500px; */
                 /* Điều chỉnh min-width cho bảng trên tablet */
             }
 
@@ -404,8 +404,7 @@
             }
 
             table {
-                font-size: 12px;
-                max-height: 200px;
+                font-size: 10px;
                 /* Điều chỉnh min-width cho bảng trên điện thoại nhỏ */
             }
 
@@ -416,13 +415,6 @@
 
             .mjx-chtml {
                 font-size: 0.9em !important;
-            }
-        }
-
-        @media (max-width: 768px) {
-            table {
-                max-height: 200px;
-                font-size: 14px;
             }
         }
     </style>
