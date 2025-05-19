@@ -541,7 +541,7 @@
 
             const y1CalcEl = document.getElementById('y1-calculation');
             if (y1CalcEl) {
-                y1CalcEl.querySelector('h3').innerHTML = `Tính \\(y(${froundf(x_for_y1)})\\)`;
+                y1CalcEl.querySelector('h3').innerHTML = `Tính \\(y_{1}\\)`;
                 document.getElementById('y1-steps').innerHTML = `
                     <div class="calculation-box">
                         <h4>Bước 1: Tính A</h4>
@@ -583,12 +583,15 @@
                 const y1ResultEl = document.getElementById('y1-result');
                 y1ResultEl.style.display = 'block';
                 y1ResultEl.innerHTML = `
-                    <h3>Tính toán cuối cùng cho \\(y(${froundf(x_for_y1)})\\)</h3>
+                    <h3> \\(\\text{Công thức } Runge-Kutta\\) </h3>
                     <div class="calculation-step">
-                        \\[ y(${froundf(x_for_y1)}) = y_0 + \\frac{1}{6}(A + 2B + 2C + D) \\]
+                        \\[ y_{1} = y_0 + \\frac{1}{6}(A + 2B + 2C + D) \\]
                     </div>
                     <div class="calculation-step">
-                        \\[ y(${froundf(x_for_y1)}) = ${froundf(y0)} + \\frac{1}{6}(${froundf(A1)} + 2 \\times ${froundf(B1)} + 2 \\times ${froundf(C1)} + ${froundf(D1)}) \\]
+                        \\[ y_{1} = ${froundf(y0)} + \\frac{1}{6}(${froundf(A1)} + 2 \\times ${froundf(B1)} + 2 \\times ${froundf(C1)} + ${froundf(D1)}) \\]
+                    </div>
+                    <div>
+                        \\[ y_{1} = ${froundf(y1_calculated)} \\]
                     </div>
                     <div class="success-box">
                         <h3>Kết quả gần đúng </h3>
@@ -602,7 +605,7 @@
 
             const y2CalcEl = document.getElementById('y2-calculation');
             if (y2CalcEl) {
-                y2CalcEl.querySelector('h3').innerHTML = `Tính \\(y(${froundf(x_for_y2)})\\)`;
+                y2CalcEl.querySelector('h3').innerHTML = `Tính \\(y_{2}\\)`;
                 const x_prev_for_y2 = x_for_y1;
                 const y_prev_for_y2 = y1_calculated;
 
@@ -645,12 +648,15 @@
                     </div>
                 `;
                 document.getElementById('y2-result').innerHTML = `
-                    <h3>Tính toán cuối cùng cho \\(y(${froundf(x_for_y2)})\\)</h3>
+                    <h3> \\(\\text{Công thức } Runge-Kutta\\) </h3>
                     <div class="calculation-step">
-                        \\[ y(${froundf(x_for_y2)}) = y_1 + \\frac{1}{6}(A_2 + 2B_2 + 2C_2 + D_2) \\]
+                        \\[ y_{2} = y_1 + \\frac{1}{6}(A + 2B + 2C + D) \\]
                     </div>
                     <div class="calculation-step">
-                        \\[ y(${froundf(x_for_y2)}) = ${froundf(y_prev_for_y2)} + \\frac{1}{6}(${froundf(A2)} + 2 \\times ${froundf(B2)} + 2 \\times ${froundf(C2)} + ${froundf(D2)}) \\]
+                        \\[ y_{2} = ${froundf(y_prev_for_y2)} + \\frac{1}{6}(${froundf(A2)} + 2 \\times ${froundf(B2)} + 2 \\times ${froundf(C2)} + ${froundf(D2)}) \\]
+                    </div>
+                    <div>
+                        \\[ y_{2} = ${froundf(y2_calculated)} \\]
                     </div>
                     <div class="success-box">
                         <h3>Kết quả gần đúng</h3>
