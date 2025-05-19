@@ -20,6 +20,7 @@
         }
 
         body {
+            background: linear-gradient(180deg, #4FC3F7, #94df97, #FFFFFF);
             font-family: 'Roboto', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             max-width: 900px;
             margin: 0 auto;
@@ -203,7 +204,7 @@
 
         .success-box2 {
             background-color: rgb(243, 253, 244);
-
+            overflow-x: auto;
             padding: 15px;
             border-radius: 8px;
             margin-top: 30px;
@@ -223,6 +224,18 @@
             .input-row {
                 flex-direction: column;
                 gap: 15px;
+            }
+
+            .math-formula {
+                font-size: 10px;
+            }
+
+            .success-box2 {
+                font-size: 10px;
+            }
+
+            .success-box {
+                font-size: 10px;
             }
         }
 
@@ -294,7 +307,6 @@
             padding: 10px 15px;
             text-align: center;
             border: 1px solid #ddd;
-            min-width: 120px;
         }
 
         .horizontal-table th {
@@ -313,6 +325,14 @@
 
         /* hết */
 
+        @media (max-width: 480px) {
+            body>button:first-of-type {
+                /* Nút Home */
+                width: 95% !important;
+                font-size: 0.9em;
+                padding: 10px;
+            }
+        }
 
         /* Đặt đoạn CSS này vào bên trong thẻ <style> của bạn */
         body {
@@ -327,14 +347,6 @@
             opacity: 0;
             transform: translateY(30px);
             /* Đổi thành hiệu ứng trượt xuống. Bạn có thể điều chỉnh giá trị 30px tùy ý */
-        }
-        @media (max-width: 480px) {
-            body>button:first-of-type {
-                /* Nút Home */
-                width: 95% !important;
-                font-size: 0.9em;
-                padding: 10px;
-            }
         }
     </style>
 </head>
@@ -390,7 +402,7 @@
         </div>
     </div>
 
-    <button onclick="calculateEuler()">Tính toán</button>
+    <button onclick="calculateEuler()">Calculate</button>
 
     <div id="result" class="result-section" style="display: none;">
         <div style="display: flex; justify-content: space-between; align-items: center;">
@@ -528,13 +540,11 @@
                     <table class="horizontal-table">
                         <thead>
                             <tr>
-                                <th class="fixed-column"> \\(k\\)</th>
                                 ${data.map(item => `<th> \\(${prefix}^{(${item.iteration})}\\)</th>`).join('')}
                             </tr>
                         </thead>
                         <tbody>
                             <tr>
-                                <td class="fixed-column"> \\(${prefix}^{(k+1)}\\)</td>
                                 ${data.map(item => `<td> \\(${formatNumber(item.value)}\\)</td>`).join('')}
                             </tr>
                         </tbody>
@@ -695,12 +705,10 @@
             // ... tiếp tục điền các phần khác như trong calculateEuler1 ...
             // Display initial values
             document.getElementById('initial-values').innerHTML = `
-                    <p>Các điểm tính toán:</p>
                     <p>\\[ y(${x0}) = ${y0};x_1 = ${x1};x_2 = ${x2} \\]</p>
-                    <p>Kích thước bước: \\[ h = ${h} \\]</p>
+                    <p>\\[ h = ${h} \\]</p>
                 `;
             document.getElementById('y1-calculation').innerHTML = `
-                    <p>Xấp xỉ ban đầu:</p>
                     <p>\\[ y_1^{(0)} = y_0 + h f(x_0, y_0) = y_0 + h(${formatExpression(format_k(y_diff, { x: 0, y: 0 }))}) \\]</p>
                     <p>\\[ =${y0} + ${h} \\times ${formatNumber(calcFunction(y_diff, x0, y0), decimalPlaces)} = ${formatNumber(s0_y1, decimalPlaces)} \\]</p>
                     <p>Lặp cải tiến:</p>
@@ -736,7 +744,6 @@
             y1TableHTML += `</tbody></table>`;
             document.getElementById('y1-iterations').innerHTML = y1TableHTML;
             document.getElementById('y2-calculation').innerHTML = `
-                    <p>Xấp xỉ ban đầu:</p>
                     <p> \\[ y_2^{(0)} = y_1 + h f(x_1, y_1) = y_0 + h(${formatExpression(format_k(y_diff, { x: 1, y: 1 }))}) \\]</p>
                     <p> \\[ = ${formatNumber(y1_final, decimalPlaces)} + ${h} \\times ${formatNumber(calcFunction(y_diff, x1, y1_final), decimalPlaces)} = ${formatNumber(s0_y2, decimalPlaces)} \\]</p>
                     <p>Lặp cải tiến:</p>
@@ -773,11 +780,12 @@
             let finalTableHTML = `
                     <div class="success-box">
                         <div class="success-box2">
-                            <p style="color: #0afc6f; font-size: 20px;"> \\(\\quad\\) Kết quả xấp xỉ : </p>
-                            <div style="font-size: 1.3em; text-align: center;"> 
-                                \\[y(${x1}) \\approx ${formatNumber(y1_final)} \\quad;\\quad y(${x2}) \\approx ${formatNumber(y2_final)} \\]
+                            <p style="color: #0afc6f; font-size: 20px;"> Kết quả xấp xỉ</p>
+                            <div> 
+                                \\[y(${x1}) \\approx ${formatNumber(y1_final)} \\]
+                                \\[y(${x2}) \\approx ${formatNumber(y2_final)} \\]
                             </div>
-                        </div>
+                        </div>                   
                     </div>`;
             document.getElementById('final-results-table').innerHTML = finalTableHTML;
 
@@ -802,12 +810,12 @@
             const mainContent = document.getElementById('main-result-content');
             mainContent.innerHTML = `
                 <div class="math-formula">
-                    <p>Phương trình vi phân:</p>
-                    <p>\\[ y' = ${formatExpression(y_diff)}; x₀ = ${x0}; y₀ = ${y0}; x₁ = ${x1}; x₂ = ${x2} \\]</p>
+                    <h>Phương trình vi phân:</h>
+                    <p>\\[ y' = ${formatExpression(y_diff)}; x_{0} = ${x0}; y_{0} = ${y0}; x_{1} = ${x1}; x_{2} = ${x2} \\]</p>
                 </div>
                 
                 <div class="step math-formula">
-                    <p>Tính y₁ tại x = ${x1}</p>
+                    <h3>Tính \\(y_{1}\\)</h3>
                     <p>\\[ 
                         \\begin{cases}
                            y_1^{(0)} =y_0 + h(${formatExpression(format_k(y_diff, { x: 0, y: 0 }))}) = ${formatNumber(s0_y1, currentResults.decimalPlaces)} \\\\[2ex]
@@ -818,7 +826,7 @@
                 </div>
                 
                 <div class="step math-formula">
-                    <p>Tính y₂ tại x = ${x2}</p>
+                    <h3>Tính \\(y_{2}\\)</h3>
                     <p>\\[ 
                         \\begin{cases}
                            y_2^{(0)} = y_1 + h(${formatExpression(format_k(y_diff, { x: 1, y: 1 }))}) = ${formatNumber(s0_y2, currentResults.decimalPlaces)} \\\\[2ex]
