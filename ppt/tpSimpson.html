@@ -557,7 +557,7 @@
                             .replace(/\^/g, '^')
                             .replace(/exp\(([^)]+)\)/g, 'e^{$1}')
                             .replace(/sqrt\(([^)]+)\)/g, '\\sqrt{$1}') // Added sqrt support
-                            .replace(/([a-zA-Z0-9.]+)\/([a-zA-Z0-9.]+)/g, '\\frac{$1}{$2}');
+                            .replace(/([^\/]+)\/([^\/]+)/g, '\\frac{$1}{$2}'); // Chuyển a/b thành \frac{a}{b}
 
 
                         document.getElementById('function-display').innerHTML = `
