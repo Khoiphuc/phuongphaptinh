@@ -744,11 +744,11 @@
             y1TableHTML += `</tbody></table>`;
             document.getElementById('y1-iterations').innerHTML = y1TableHTML;
             document.getElementById('y2-calculation').innerHTML = `
-                    <p> \\[ y_2^{(0)} = y_1 + h f(x_1, y_1) = y_0 + h(${formatExpression(format_k(y_diff, { x: 1, y: 1 }))}) \\]</p>
+                    <p> \\[ y_2^{(0)} = y_1 + h f(x_1, y_1) = y_1 + h(${formatExpression(format_k(y_diff, { x: 1, y: 1 }))}) \\]</p>
                     <p> \\[ = ${formatNumber(y1_final, decimalPlaces)} + ${h} \\times ${formatNumber(calcFunction(y_diff, x1, y1_final), decimalPlaces)} = ${formatNumber(s0_y2, decimalPlaces)} \\]</p>
                     <p>Lặp cải tiến:</p>
                     <p>\\[ y_2^{(k+1)} = y_1 + \\frac{h}{2} \\left[ f(x_1, y_1) + f(x_2, y_2^{(k)}) \\right] \\]</p>
-                    <p> \\[ y_1^{(k+1)} = y_0 + \\frac{h}{2} \\left[ (${formatExpression(format_k(y_diff, { x: 1, y: 1 }))}) + (${formatExpression(format_k(y_diff, { x: 2, y: 2 }))})  \\right]\\] </p>
+                    <p> \\[ y_2^{(k+1)} = y_0 + \\frac{h}{2} \\left[ (${formatExpression(format_k(y_diff, { x: 1, y: 1 }))}) + (${formatExpression(format_k(y_diff, { x: 2, y: 2 }))})  \\right]\\] </p>
                 `;
             let y2TableHTML = `
                     <div class="scrollable-table">
