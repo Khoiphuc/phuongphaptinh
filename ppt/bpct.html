@@ -342,18 +342,18 @@
         <div class="input-row">
             <div class="input-group">
                 <label for="f_a">Hệ số a của hàm số (φ₁(x))::</label>
-                <input type="text" id="f_a" placeholder="x" value="log(x)">
+                <input type="text" id="f_a" placeholder="x" value="3^x + x">
 
             </div>
 
             <div class="input-group">
                 <label for="f_b">Hệ số b của hàm số (φ₂(x)):</label>
-                <input type="text" id="f_b" placeholder="1" value="x^3">
+                <input type="text" id="f_b" placeholder="1" value="x^3 + 1">
             </div>
 
             <div class="input-group">
                 <label for="f_free">Hàm số tự do (φ₀(x)):</label>
-                <input type="text" id="f_free" placeholder="0" value="1">
+                <input type="text" id="f_free" placeholder="0" value="2">
             </div>
 
         </div>
@@ -439,18 +439,23 @@
             container.innerHTML = '';
 
 
-            let temp_x = [1.2, 1.5, 2.0];
-            let temp_y = [6.55, 11.94, 26.39];
+            let temp_x = [0, 1, 2];
+            let temp_y = [3.33, 5.33, 14.67];
 
 
             for (let i = 0; i < n; i++) {
                 const pointDiv = document.createElement('div');
                 pointDiv.className = 'data-point';
+                // Kiểm tra xem i có nằm trong phạm vi của mảng temp_x/temp_y không
+                // Nếu có, sử dụng giá trị từ mảng, nếu không, để trống (dùng placeholder)
+                const x_val = (i < temp_x.length) ? temp_x[i] : '';
+                const y_val = (i < temp_y.length) ? temp_y[i] : '';
+
                 pointDiv.innerHTML = `
                     <label for="x_${i}"> \\(x_${i}:\\) </label>
-                    <input type="number" id="x_${i}" step="any" placeholder="x value" value="${temp_x[i] || ''}">
+                    <input type="number" id="x_${i}" step="any" placeholder="x value" value="${x_val}">
                     <label for="y_${i}"> \\(y_${i}:\\)</label>
-                    <input type="number" id="y_${i}" step="any" placeholder="y value" value="${temp_y[i] || ''}">
+                    <input type="number" id="y_${i}" step="any" placeholder="y value" value="${y_val}">
                 `;
                 container.appendChild(pointDiv);
             }
@@ -489,6 +494,38 @@
             return expr
                 .replace(/\bx\b/g, 'x_{k}')
                 .replace(/\by\b/g, 'y_{k}');
+        }
+
+        function groupIfNeededForMultiplication(exprStr) {
+            const str = exprStr.trim();
+            if (!str) return str; // Xử lý chuỗi rỗng
+
+            try {
+                const node = math.parse(str);
+
+                // Nếu biểu thức đã được bao bởi dấu ngoặc ở cấp cao nhất, giữ nguyên
+                if (node.isParenthesisNode) {
+                    return str;
+                }
+
+                // Kiểm tra xem nút gốc có phải là toán tử + hoặc - nhị phân không
+                // (nghĩa là có hai toán hạng, ví dụ: term1 + term2)
+                if (node.isOperatorNode && (node.op === '+' || node.op === '-') && node.args && node.args.length === 2) {
+                    return `(${str})`; // Thêm dấu ngoặc
+                }
+            } catch (e) {
+                // Ghi lại lỗi nếu math.js không phân tích được cú pháp, nhưng không làm gián đoạn chương trình
+                console.warn("Lỗi phân tích cú pháp Math.js trong groupIfNeededForMultiplication cho chuỗi:", str, e);
+                // Dự phòng: Nếu phân tích cú pháp thất bại, có thể thử một kiểm tra chuỗi đơn giản hơn
+                // Tuy nhiên, điều này kém tin cậy hơn so với việc dùng math.parse
+                // Ví dụ: nếu chuỗi chứa " + " hoặc " - " (có dấu cách)
+                if (str.includes(' + ') || str.includes(' - ')) {
+                    if (!(str.startsWith('(') && str.endsWith(')'))) {
+                        return `(${str})`;
+                    }
+                }
+            }
+            return str; // Trả về chuỗi gốc (đã cắt khoảng trắng) nếu không cần nhóm
         }
 
         function formatExpression(expr) {
@@ -532,7 +569,9 @@
                         }
 
                         // Display the approximation function
-                        const fDisplay = `a \\cdot ${f_a} + b \\cdot ${f_b} ${f_free ? ' + ' + f_free : ''}`;
+                        const display_f_a_grouped = groupIfNeededForMultiplication(f_a);
+                        const display_f_b_grouped = groupIfNeededForMultiplication(f_b);
+                        const fDisplay = `a \\cdot ${display_f_a_grouped} + b \\cdot ${display_f_b_grouped} ${f_free ? ' + ' + f_free : ''}`;
                         document.getElementById('function-display').innerHTML = `
                             <p>\\[ y = ${formatExpression(fDisplay)} \\]</p>
                         `;
@@ -565,17 +604,27 @@
 
                         document.getElementById('data-points-display').innerHTML = dataPointsHTML;
 
-                        const sExpr = `(a \\cdot ${f_a} + b \\cdot ${f_b} ${f_free ? ' + ' + f_free : ''}- y_k)^2 `;
+                        const sExpr_f_a_grouped = groupIfNeededForMultiplication(f_a);
+                        const sExpr_f_b_grouped = groupIfNeededForMultiplication(f_b);
+                        const sExpr = `(a \\cdot ${sExpr_f_a_grouped} + b \\cdot ${sExpr_f_b_grouped} ${f_free ? ' + ' + f_free : ''}- y_k)^2 `;
                         document.getElementById('sum-squares').innerHTML = `
                             <p>\\[ S = \\sum_{k=1}^{${n}} ${formatExpression(format_k(sExpr))} \\]</p>
                         `;
 
-                        const sDiffA = `(a \\cdot ${f_a} + b \\cdot ${f_b} ${f_free ? ' + ' + f_free : ''} - y_k) \\cdot ${f_a}`;
-                        const sDiffB = `(a \\cdot ${f_a} + b \\cdot ${f_b} ${f_free ? ' + ' + f_free : ''} - y_k) \\cdot ${f_b}`;
+                        // Sử dụng lại các biến đã nhóm ở mục b hoặc nhóm lại nếu cần
+                        // const sExpr_f_a_grouped = groupIfNeededForMultiplication(f_a); // Nếu chưa có từ mục b
+                        // const sExpr_f_b_grouped = groupIfNeededForMultiplication(f_b); // Nếu chưa có từ mục b
+
+                        // Phần nhân ở cuối (f_a hoặc f_b) cần được nhóm nếu là đa thức
+                        const deriv_multiplier_f_a = groupIfNeededForMultiplication(f_a);
+                        const deriv_multiplier_f_b = groupIfNeededForMultiplication(f_b);
+
+                        const sDiffA = `(a \\cdot ${sExpr_f_a_grouped} + b \\cdot ${sExpr_f_b_grouped} ${f_free ? ' + ' + f_free : ''} - y_k) \\cdot ${deriv_multiplier_f_a}`;
+                        const sDiffB = `(a \\cdot ${sExpr_f_a_grouped} + b \\cdot ${sExpr_f_b_grouped} ${f_free ? ' + ' + f_free : ''} - y_k) \\cdot ${deriv_multiplier_f_b}`;
 
                         document.getElementById('partial-derivatives').innerHTML = `
-                            <p>\\[ \\frac{\\partial S}{\\partial a} = 2 \\sum_{k=1}^{${n}} ${formatExpression(format_k(sDiffA))} \\]</p>
-                            <p>\\[ \\frac{\\partial S}{\\partial b} = 2 \\sum_{k=1}^{${n}} ${formatExpression(format_k(sDiffB))} \\]</p>
+                            <p>\\[ S'_{a} = 2 \\sum_{k=1}^{${n}} ${formatExpression(format_k(sDiffA))} \\]</p>
+                            <p>\\[ S'_{b} = 2 \\sum_{k=1}^{${n}} ${formatExpression(format_k(sDiffB))} \\]</p>
                         `;
 
                         const he_pt1 = [
@@ -671,21 +720,20 @@
                         const aSol = (-b1 / a11) - (a12 / a11) * bSol;
 
                         document.getElementById('final-result').innerHTML = `
-                            <div class="success-box">
-                                <h3>Giải Hệ phương trình</h3>
-                                <p>\\[
-                                    \\begin{cases}
-                                        a = ${formatNumber(aSol)}\\\\[1.1ex]
-                                        b = ${formatNumber(bSol)}
-                                    \\end{cases}
-                                \\]</p>
-                                <p>Hàm xấp xỉ cuối cùng:</p>
-                                <p style="font-size: 1.3em; text-align: center;">
-                                    \\[ y = ${formatFirstCoefficient(formatNumber(aSol))} ${formatExpression(f_a)} + ${formatFirstCoefficient(formatNumber(bSol))} ${formatExpression(f_b)}${f_free ? ' + ' + formatExpression(f_free) : ''} \\]
-                                </p>
-                            </div>
-                        `;
-
+                        <div class="success-box">
+                            <h3>Giải Hệ phương trình</h3>
+                            <p>\\[
+                                \\begin{cases}
+                                    a = ${formatNumber(aSol)}\\\\[1.1ex]
+                                    b = ${formatNumber(bSol)}
+                                \\end{cases}
+                            \\]</p>
+                            <p>Hàm xấp xỉ cuối cùng:</p>
+                            <p style="font-size: 1.3em; text-align: center;">
+                                \\[ y = ${formatFirstCoefficient(formatNumber(aSol))} ${formatExpression(groupIfNeededForMultiplication(f_a))} + ${formatFirstCoefficient(formatNumber(bSol))} ${formatExpression(groupIfNeededForMultiplication(f_b))}${f_free ? ' + ' + formatExpression(f_free) : ''} \\]
+                            </p>
+                        </div>
+                    `;
                         // Show result section with animation
                         resultSection.classList.add('show');
 
