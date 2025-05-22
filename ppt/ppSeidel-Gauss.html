@@ -862,7 +862,7 @@
                         resultsDiv.innerHTML += `<div class="section-title">Đánh giá sai số</div>`;
                         resultsDiv.innerHTML += `
                             <div class="math-display">
-                                \\[ |X^{(${n})} - X^{(*)}| \\leq \\frac{\\|U\\|_\\infty}{1 - \\|B\\|_\\infty}  |X^{(${n})} - X^{(${n - 1})}| \\]
+                                \\[ ||X^{(${n})} - X^{(*)}||_\\infty \\leq \\frac{\\|U\\|_\\infty}{1 - \\|B\\|_\\infty}  ||X^{(${n})} - X^{(${n - 1})}||_\\infty \\]
                                 \\[ \\leq \\frac{${froundf(cvc_U)}}{1 - ${froundf(cvc_B)}} \\left\\| \\begin{pmatrix}${froundf(dx)} \\\\ ${froundf(dy)} \\\\ ${froundf(dz)} \\end{pmatrix}\\right\\| _\\infty \\]
                                 \\[ \\leq ${froundf(error_bound)} \\]
                             </div>
