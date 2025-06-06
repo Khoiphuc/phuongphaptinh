@@ -7,9 +7,7 @@
     <title>Giải phương trình</title>
     <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/11.7.0/math.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/11.7.0/math.min.js"></script>
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/12.4.1/math.min.js"></script>
     <style>
         :root {
             --primary-color: #3498db;
@@ -24,13 +22,12 @@
         body {
             font-family: 'Roboto', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: linear-gradient(180deg, #4FC3F7, #94df97, #FFFFFF);
-            max-width: 900px;
+            max-width: 1000px;
             margin: 0 auto;
             padding: 20px;
             line-height: 1.6;
             color: var(--text-color);
             background-color: #f5f7fa;
-
         }
 
         h1,
@@ -46,6 +43,25 @@
             padding-bottom: 15px;
             border-bottom: 2px solid var(--primary-color);
             position: relative;
+            font-family: 'Arial Narrow Bold', sans-serif;
+            font-weight: bold;
+            font-size: 2.5rem;
+            background: linear-gradient(90deg, #001571, #2A0040, #00C4CC, #001571);
+            background-size: 200% 100%;
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            animation: flow 4s linear infinite;
+        }
+
+        @keyframes flow {
+            0% {
+                background-position: 0 0;
+            }
+
+            100% {
+                background-position: -200% 0;
+            }
         }
 
         h1::after {
@@ -122,23 +138,14 @@
             border-radius: 10px;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
             margin-top: 25px;
-
-            /* ---- THÊM CÁC DÒNG SAU ĐỂ TẠO HIỆU ỨNG ---- */
             opacity: 0;
-            /* Ban đầu ẩn đi */
             transform: translateY(-20px);
-            /* Ban đầu hơi dịch xuống dưới một chút */
             transition: opacity 0.7s ease-out, transform 0.7s ease-out;
-            /* Thời gian và kiểu hiệu ứng, 0.3s cho nhất quán với hiệu ứng Home */
-            /* display: none; sẽ được quản lý bởi JavaScript và style inline ban đầu */
         }
 
-        /* ---- THÊM LỚP MỚI NÀY VÀO CSS CỦA BẠN ---- */
         .result-section.visible {
             opacity: 1;
-            /* Hiện rõ ra */
             transform: translateY(0);
-            /* Về vị trí ban đầu */
         }
 
         .result-title {
@@ -146,37 +153,6 @@
             border-bottom: 1px solid #eee;
             padding-bottom: 12px;
             margin-top: 0;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: separate;
-            border-spacing: 0;
-            margin: 25px 0;
-            font-family: 'Consolas', 'Monaco', monospace;
-            font-size: 14px;
-            border-radius: 8px;
-            overflow: hidden;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-        }
-
-        th {
-            background-color: var(--primary-color);
-            color: white;
-            padding: 12px 15px;
-            text-align: center;
-            font-weight: 500;
-        }
-
-        td {
-            padding: 10px 15px;
-            text-align: center;
-            border: 1px solid #eee;
-            background-color: white;
-        }
-
-        tr:nth-child(even) td {
-            background-color: var(--background-color);
         }
 
         .math-formula {
@@ -187,6 +163,7 @@
             overflow-x: auto;
             box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
             border-left: 4px solid var(--primary-color);
+            font-size: 20px;
         }
 
         .step {
@@ -214,12 +191,6 @@
             border-left: 4px solid var(--error-color);
         }
 
-        .number-cell {
-            font-family: 'Consolas', 'Monaco', monospace;
-            text-align: right;
-            padding-right: 15px;
-        }
-
         .mjx-chtml {
             font-size: 1.1em !important;
         }
@@ -245,73 +216,42 @@
 
         #iteration-process {
             max-height: 400px;
-            /* Giới hạn chiều cao để có thanh cuộn */
             overflow-y: auto;
-            /* Tạo thanh cuộn khi nội dung quá dài */
             border: 1px solid #ccc;
-            /* Viền bảng để dễ nhìn */
             padding: 5px;
-            /* Khoảng cách giữa nội dung và viền */
             width: 100%;
-            /* Đảm bảo bảng chiếm hết chiều rộng */
         }
 
         .iteration-row {
             display: flex;
             justify-content: space-between;
-            /* Căn đều nội dung */
             padding: 5px;
             border-bottom: 1px solid #ddd;
-            /* Tạo đường phân cách giữa các dòng */
-
         }
 
         .iteration-value {
             flex: 1;
-            /* Cho phép ô giá trị co giãn theo kích thước */
             text-align: center;
-            /* Căn giữa nội dung */
             font-size: 16px;
             border-right: 1px solid #ccc;
-            /* Đường kẻ giữa các cột */
-
         }
 
-        @media (max-width: 768px) {
-            .input-row {
-                flex-direction: column;
-                gap: 15px;
-            }
-
-            .math-formula {
-                font-size: 10px;
-            }
-        }
-
-        @media (max-width: 480px) {
-            body>button:first-of-type {
-                /* Nút Home */
-                width: 95% !important;
-                font-size: 0.9em;
-                padding: 10px;
-            }
-        }
-
-
-
-        /* Đặt đoạn CSS này vào bên trong thẻ <style> của bạn */
         body {
-            /* ... các style hiện có của body ... */
             opacity: 1;
-            /* Đảm bảo body có opacity ban đầu là 1 */
             transition: opacity 0.3s ease-out, transform 0.3s ease-out;
-            /* Thời gian hiệu ứng */
         }
 
         body.page-fade-out {
             opacity: 0;
             transform: translateY(30px);
-            /* Đổi thành hiệu ứng trượt xuống. Bạn có thể điều chỉnh giá trị 30px tùy ý */
+        }
+
+        @media (max-width: 768px) {
+            .math-formula {
+                padding: 15px;
+                /* Giảm padding các khối */
+                font-size: 10px;
+            }
         }
     </style>
 </head>
@@ -319,69 +259,58 @@
 <body>
     <button onclick="goToHomeWithTransition()"
         style="width: 400px; height: 50px; text-align: center; background: linear-gradient(135deg, #00B4DB, #0083B0, #00FF7F);">Home</button>
-
     <h1>Phương pháp Newton - Tiếp Tuyến</h1>
     <div class="input-section">
         <div class="input-group">
             <label for="function">Hàm f(x) = 0:</label>
-            <input type="text" id="function" placeholder="x^3 - 2x - 5" value="x^2 + 1/x -40">
-            <small style="color: #7f8c8d; font-size: 0.9em;">Use JavaScript math syntax: log, sin, cos, exp, sqrt, ^ for
-                power</small>
+            <input type="text" id="function" placeholder="x^3 - 2x - 5" value="x^2 + 1/x - 40">
+            <small style="color: #7f8c8d; font-size: 0.9em;">Dùng cú pháp toán của JavaScript: log, sin, cos, exp, sqrt,
+                ^ cho lũy thừa</small>
         </div>
-
         <div class="input-row">
             <div class="input-group" style="flex: 1;">
-                <label for="lower">Đầu đoạn (a):</label>
+                <label for="lower">Đoạn (a):</label>
                 <input type="number" id="lower" step="any" value="6">
             </div>
-
             <div class="input-group" style="flex: 1;">
-                <label for="upper">Cuối đoạn (b):</label>
+                <label for="upper">(b):</label>
                 <input type="number" id="upper" step="any" value="7">
             </div>
 
             <div class="input-group" style="flex: 1;">
-                <label for="floatpoint">Dấu chấm động</label>
-                <input type="number" id="floatpoint" value="6" min="1" max="34">
+                <label for="iterations">Số lần lặp:</label>
+                <input type="number" id="iterations" min="1" value="3">
             </div>
         </div>
         <div class="input-group" style="flex: 1;">
-            <label for="iterations">Số lần lặp:</label>
-            <input type="number" id="iterations" min="1" value="3">
+            <label for="floatpoint">Số chữ số sau dấu phẩy:</label>
+            <input type="number" id="floatpoint" value="6" min="1" max="34">
         </div>
     </div>
-
     <button onclick="calculate()">Tính toán</button>
-
-
     <div id="result" class="result-section" style="display: none;">
         <div
             style="background: linear-gradient(to top, #C8E6C9, #81C784, #4CAF50); color: white; padding: 8px 15px; border-radius: 4px; margin-top: 10px;">
-            Tính toán thành công ✅</div>
+            Tính toán thành công ✅
+        </div>
         <h2 class="result-title">Kết quả tính toán</h2>
-
         <div id="function-display" class="math-formula"></div>
-
         <div class="step">
             <h3>Các đạo hàm </h3>
             <div id="derivatives" class="math-formula"></div>
         </div>
-
         <div class="step">
             <h3>Chọn điểm ban đầu</h3>
             <div id="initial-point" class="math-formula"></div>
         </div>
-
         <div class="step">
             <h3>Xây dựng dãy <span> \( \{x_{n}\} \)</span></h3>
             <div id="iteration-process" class="math-formula"></div>
         </div>
-
         <div class="step">
             <h3>Đánh giá sai số</h3>
             <div id="error-estimation" class="math-formula"></div>
         </div>
-
         <div class="final-result">
             <h3>Kết quả cuối cùng</h3>
             <div id="final-result" class="math-formula"></div>
@@ -389,21 +318,69 @@
     </div>
 
     <script>
-
-        // Đặt hàm này vào bên trong thẻ <script> của bạn
-
-        // ... (các hàm JavaScript hiện có của bạn như roundTo, formatNumber, ...)
-
         function goToHomeWithTransition() {
-            document.body.classList.add('page-fade-out'); // Thêm lớp để kích hoạt hiệu ứng CSS
-
-            // Đợi hiệu ứng CSS hoàn thành (0.5 giây = 500ms, khớp với 'transition' trong CSS)
+            document.body.classList.add('page-fade-out');
             setTimeout(function () {
-                window.location.href = '../index.html'; // Chuyển hướng đến trang Home
-            }, 300); // 500 milliseconds
+                window.location.href = '../index.html';
+            }, 300);
         }
 
-        // ... (Phần còn lại của script của bạn) ...
+        // --- BẮT ĐẦU THAY ĐỔI ---
+
+        /**
+         * THAY ĐỔI: Dán hàm getDerivativeResult từ code máy tính đạo hàm vào đây.
+         * Hàm này tính toán đạo hàm ký hiệu và trả về dưới dạng TeX, rất mạnh mẽ.
+         */
+        function getDerivativeResult(expressionStr, order, defaultVariable = 'x') {
+            if (!expressionStr) {
+                return { success: false, error: 'Vui lòng nhập biểu thức toán học.' };
+            }
+            try {
+                // Rút gọn biểu thức trước khi lấy đạo hàm để xử lý các trường hợp phức tạp
+                const simplifiedNode = math.simplify(expressionStr);
+                let currentExpressionNode = simplifiedNode;
+
+                let variableToDifferentiate = defaultVariable;
+                const symbols = currentExpressionNode.filter(node => node.isSymbolNode);
+                const uniqueSymbols = [...new Set(symbols.map(s => s.name))];
+                const commonVars = ['x', 'y', 'z', 't'];
+                let foundVar = false;
+
+                for (const v of commonVars) {
+                    if (uniqueSymbols.includes(v)) {
+                        variableToDifferentiate = v;
+                        foundVar = true;
+                        break;
+                    }
+                }
+                if (!foundVar && uniqueSymbols.length > 0 && uniqueSymbols.length === 1) {
+                    variableToDifferentiate = uniqueSymbols[0];
+                }
+
+                for (let i = 0; i < order; i++) {
+                    currentExpressionNode = math.derivative(currentExpressionNode, variableToDifferentiate);
+                }
+
+                // Rút gọn kết quả cuối cùng
+                const finalNode = math.simplify(currentExpressionNode);
+                // --- BẮT ĐẦU THAY ĐỔI ---
+                // 1. Dùng toTex với tùy chọn `implicit: 'auto'` để math.js tự xử lý
+                let texString = finalNode.toTex({
+                    implicit: 'auto' // ✨ Đây là sự thay đổi quan trọng nhất
+                });
+
+                // 2. Với các dấu nhân bắt buộc phải hiển thị, đổi thành \times
+                texString = texString.replace(/\\cdot/g, ' \\times ');
+                // --- KẾT THÚC THAY ĐỔI ---
+
+                return { success: true, tex: texString, variable: variableToDifferentiate };
+            } catch (mathError) {
+                console.error(`Error in getDerivativeResult for order ${order}:`, mathError);
+                return { success: false, error: mathError.message };
+            }
+        }
+
+        // --- KẾT THÚC THAY ĐỔI ---
 
         function roundTo(value, decimals) {
             const factor = Math.pow(10, decimals);
@@ -416,19 +393,16 @@
             if (num === null || num === undefined) return "NaN";
             const rounded = roundTo(num, decimals);
             let str = rounded.toString();
-
-            // Remove trailing zeros and possible decimal point
             if (str.indexOf('.') !== -1) {
                 str = str.replace(/\.?0+$/, '');
             }
-
             return str === '' ? '0' : str;
         }
 
+        // CÁC HÀM NÀY VẪN CẦN THIẾT CHO VIỆC TÍNH TOÁN GIÁ TRỊ, KHÔNG THAY ĐỔI
         function calculateDerivative(f, x) {
             const h = 0.0001;
             try {
-                // Tính đạo hàm số với công thức trung tâm 5 điểm cho độ chính xác cao hơn
                 return (-math.evaluate(f, { x: x + 2 * h })
                     + 8 * math.evaluate(f, { x: x + h })
                     - 8 * math.evaluate(f, { x: x - h })
@@ -444,7 +418,6 @@
         function calculateSecondDerivative(f, x) {
             const h = 0.0001;
             try {
-                // Tính đạo hàm bậc hai với công thức sai phân hữu hạn
                 return (math.evaluate(f, { x: x + h })
                     - 2 * math.evaluate(f, { x: x })
                     + math.evaluate(f, { x: x - h }))
@@ -455,104 +428,53 @@
             }
         }
 
-
         function calculate() {
-            // Get input values
             const fInput = document.getElementById('function').value;
             const a = parseFloat(document.getElementById('lower').value);
             const b = parseFloat(document.getElementById('upper').value);
             const iterations = parseInt(document.getElementById('iterations').value);
 
-
-            // Show result section
-
-            // Show result section with animation
             const resultSection = document.getElementById('result');
-
-            // 1. Thay đổi display để phần tử chiếm không gian và có thể thực hiện transition
-            //    Style inline ban đầu là display: none;, giờ chúng ta đổi thành 'block'
             resultSection.style.display = 'block';
-
-            // 2. Sử dụng một setTimeout nhỏ để đảm bảo trình duyệt đã áp dụng 'display: block'
-            //    và opacity: 0 từ CSS trước khi thêm lớp 'visible'. Điều này giúp transition chạy đúng.
-            // Chúng ta sẽ thêm lệnh cuộn vào đây
             setTimeout(function () {
-                resultSection.classList.add('visible'); // Thêm lớp .visible để kích hoạt hiệu ứng CSS
-
-                // ---- THÊM DÒNG NÀY ĐỂ TỰ ĐỘNG CUỘN ----
+                resultSection.classList.add('visible');
                 resultSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                // ----------------------------------------
-
-            }, 10); // Khoảng trễ nhỏ (10 mili giây) là đủ để trình duyệt xử lý
-
-
+            }, 10);
 
             try {
-                // Validate inputs
                 if (isNaN(a)) throw new Error('Lower bound must be a number');
                 if (isNaN(b)) throw new Error('Upper bound must be a number');
                 if (isNaN(iterations) || iterations < 1) throw new Error('Number of iterations must be a positive integer');
 
-                // Test the function
                 math.evaluate(fInput, { x: a });
                 math.evaluate(fInput, { x: b });
 
-                let fDisplay = fInput
-                    .replace(/log/g, '\\ln')
-                    .replace(/\^/g, '^')
-                    .replace(/exp\(([^)]+)\)/g, 'e^{$1}')
-                    .replace(/sqrt\(([^)]+)\)/g, '\\sqrt{$1}')
-                    .replace(/([^+\-*/()]+)\/([^+\-*/()]+)/g, '\\frac{$1}{$2}'); // Tổng quát hơn
-
+                let fNodeOriginal = math.parse(fInput);
                 document.getElementById('function-display').innerHTML = `
-                    <p>\\[ f(x) = ${fDisplay} \\]</p>
+                    <p>\\[ f(x) = ${fNodeOriginal.toTex()} \\]</p>
                 `;
 
-                // Calculate derivatives numerically
+                // CÁC HÀM TÍNH GIÁ TRỊ VẪN GIỮ NGUYÊN
                 const fPrime = (x) => calculateDerivative(fInput, x);
                 const fDoublePrime = (x) => calculateSecondDerivative(fInput, x);
 
-                // Calculate symbolic derivatives
-                let fPrimeDisplay = '';
-                let fDoublePrimeDisplay = '';
-                try {
-                    // Compute first derivative
-                    fInput2 = fInput.replace(/1\/x/g, 'x^(-1)');
-                    const fNode = math.parse(fInput2);
-                    const fPrimeNode = math.derivative(fNode, 'x');
+                // --- BẮT ĐẦU THAY ĐỔI ---
 
-                    fPrimeDisplay = fPrimeNode.toString()
-                        .replace(/log/g, '\\ln')
-                        .replace(/\^/g, '^')
-                        .replace(/exp\(([^)]+)\)/g, 'e^{$1}')
-                        .replace(/sqrt\(([^)]+)\)/g, '\\sqrt{$1}')
-                        .replace(/\*/g, ' \\times') // Loại bỏ dấu * hoàn toàn
-                        .replace(/([^\/]+)\/([^\/]+)/g, '\\frac{$1}{$2}'); // Chuyển a/b thành \frac{a}{b}
+                // THAY ĐỔI: Áp dụng hàm getDerivativeResult để lấy biểu thức đạo hàm cấp 1 và 2.
+                // Đoạn code mới này thay thế hoàn toàn cho khối try...catch cũ.
+                const result1 = getDerivativeResult(fInput, 1);
+                const result2 = getDerivativeResult(fInput, 2);
 
+                const fPrimeDisplay = result1.success ? result1.tex : 'Lỗi \\, tính \\, đạo \\, hàm \\, cấp \\, 1';
+                const fDoublePrimeDisplay = result2.success ? result2.tex : 'Lỗi \\, tính \\, đạo \\, hàm \\, cấp \\, 2';
 
+                // --- KẾT THÚC THAY ĐỔI ---
 
-                    // Compute second derivative
-                    const fDoublePrimeNode = math.derivative(fPrimeNode, 'x');
-                    fDoublePrimeDisplay = fDoublePrimeNode.toString()
-                        .replace(/log/g, '\\ln')
-                        .replace(/\^/g, '^')
-                        .replace(/exp\(([^)]+)\)/g, 'e^{$1}')
-                        .replace(/sqrt\(([^)]+)\)/g, '\\sqrt{$1}')
-                        .replace(/\*/g, '\\times') // Loại bỏ dấu * hoàn toàn
-                        .replace(/([^\/]+)\/([^\/]+)/g, '\\frac{$1}{$2}'); // Chuyển a/b thành \frac{a}{b}
-                } catch (e) {
-                    console.error("Error calculating symbolic derivatives:", e);
-                    fPrimeDisplay = 'Unable\\ to\\ compute';
-                    fDoublePrimeDisplay = 'Unable\\ to\\ compute';
-                }
-
-                // Display derivatives
                 document.getElementById('derivatives').innerHTML = `
-                    <p>\\[ f'(x) = ${fPrimeDisplay} > 0 \\text{ } \\forall x \\in [${a};${b}] \\]</p>
-                    <p>\\[ f''(x) = ${fDoublePrimeDisplay} > 0 \\text{ } \\forall x \\in [${a};${b}] \\]</p>
+                    <p>\\[ f'(x) = ${fPrimeDisplay} \\]</p>
+                    <p>\\[ f''(x) = ${fDoublePrimeDisplay} \\]</p>
                 `;
 
-                // Determine initial point
                 let x0;
                 const fA = math.evaluate(fInput, { x: a });
                 const fDoublePrimeA = fDoublePrime(a);
@@ -569,17 +491,13 @@
                     <p>\\[ \\Rightarrow x_0 = ${x0} \\]</p>
                 `;
 
-                // Perform iterations
                 let currentX = x0;
                 let iterationValues = [];
                 let iterationHTML = '';
-
-
                 for (let i = 0; i < iterations; i++) {
                     const fVal = math.evaluate(fInput, { x: currentX });
                     const fPrimeVal = fPrime(currentX);
                     const nextX = currentX - fVal / fPrimeVal;
-
                     iterationValues.push({
                         iteration: i + 1,
                         x: currentX,
@@ -587,42 +505,33 @@
                         fPrimeX: fPrimeVal,
                         nextX: nextX
                     });
-
                     currentX = nextX;
                 }
-                let f_xn = fDisplay
-                    .replace(/(\d*)x/g, '$1x_{n}')
 
-                let f_prime_xn = fPrimeDisplay
-                    .replace(/\bx\b/g, 'x_{n}'); // Đổi x thành x_n
+                // Hiển thị công thức lặp
+                let f_xn_tex = fNodeOriginal.toTex({ parenthesis: 'auto' }).replace(/x/g, 'x_n');
+                let f_prime_xn_tex = fPrimeDisplay.replace(/x/g, 'x_n');
 
-                // First, show the Newton's formula for each iteration
                 iterationHTML += `<div class="math-formula">`;
-                iterationHTML += `
-                        <p>\\[ x_{n+1} = x_{n} - \\frac{f(x_{n})} {f'(x_{n})}   \\]</p>
-                        <p>\\[ x_{n+1} = x_{n} - \\frac{${f_xn}}{${f_prime_xn}} \\]</p>
-                    `;
+                iterationHTML += `<p>\\[ x_{n+1} = x_{n} - \\frac{f(x_{n})}{f'(x_{n})} \\] </p>
+                                    <p>\\[x_n - \\frac{${f_xn_tex}}{${f_prime_xn_tex}} \\]</p>`;
 
-                // Display iteration process
+
                 iterationHTML += `<div class="iteration-row" style="font-weight: bold; margin-bottom: 10px;">
                     <div class="iteration-value" style="flex: 0.5;"> \\(n\\) </div>
                     <div class="iteration-value"> \\(x_{n+1}\\) </div>
                 </div>`;
-
-
                 for (const iter of iterationValues) {
                     iterationHTML += `<div class="iteration-row ">
-                            <div class="iteration-value" style="flex: 0.5;"> \\(x_{${iter.iteration}}\\)</div>
-                            <div class="iteration-value"> \\(${formatNumber(iter.nextX)}\\) </div>
-                        </div>`;
+                        <div class="iteration-value" style="flex: 0.5;"> \\(x_{${iter.iteration}}\\)</div>
+                        <div class="iteration-value"> \\(${formatNumber(iter.nextX)}\\) </div>
+                    </div>`;
                 }
                 iterationHTML += `</div>`;
                 document.getElementById('iteration-process').innerHTML = iterationHTML;
 
-                // Calculate error estimation
                 const fPrimeMin = Math.min(Math.abs(fPrime(a)), Math.abs(fPrime(b)));
                 const fDoublePrimeMax = Math.max(Math.abs(fDoublePrime(a)), Math.abs(fDoublePrime(b)));
-
                 let x_temp = 0;
                 let errorEstimation = '';
                 if (iterationValues.length >= 2) {
@@ -630,20 +539,17 @@
                     const prev = iterationValues[iterationValues.length - 2];
                     const error = (fDoublePrimeMax / (2 * fPrimeMin)) * Math.pow(last.nextX - prev.nextX, 2);
                     x_temp = last.nextX;
-
                     errorEstimation = `
                         <p>\\[ m = \\min_{[${a},${b}]} |f'(x)| = ${formatNumber(fPrimeMin)} \\]</p>
                         <p>\\[ M = \\max_{[${a},${b}]} |f''(x)| = ${formatNumber(fDoublePrimeMax)} \\]</p>
                         <p> \\( \\text{Đánh giá}\\) </p>
                         <p>\\[ |x_{${iterations}} - x^*| \\leq \\frac{M}{2m} (x_{${iterations}} - x_{${iterations - 1}})^2 \\]</p>
-                        <p>\\[ |x_{${iterations}} - x^*| \\leq \\frac{${formatNumber(fDoublePrimeMax)}}{2 \\times ${formatNumber(fPrimeMin)}} (${formatNumber(last.nextX)} - ${formatNumber(prev.nextX)})^2 \\]</p>
+                        <p>\\[ |x_{${iterations}} - x^*| \\leq \\frac{${formatNumber(fDoublePrimeMax)}}{2 \\times ${formatNumber(fPrimeMin)}} (${formatNumber(last.nextX)} - ${formatNumber(prev.nextX)})^2 \\] </p>
                         <p>\\[ \\approx ${formatNumber(error)} \\]</p>
-                    `;
+                        `;
                 }
-
                 document.getElementById('error-estimation').innerHTML = errorEstimation;
 
-                // Display final result
                 document.getElementById('final-result').innerHTML = `
                     <div class="success-box">
                         <p>Sau ${iterations} lần lặp:  </p>
@@ -651,19 +557,15 @@
                         <p>\\[ f(${formatNumber(x_temp)}) \\approx ${formatNumber(math.evaluate(fInput, { x: x_temp }))} \\]</p>
                     </div>
                 `;
-
             } catch (e) {
                 document.getElementById('result').innerHTML = `
                     <div class="error">
-                        <h3>Error</h3>
+                        <h3>Lỗi</h3>
                         <p>${e.message}</p>
-                        <p>Đã xảy ra lỗi ! Vui lòng Ref và nhập lại</p>
+                        <p>Đã xảy ra lỗi! Vui lòng làm mới trang và nhập lại.</p>
                     </div>
                 `;
             }
-
-
-            // Render MathJax after updating content
             if (typeof MathJax !== 'undefined') {
                 MathJax.typeset();
             }
