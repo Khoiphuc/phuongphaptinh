@@ -540,8 +540,8 @@
                     const error = (fDoublePrimeMax / (2 * fPrimeMin)) * Math.pow(last.nextX - prev.nextX, 2);
                     x_temp = last.nextX;
                     errorEstimation = `
-                        <p>\\[ m = \\min_{[${a},${b}]} |f'(x)| = ${formatNumber(fPrimeMin)} \\]</p>
-                        <p>\\[ M = \\max_{[${a},${b}]} |f''(x)| = ${formatNumber(fDoublePrimeMax)} \\]</p>
+                        <p>\\[ m = \\min_{[${a};${b}]} |f'(x)| = ${formatNumber(fPrimeMin)} \\]</p>
+                        <p>\\[ M = \\max_{[${a};${b}]} |f''(x)| = ${formatNumber(fDoublePrimeMax)} \\]</p>
                         <p> \\( \\text{Đánh giá}\\) </p>
                         <p>\\[ |x_{${iterations}} - x^*| \\leq \\frac{M}{2m} (x_{${iterations}} - x_{${iterations - 1}})^2 \\]</p>
                         <p>\\[ |x_{${iterations}} - x^*| \\leq \\frac{${formatNumber(fDoublePrimeMax)}}{2 \\times ${formatNumber(fPrimeMin)}} (${formatNumber(last.nextX)} - ${formatNumber(prev.nextX)})^2 \\] </p>
