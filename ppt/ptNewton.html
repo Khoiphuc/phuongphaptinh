@@ -336,13 +336,12 @@
                 return { success: false, error: 'Vui lòng nhập biểu thức toán học.' };
             }
             try {
-                // Rút gọn biểu thức trước khi lấy đạo hàm để xử lý các trường hợp phức tạp
-                const simplifiedNode = math.simplify(expressionStr);
-                let currentExpressionNode = simplifiedNode;
+                let node = math.parse(expressionStr);
 
+                // Tự động phát hiện biến số
                 let variableToDifferentiate = defaultVariable;
-                const symbols = currentExpressionNode.filter(node => node.isSymbolNode);
-                const uniqueSymbols = [...new Set(symbols.map(s => s.name))];
+                const symbolsInExpr = node.filter(n => n.isSymbolNode && n.name !== 'e' && n.name !== 'pi');
+                const uniqueSymbols = [...new Set(symbolsInExpr.map(s => s.name))];
                 const commonVars = ['x', 'y', 'z', 't'];
                 let foundVar = false;
 
@@ -353,33 +352,44 @@
                         break;
                     }
                 }
-                if (!foundVar && uniqueSymbols.length > 0 && uniqueSymbols.length === 1) {
+                if (!foundVar && uniqueSymbols.length === 1) {
                     variableToDifferentiate = uniqueSymbols[0];
                 }
 
                 for (let i = 0; i < order; i++) {
-                    currentExpressionNode = math.derivative(currentExpressionNode, variableToDifferentiate);
+                    node = math.derivative(node, variableToDifferentiate);
                 }
 
-                // Rút gọn kết quả cuối cùng
-                const finalNode = math.simplify(currentExpressionNode);
-                // --- BẮT ĐẦU THAY ĐỔI ---
-                // 1. Dùng toTex với tùy chọn `implicit: 'auto'` để math.js tự xử lý
-                let texString = finalNode.toTex({
-                    implicit: 'auto' // ✨ Đây là sự thay đổi quan trọng nhất
+                node = math.simplify(node);
+
+                // Bước 1: Biến đổi các hàm sec, csc, cot
+                let transformedNode = node.transform(function (currentNode) {
+                    if (currentNode.isFunctionNode) {
+                        if (currentNode.name === 'sec') return new math.OperatorNode('/', '/', [new math.ConstantNode(1), new math.FunctionNode('cos', currentNode.args)]);
+                        if (currentNode.name === 'csc') return new math.OperatorNode('/', '/', [new math.ConstantNode(1), new math.FunctionNode('sin', currentNode.args)]);
+                        if (currentNode.name === 'cot') return new math.OperatorNode('/', '/', [new math.ConstantNode(1), new math.FunctionNode('tan', currentNode.args)]);
+                    }
+                    return currentNode;
                 });
 
-                // 2. Với các dấu nhân bắt buộc phải hiển thị, đổi thành \times
+                transformedNode = math.simplify(transformedNode);
+
+                // Bước 2: Chuyển đổi sang LaTeX và định dạng lại
+                let texString = transformedNode.toTex({ implicit: 'auto' });
+
+                // ✅ SỬA LỖI: Cập nhật Regex để xử lý đúng định dạng \left(\sin\left(x\right)\right)^{2}
+                // Regex mới sẽ tìm các hàm được bao trong ngoặc và có lũy thừa bên ngoài.
+                texString = texString.replace(/\\left\(\\s*\\(sin|cos|tan|cot|log|ln)\\left\((.*?)\\right\)\\s*\\right\)\\^{([^}]+)}/g, '\\$1^{$3}\\left($2\\right)');
+
+                // Xử lý dấu nhân để dễ đọc
                 texString = texString.replace(/\\cdot/g, ' \\times ');
-                // --- KẾT THÚC THAY ĐỔI ---
 
                 return { success: true, tex: texString, variable: variableToDifferentiate };
             } catch (mathError) {
                 console.error(`Error in getDerivativeResult for order ${order}:`, mathError);
-                return { success: false, error: mathError.message };
+                return { success: false, error: `Lỗi tính toán: ${mathError.message}` };
             }
         }
-
         // --- KẾT THÚC THAY ĐỔI ---
 
         function roundTo(value, decimals) {
@@ -540,8 +550,8 @@
                     const error = (fDoublePrimeMax / (2 * fPrimeMin)) * Math.pow(last.nextX - prev.nextX, 2);
                     x_temp = last.nextX;
                     errorEstimation = `
-                        <p>\\[ m = \\min_{[${a};${b}]} |f'(x)| = ${formatNumber(fPrimeMin)} \\]</p>
-                        <p>\\[ M = \\max_{[${a};${b}]} |f''(x)| = ${formatNumber(fDoublePrimeMax)} \\]</p>
+                        <p>\\[ m = \\min_{[${a},${b}]} |f'(x)| = ${formatNumber(fPrimeMin)} \\]</p>
+                        <p>\\[ M = \\max_{[${a},${b}]} |f''(x)| = ${formatNumber(fDoublePrimeMax)} \\]</p>
                         <p> \\( \\text{Đánh giá}\\) </p>
                         <p>\\[ |x_{${iterations}} - x^*| \\leq \\frac{M}{2m} (x_{${iterations}} - x_{${iterations - 1}})^2 \\]</p>
                         <p>\\[ |x_{${iterations}} - x^*| \\leq \\frac{${formatNumber(fDoublePrimeMax)}}{2 \\times ${formatNumber(fPrimeMin)}} (${formatNumber(last.nextX)} - ${formatNumber(prev.nextX)})^2 \\] </p>
