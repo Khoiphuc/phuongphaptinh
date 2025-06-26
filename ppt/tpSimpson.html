@@ -432,7 +432,7 @@
     <div class="input-section">
         <div class="input-group">
             <label for="function">Hàm số f(x):</label>
-            <input type="text" id="function" placeholder="exp(2x)/(exp(x)+1)" value="exp(2x)/(exp(x)+1)">
+            <input type="text" id="function" placeholder="exp(2x)/(exp(x)+1)" value="e^(2x)/(e^x+1)">
             <small style="color: #7f8c8d; font-size: 0.9em;">Use JavaScript math syntax: log, sin, cos, exp, sqrt, ^ for
                 power</small>
         </div>
@@ -454,7 +454,7 @@
                 <input type="number" id="n" min="2" step="2" value="10">
             </div>
             <div class="input-group" style="flex: 1;">
-                <label for="floatpoint">Dấu chấm động:</label>
+                <label for="floatpoint">Số chữ số sau dấu phẩy:</label>
                 <input type="number" id="floatpoint" min="0" max="34" step="1" value="6">
             </div>
 
@@ -529,7 +529,7 @@
             requestAnimationFrame(() => {
                 requestAnimationFrame(() => { // Double RAF for more robust reflow
                     try {
-                        const fInput = document.getElementById('function').value;
+                        const fInput = document.getElementById('function').value.trim();
                         const a = parseFloat(document.getElementById('lower').value);
                         const b = parseFloat(document.getElementById('upper').value);
                         const n = parseInt(document.getElementById('n').value);
@@ -551,20 +551,22 @@
 
                         const h = (b - a) / n;
 
-                        let fDisplay = fInput
-                            .replace(/log/g, '\\ln')
-                            .replace(/\^/g, '^')
-                            .replace(/exp\(([^)]+)\)/g, 'e^{$1}')
-                            .replace(/sqrt\(([^)]+)\)/g, '\\sqrt{$1}') // Added sqrt support
-                            .replace(/([^\/]+)\/([^\/]+)/g, '\\frac{$1}{$2}'); // Chuyển a/b thành \frac{a}{b}
+                        // let fDisplay = fInput
+                        //     .replace(/log/g, '\\ln')
+                        //     .replace(/\^/g, '^')
+                        //     .replace(/exp\(([^)]+)\)/g, 'e^{$1}')
+                        //     .replace(/sqrt\(([^)]+)\)/g, '\\sqrt{$1}') // Added sqrt support
+                        //     .replace(/([^\/]+)\/([^\/]+)/g, '\\frac{$1}{$2}'); // Chuyển a/b thành \frac{a}{b} bỏ , thế = fNodeOrinal
 
+                        let fNodeOriginal = math.parse(fInput);
 
                         document.getElementById('function-display').innerHTML = `
-                            <p>\\[ I = \\int_{${fr(a)}}^{${fr(b)}} ${fDisplay} \\, dx \\]</p>
+                            <p>Hàm cần tính</p>
+                            <p>\\[ I = \\int_{${fr(a)}}^{${fr(b)}} ${fNodeOriginal.toTex()} \\, dx \\]</p>
                         `;
 
                         document.getElementById('h-calculation').innerHTML = `
-                            <p>\\[ f(x) = ${fDisplay} \\]</p>
+                            <p>\\[ f(x) = ${fNodeOriginal.toTex()} \\]</p>
                             <p>\\[ h = \\frac{b - a}{n} = \\frac{${fr(b)} - ${fr(a)}}{${n}} = ${fr(h)} \\]</p>
                         `;
 
