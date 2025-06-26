@@ -230,6 +230,7 @@
 
         .success-box {
             background-color: #e8f8f5;
+            font-size: 18px;
             padding: 20px;
             border-radius: 8px;
             margin-top: 20px;
@@ -310,6 +311,7 @@
             font-size: 20px;
         }
 
+
         @media (max-width: 768px) {
             .scrollable-table {
                 max-height: 200px;
@@ -319,6 +321,10 @@
             .math-formula {
                 font-size: 10px;
             }
+        }
+
+        .success-box {
+            font-size: 8x;
         }
 
         @media (max-width: 480px) {
@@ -341,25 +347,24 @@
     <div class="input-section">
         <div class="input-row">
             <div class="input-group">
-                <label for="f_a">Hệ số a của hàm số (φ₁(x))::</label>
+                <label for="f_a">Biểu thức của hệ số a (φ₁(x))::</label>
                 <input type="text" id="f_a" placeholder="x" value="3^x + x">
 
             </div>
 
             <div class="input-group">
-                <label for="f_b">Hệ số b của hàm số (φ₂(x)):</label>
+                <label for="f_b">Biểu thức của hệ số b (φ₂(x)):</label>
                 <input type="text" id="f_b" placeholder="1" value="x^3 + 1">
             </div>
 
             <div class="input-group">
-                <label for="f_free">Hàm số tự do (φ₀(x)):</label>
+                <label for="f_free">Biểu thức tự do (φ₀(x)):</label>
                 <input type="text" id="f_free" placeholder="0" value="2">
             </div>
 
         </div>
-        <small style="color: #7f8c8d; font-size: 0.9em;">Use JavaScript math syntax: log, sin, cos, exp, sqrt, ^
-            for
-            power</small>
+        <small style="color: #7f8c8d; font-size: 0.9em;">Dùng cú pháp toán của JavaScript: log, sin, cos, exp, sqrt, ^
+            cho lũy thừa</small>
 
         <div class="input-row">
             <div class="input-group">
@@ -367,7 +372,7 @@
                 <input type="number" id="n" min="2" value="3">
             </div>
             <div class="input-group">
-                <label for="n">Dấu chấm động :</label>
+                <label for="n">Số chữ số sau dấu phẩy:</label>
                 <input type="number" id="floatpoint" min="2" value="6">
             </div>
 
@@ -411,10 +416,10 @@
             <div id="normal-equations" class="math-formula"></div>
         </div>
 
-        <div class="step">
+        <!-- <div class="step">
             <h3>Hệ phương trình</h3>
             <div id="equation-system" class="math-formula"></div>
-        </div>
+        </div> -->
 
         <div class="final-result">
             <h3>Kết quả cuối cùng</h3>
@@ -452,9 +457,9 @@
                 const y_val = (i < temp_y.length) ? temp_y[i] : '';
 
                 pointDiv.innerHTML = `
-                    <label for="x_${i}"> \\(x_${i}:\\) </label>
+                    <label for="x_${i}"> \\( x_${i}:\\) </label>
                     <input type="number" id="x_${i}" step="any" placeholder="x value" value="${x_val}">
-                    <label for="y_${i}"> \\(y_${i}:\\)</label>
+                    <label for="y_${i}"> \\( y_${i}:\\) </label>
                     <input type="number" id="y_${i}" step="any" placeholder="y value" value="${y_val}">
                 `;
                 container.appendChild(pointDiv);
@@ -491,53 +496,89 @@
 
 
         function format_k(expr) {
-            return expr
-                .replace(/\bx\b/g, 'x_{k}')
-                .replace(/\by\b/g, 'y_{k}');
+            // Sử dụng hàm toTex của math.js để chuyển đổi an toàn
+            try {
+                const node = math.parse(expr);
+                return node.toTex({ parenthesis: 'auto' }).replace(/x/g, 'x_{k}').replace(/y/g, 'y_{k}');
+            } catch (e) {
+                console.error("Lỗi format_k:", e);
+                // Fallback cho trường hợp đơn giản nếu toTex lỗi
+                return expr.replace(/\bx\b/g, 'x_{k}').replace(/\by\b/g, 'y_{k}');
+            }
         }
 
-        function groupIfNeededForMultiplication(exprStr) {
-            const str = exprStr.trim();
-            if (!str) return str; // Xử lý chuỗi rỗng
+
+        /**
+ * Kiểm tra một chuỗi biểu thức và thêm dấu ngoặc đơn '()' nếu nó là một
+ * biểu thức chứa phép cộng hoặc trừ ở cấp cao nhất.
+ * Điều này đảm bảo thứ tự thực hiện phép toán chính xác khi ghép nối các biểu thức.
+ *
+ * @param {string} exprStr Chuỗi biểu thức toán học cần kiểm tra.
+ * @returns {string} Biểu thức đã được thêm ngoặc nếu cần.
+ */
+        function groupExpressionIfNeeded(exprStr) {
+            // Nếu đầu vào không phải chuỗi hoặc là chuỗi rỗng, trả về nguyên bản.
+            if (!exprStr || typeof exprStr !== 'string') {
+                return exprStr;
+            }
+
+            const trimmedExpr = exprStr.trim();
+            if (trimmedExpr === '') {
+                return '';
+            }
 
             try {
-                const node = math.parse(str);
+                // Phân tích chuỗi thành một cây cú pháp bằng math.js
+                const node = math.parse(trimmedExpr);
 
-                // Nếu biểu thức đã được bao bởi dấu ngoặc ở cấp cao nhất, giữ nguyên
+                // TRƯỜNG HỢP 1: Biểu thức đã được bao bởi dấu ngoặc.
+                // Ví dụ: người dùng nhập "(x+5)". Không cần làm gì thêm.
                 if (node.isParenthesisNode) {
-                    return str;
+                    return trimmedExpr;
                 }
 
-                // Kiểm tra xem nút gốc có phải là toán tử + hoặc - nhị phân không
-                // (nghĩa là có hai toán hạng, ví dụ: term1 + term2)
+                // TRƯỜNG HỢP 2: Biểu thức là một phép cộng hoặc trừ ở cấp cao nhất.
+                // Ví dụ: "x+5", "a-b". Đây là trường hợp cần thêm ngoặc.
+                // Ta kiểm tra thêm node.args.length === 2 để phân biệt với phép toán một ngôi (như số âm "-5").
                 if (node.isOperatorNode && (node.op === '+' || node.op === '-') && node.args && node.args.length === 2) {
-                    return `(${str})`; // Thêm dấu ngoặc
+                    return `(${trimmedExpr})`;
                 }
+
+                // TRƯỜNG HỢP 3: Các trường hợp khác không cần thêm ngoặc.
+                // Ví dụ: "5", "x", "5*x", "x^2", "sin(x)"
+                return trimmedExpr;
+
             } catch (e) {
-                // Ghi lại lỗi nếu math.js không phân tích được cú pháp, nhưng không làm gián đoạn chương trình
-                console.warn("Lỗi phân tích cú pháp Math.js trong groupIfNeededForMultiplication cho chuỗi:", str, e);
-                // Dự phòng: Nếu phân tích cú pháp thất bại, có thể thử một kiểm tra chuỗi đơn giản hơn
-                // Tuy nhiên, điều này kém tin cậy hơn so với việc dùng math.parse
-                // Ví dụ: nếu chuỗi chứa " + " hoặc " - " (có dấu cách)
-                if (str.includes(' + ') || str.includes(' - ')) {
-                    if (!(str.startsWith('(') && str.endsWith(')'))) {
-                        return `(${str})`;
-                    }
-                }
+                // Nếu math.js không thể phân tích cú pháp (ví dụ: "abc++"),
+                // ta sẽ trả về chuỗi gốc để tránh lỗi.
+                console.warn(`Không thể phân tích biểu thức: "${exprStr}". Trả về chuỗi gốc.`);
+                return exprStr;
             }
-            return str; // Trả về chuỗi gốc (đã cắt khoảng trắng) nếu không cần nhóm
         }
 
+        // ======================= THAY ĐỔI Ở ĐÂY =========================
+        /**
+         * Chuyển đổi một chuỗi biểu thức toán học (theo cú pháp math.js) sang định dạng LaTeX.
+         * Sử dụng bộ phân tích cú pháp của math.js để đảm bảo chuyển đổi chính xác.
+         * @param {string} expr - Chuỗi biểu thức đầu vào. Ví dụ: "x^(4/3) + sin(x)".
+         * @returns {string} - Chuỗi đã được định dạng LaTeX. Ví dụ: "x^{\\frac{4}{3}} + \\sin\\left(x\\right)".
+         */
         function formatExpression(expr) {
-            return expr
-                .replace(/log/g, '\\ln')
-                .replace(/\^/g, '^')
-                .replace(/exp\(([^)]+)\)/g, 'e^{$1}')
-                .replace(/sqrt\(([^)]+)\)/g, '\\sqrt{$1}')
-                .replace(/\\cdot/g, '')
-                .replace(/\*/g, '')
-                .replace(/([^\/]+)\/([^\/]+)/g, '\\frac{$1}{$2}');
+            try {
+                // Phân tích cú pháp biểu thức bằng math.js để tạo ra một cây cú pháp (AST)
+                const node = math.parse(expr);
+
+                // Sử dụng phương thức .toTex() trên cây cú pháp để chuyển đổi sang LaTeX
+                // Tùy chọn {parenthesis: 'auto'} giúp math.js tự động thêm ngoặc khi cần thiết
+                return node.toTex({ parenthesis: 'auto' });
+            } catch (e) {
+                // Nếu người dùng nhập vào một biểu thức không hợp lệ, math.parse sẽ báo lỗi.
+                // Chúng ta sẽ bắt lỗi này, thông báo trong console và trả về chuỗi gốc.
+                console.error(`Lỗi khi chuyển đổi biểu thức "${expr}" sang LaTeX:`, e);
+                return expr; // Trả về biểu thức ban đầu như một phương án dự phòng.
+            }
         }
+        // ======================= KẾT THÚC THAY ĐỔI ======================y
 
         function calculateLeastSquares() {
             const resultSection = document.getElementById('result');
@@ -569,9 +610,7 @@
                         }
 
                         // Display the approximation function
-                        const display_f_a_grouped = groupIfNeededForMultiplication(f_a);
-                        const display_f_b_grouped = groupIfNeededForMultiplication(f_b);
-                        const fDisplay = `a \\cdot ${display_f_a_grouped} + b \\cdot ${display_f_b_grouped} ${f_free ? ' + ' + f_free : ''}`;
+                        const fDisplay = `a${groupExpressionIfNeeded(f_a)} + b${groupExpressionIfNeeded(f_b)} ${f_free ? ' + ' + f_free : ''}`;
                         document.getElementById('function-display').innerHTML = `
                             <p>\\[ y = ${formatExpression(fDisplay)} \\]</p>
                         `;
@@ -604,23 +643,15 @@
 
                         document.getElementById('data-points-display').innerHTML = dataPointsHTML;
 
-                        const sExpr_f_a_grouped = groupIfNeededForMultiplication(f_a);
-                        const sExpr_f_b_grouped = groupIfNeededForMultiplication(f_b);
-                        const sExpr = `(a \\cdot ${sExpr_f_a_grouped} + b \\cdot ${sExpr_f_b_grouped} ${f_free ? ' + ' + f_free : ''}- y_k)^2 `;
+
+                        const sExpr = `(a${groupExpressionIfNeeded(f_a)} + b${groupExpressionIfNeeded(f_b)} ${f_free ? ' + ' + f_free : ''} - y)^2 `;
                         document.getElementById('sum-squares').innerHTML = `
                             <p>\\[ S = \\sum_{k=1}^{${n}} ${formatExpression(format_k(sExpr))} \\]</p>
                         `;
 
                         // Sử dụng lại các biến đã nhóm ở mục b hoặc nhóm lại nếu cần
-                        // const sExpr_f_a_grouped = groupIfNeededForMultiplication(f_a); // Nếu chưa có từ mục b
-                        // const sExpr_f_b_grouped = groupIfNeededForMultiplication(f_b); // Nếu chưa có từ mục b
-
-                        // Phần nhân ở cuối (f_a hoặc f_b) cần được nhóm nếu là đa thức
-                        const deriv_multiplier_f_a = groupIfNeededForMultiplication(f_a);
-                        const deriv_multiplier_f_b = groupIfNeededForMultiplication(f_b);
-
-                        const sDiffA = `(a \\cdot ${sExpr_f_a_grouped} + b \\cdot ${sExpr_f_b_grouped} ${f_free ? ' + ' + f_free : ''} - y_k) \\cdot ${deriv_multiplier_f_a}`;
-                        const sDiffB = `(a \\cdot ${sExpr_f_a_grouped} + b \\cdot ${sExpr_f_b_grouped} ${f_free ? ' + ' + f_free : ''} - y_k) \\cdot ${deriv_multiplier_f_b}`;
+                        const sDiffA = `(a${groupExpressionIfNeeded(f_a)} + b${groupExpressionIfNeeded(f_b)} ${f_free ? ' + ' + f_free : ''} - y) ${groupExpressionIfNeeded(f_a)}`;
+                        const sDiffB = `(a${groupExpressionIfNeeded(f_a)} + b${groupExpressionIfNeeded(f_b)} ${f_free ? ' + ' + f_free : ''} - y) ${groupExpressionIfNeeded(f_b)}`;
 
                         document.getElementById('partial-derivatives').innerHTML = `
                             <p>\\[ S'_{a} = 2 \\sum_{k=1}^{${n}} ${formatExpression(format_k(sDiffA))} \\]</p>
@@ -685,14 +716,6 @@
                             return (num >= 0) ? `+ ${num}` : `- ${Math.abs(num)}`;
                         }
 
-                        document.getElementById('normal-equations').innerHTML = `
-                            <p>\\[
-                                \\begin{cases}
-                                    ${formatFirstCoefficient(sums1[0])}a ${formatFollowingCoefficient(sums1[1])}b ${formatFollowingCoefficient(sums1[2])} ${formatFollowingCoefficient(-sums1[3])} = 0 \\\\[1.1ex]
-                                    ${formatFirstCoefficient(sums2[0])}a ${formatFollowingCoefficient(sums2[1])}b ${formatFollowingCoefficient(sums2[2])} ${formatFollowingCoefficient(-sums2[3])} = 0
-                                \\end{cases}
-                            \\]</p>
-                        `;
 
                         const a11 = sums1[0];
                         const a12 = sums1[1];
@@ -702,14 +725,32 @@
                         const a22 = sums2[1];
                         const b2 = -sums2[3] + sums2[2];
 
-                        document.getElementById('equation-system').innerHTML = `
+                        document.getElementById('normal-equations').innerHTML = `
                             <p>\\[
+                                \\begin{cases}
+                                    ${formatFirstCoefficient(sums1[0])}a ${formatFollowingCoefficient(sums1[1])}b ${formatFollowingCoefficient(sums1[2])} ${formatFollowingCoefficient(-sums1[3])} = 0 \\\\[1.1ex]
+                                    ${formatFirstCoefficient(sums2[0])}a ${formatFollowingCoefficient(sums2[1])}b ${formatFollowingCoefficient(sums2[2])} ${formatFollowingCoefficient(-sums2[3])} = 0
+                                \\end{cases}
+                                \\qquad
+                                \\Leftrightarrow
+                                \\qquad
                                 \\begin{cases}
                                     ${formatFirstCoefficient(a11)}a ${formatFollowingCoefficient(a12)}b = ${formatFirstCoefficient(formatNumber(-b1))} \\\\[1.1ex]
                                     ${formatFirstCoefficient(a21)}a ${formatFollowingCoefficient(a22)}b = ${formatFirstCoefficient(formatNumber(-b2))}
                                 \\end{cases}
                             \\]</p>
                         `;
+
+
+
+                        // document.getElementById('equation-system').innerHTML = `
+                        //     <p>\\[
+                        //         \\begin{cases}
+                        //             ${formatFirstCoefficient(a11)}a ${formatFollowingCoefficient(a12)}b = ${formatFirstCoefficient(formatNumber(-b1))} \\\\[1.1ex]
+                        //             ${formatFirstCoefficient(a21)}a ${formatFollowingCoefficient(a22)}b = ${formatFirstCoefficient(formatNumber(-b2))}
+                        //         \\end{cases}
+                        //     \\]</p>
+                        // `;
 
                         const det = a11 * a22 - a12 * a21;
                         if (Math.abs(det) < 1e-10) {
@@ -718,6 +759,8 @@
 
                         const bSol = (a21 * -b1 - a11 * -b2) / (a21 * a12 - a11 * a22);
                         const aSol = (-b1 / a11) - (a12 / a11) * bSol;
+
+                        const finalResult = `${formatFirstCoefficient(formatNumber(aSol))}${groupExpressionIfNeeded(f_a)} + ${formatFirstCoefficient(formatNumber(bSol))}${groupExpressionIfNeeded(f_b)}${f_free ? ' + ' + formatExpression(f_free) : ''} `;
 
                         document.getElementById('final-result').innerHTML = `
                         <div class="success-box">
@@ -728,9 +771,9 @@
                                     b = ${formatNumber(bSol)}
                                 \\end{cases}
                             \\]</p>
-                            <p>Hàm xấp xỉ cuối cùng:</p>
-                            <p style="font-size: 1.3em; text-align: center;">
-                                \\[ y = ${formatFirstCoefficient(formatNumber(aSol))} ${formatExpression(groupIfNeededForMultiplication(f_a))} + ${formatFirstCoefficient(formatNumber(bSol))} ${formatExpression(groupIfNeededForMultiplication(f_b))}${f_free ? ' + ' + formatExpression(f_free) : ''} \\]
+                            <p><strong>Kết quả:</strong></p>
+                            <p>
+                                \\[ y = ${formatExpression(finalResult)} \\]
                             </p>
                         </div>
                     `;
